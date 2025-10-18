@@ -2,6 +2,8 @@ package com.github.unreference.splice.mixin.net.minecraft.client.gui.screens.opt
 
 import com.github.unreference.splice.client.gui.screens.options.controls.SpliceMixinKeyBindsScreenHelper;
 import com.github.unreference.splice.mixin.net.minecraft.client.gui.components.SpliceMixinAbstractSelectionListAccessors;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.platform.InputConstants;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.options.controls.KeyBindsList;
 import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
@@ -27,7 +30,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -47,8 +49,10 @@ public abstract class SpliceMixinKeyBindsList {
     @Shadow @Final private KeyMapping key;
 
     @Unique private Button splice$unbind;
-    @Unique private int splice$unbindButtonX;
-    @Unique private int splice$unbindButtonY;
+
+    @Unique private int splice$unbindCachedWidth = -1;
+    @Unique private Language splice$lastLang;
+    @Unique private Minecraft splice$mc;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void splice$ctor(
@@ -57,12 +61,15 @@ public abstract class SpliceMixinKeyBindsList {
         net.minecraft.network.chat.Component name,
         CallbackInfo callback) {
       this.splice$unbind =
-          Button.builder(Component.translatable("controls.unbind"), button -> splice$unbindNow())
-              .bounds(0, 0, 50, 20)
+          Button.builder(
+                  Component.translatable("splice.controls.unbind"), button -> splice$unbindNow())
+              .bounds(0, 0, splice$unbindCachedWidth, 20)
               .build();
 
       this.splice$unbind.active = false;
       this.splice$unbind.visible = true;
+      this.splice$lastLang = Language.getInstance();
+      this.splice$mc = Minecraft.getInstance();
     }
 
     @Inject(method = "children", at = @At("RETURN"), cancellable = true)
@@ -88,7 +95,7 @@ public abstract class SpliceMixinKeyBindsList {
                 value = "INVOKE",
                 target =
                     "Lnet/minecraft/client/gui/components/Button;render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V"))
-    private void splice$preButtons(
+    private void splice$preRender(
         GuiGraphics guiGraphics,
         int index,
         int top,
@@ -100,15 +107,10 @@ public abstract class SpliceMixinKeyBindsList {
         boolean hovering,
         float partialTick,
         CallbackInfo callback) {
-      final int PAD_X = PADDING;
-      final int BETWIXT = PADDING / 2;
-      final int MIN_WIDTH = 50;
-      final int MAX_WIDTH = MIN_WIDTH * 2;
+      final int PAD = PADDING;
+      final int BETWIXT = PAD / 2;
 
-      final var MC = Minecraft.getInstance();
-      final int TEXT_WIDTH = MC.font.width(this.splice$unbind.getMessage());
-      final int UNBIND_WIDTH = Mth.clamp(TEXT_WIDTH + PAD_X, MIN_WIDTH, MAX_WIDTH);
-
+      final int UNBIND_WIDTH = splice$computeUnbindWidth();
       if (this.splice$unbind.getWidth() != UNBIND_WIDTH) {
         this.splice$unbind.setWidth(UNBIND_WIDTH);
       }
@@ -130,19 +132,26 @@ public abstract class SpliceMixinKeyBindsList {
 
       this.changeButton.setX(changeLeft);
       this.resetButton.setX(resetLeft);
-      this.splice$unbindButtonX = unbindLeft;
-      this.splice$unbindButtonY = this.resetButton.getY();
+      this.splice$unbind.setX(unbindLeft);
+      this.splice$unbind.setY(this.resetButton.getY());
     }
 
-    @Redirect(
+    @WrapOperation(
         method = "render",
         at =
             @At(
                 value = "INVOKE",
                 target =
-                    "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)I"))
-    private int splice$drawScrollingString(
-        GuiGraphics guiGraphics, Font font, Component text, int x, int y, int color) {
+                    "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Lnet/minecraft/network/chat/Component;III)I",
+                ordinal = 0))
+    private int splice$renderScrollingString(
+        GuiGraphics guiGraphics,
+        Font font,
+        Component text,
+        int x,
+        int y,
+        int color,
+        Operation<Integer> original) {
       final int MARKER = PADDING + 5;
       final int MAX_X = Math.max(x, this.changeButton.getX() - MARKER);
 
@@ -153,7 +162,7 @@ public abstract class SpliceMixinKeyBindsList {
     }
 
     @Inject(method = "render", at = @At("TAIL"))
-    private void splice$renderTail(
+    private void splice$postRender(
         GuiGraphics guiGraphics,
         int index,
         int top,
@@ -165,9 +174,7 @@ public abstract class SpliceMixinKeyBindsList {
         boolean hovering,
         float partialTick,
         CallbackInfo callback) {
-      this.splice$unbind.setX(this.splice$unbindButtonX);
-      this.splice$unbind.setY(this.splice$unbindButtonY);
-      this.splice$unbind.active = !this.key.getKey().equals(InputConstants.UNKNOWN);
+      this.splice$unbind.active = !this.key.isUnbound();
       this.splice$unbind.visible = this.resetButton.visible;
       this.splice$unbind.render(guiGraphics, mouseX, mouseY, partialTick);
     }
@@ -187,8 +194,7 @@ public abstract class SpliceMixinKeyBindsList {
       }
 
       if (keyBindsScreen != null) {
-        var list =
-            ((SpliceMixinKeyBindsScreenAccessors) keyBindsScreen).splice$getKeyBindsList();
+        var list = ((SpliceMixinKeyBindsScreenAccessors) keyBindsScreen).splice$getKeyBindsList();
         list.resetMappingAndUpdateButtons();
       }
     }
@@ -196,6 +202,23 @@ public abstract class SpliceMixinKeyBindsList {
     @Override
     public Button splice$getUnbindButton() {
       return this.splice$unbind;
+    }
+
+    @Unique
+    private int splice$computeUnbindWidth() {
+      final var LANG = Language.getInstance();
+      if (this.splice$unbindCachedWidth < 0 || LANG != this.splice$lastLang) {
+        this.splice$lastLang = LANG;
+
+        final int PAD = PADDING;
+        final int MIN = 50;
+        final int MAX = MIN * 2;
+        final int TEXT = splice$mc.font.width(this.splice$unbind.getMessage());
+
+        this.splice$unbindCachedWidth = Mth.clamp(TEXT + PAD, MIN, MAX);
+      }
+
+      return this.splice$unbindCachedWidth;
     }
   }
 }
