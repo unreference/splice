@@ -1,11 +1,14 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "",
+  "package": "com.github.unreference.splice.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-  ],
   "client": [
+    "net.minecraft.client.gui.components.SpliceMixinAbstractSelectionListAccessors",
+    "net.minecraft.client.gui.screens.options.controls.SpliceMixinKeyBindsList",
+    "net.minecraft.client.gui.screens.options.controls.SpliceMixinKeyBindsList$MixinKeyBindsListKeyEntry",
+    "net.minecraft.client.gui.screens.options.controls.SpliceMixinKeyBindsScreen",
+    "net.minecraft.client.gui.screens.options.controls.SpliceMixinKeyBindsScreenAccessors"
   ],
   "injectors": {
     "defaultRequire": 1
