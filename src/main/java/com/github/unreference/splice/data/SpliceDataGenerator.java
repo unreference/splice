@@ -19,6 +19,9 @@ public final class SpliceDataGenerator {
     var blockState = new SpliceBlockStateProvider(output, helper);
     generator.addProvider(event.includeClient(), blockState);
 
+    var dataMaps = new SpliceDataMapsProvider(output, provider);
+    generator.addProvider(event.includeServer(), dataMaps);
+
     var recipe = new SpliceRecipeProvider(output, provider);
     generator.addProvider(event.includeServer(), recipe);
 

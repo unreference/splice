@@ -19,8 +19,11 @@ public record SpliceWeatheringCopperBlocks(
     DeferredBlock<? extends Block> waxed,
     DeferredBlock<? extends Block> waxedExposed,
     DeferredBlock<? extends Block> waxedWeathered,
-    DeferredBlock<? extends Block> waxedOxidized) {
-  public static <WaxedBlock extends Block, WeatheringBlock extends Block & WeatheringCopper>
+    DeferredBlock<? extends Block> waxedOxidized,
+    ImmutableBiMap<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>> weatheringMap,
+    ImmutableBiMap<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>> waxedMap,
+    ImmutableList<DeferredBlock<? extends Block>> all) {
+  public static <Waxed extends Block, Weathering extends Block & WeatheringCopper>
       SpliceWeatheringCopperBlocks create(
           String base,
           TriFunction<
@@ -29,77 +32,95 @@ public record SpliceWeatheringCopperBlocks(
                   BlockBehaviour.Properties,
                   DeferredBlock<? extends Block>>
               register,
-          Function<BlockBehaviour.Properties, ? extends WaxedBlock> waxed,
-          BiFunction<
-                  WeatheringCopper.WeatherState,
-                  BlockBehaviour.Properties,
-                  ? extends WeatheringBlock>
+          Function<BlockBehaviour.Properties, ? extends Waxed> waxed,
+          BiFunction<WeatheringCopper.WeatherState, BlockBehaviour.Properties, ? extends Weathering>
               weathering,
           Function<WeatheringCopper.WeatherState, BlockBehaviour.Properties> weatherProps) {
-    return new SpliceWeatheringCopperBlocks(
+    final var PROPS_UNAFFECTED = weatherProps.apply(WeatheringCopper.WeatherState.UNAFFECTED);
+    final var PROPS_EXPOSED = weatherProps.apply(WeatheringCopper.WeatherState.EXPOSED);
+    final var PROPS_WEATHERED = weatherProps.apply(WeatheringCopper.WeatherState.WEATHERED);
+    final var PROPS_OXIDIZED = weatherProps.apply(WeatheringCopper.WeatherState.OXIDIZED);
+
+    final var UNAFFECTED =
         register.apply(
             base,
             props -> weathering.apply(WeatheringCopper.WeatherState.UNAFFECTED, props),
-            weatherProps.apply(WeatheringCopper.WeatherState.UNAFFECTED)),
+            PROPS_UNAFFECTED);
+
+    final var EXPOSED =
         register.apply(
-            "exposed_%s".formatted(base),
+            "exposed_" + base,
             props -> weathering.apply(WeatheringCopper.WeatherState.EXPOSED, props),
-            weatherProps.apply(WeatheringCopper.WeatherState.EXPOSED)),
+            PROPS_EXPOSED);
+
+    final var WEATHERED =
         register.apply(
-            "weathered_%s".formatted(base),
+            "weathered_" + base,
             props -> weathering.apply(WeatheringCopper.WeatherState.WEATHERED, props),
-            weatherProps.apply(WeatheringCopper.WeatherState.WEATHERED)),
+            PROPS_WEATHERED);
+
+    final var OXIDIZED =
         register.apply(
-            "oxidized_%s".formatted(base),
+            "oxidized_" + base,
             props -> weathering.apply(WeatheringCopper.WeatherState.OXIDIZED, props),
-            weatherProps.apply(WeatheringCopper.WeatherState.OXIDIZED)),
-        register.apply(
-            "waxed_%s".formatted(base),
-            waxed,
-            weatherProps.apply(WeatheringCopper.WeatherState.UNAFFECTED)),
-        register.apply(
-            "waxed_exposed_%s".formatted(base),
-            waxed,
-            weatherProps.apply(WeatheringCopper.WeatherState.EXPOSED)),
-        register.apply(
-            "waxed_weathered_%s".formatted(base),
-            waxed,
-            weatherProps.apply(WeatheringCopper.WeatherState.WEATHERED)),
-        register.apply(
-            "waxed_oxidized_%s".formatted(base),
-            waxed,
-            weatherProps.apply(WeatheringCopper.WeatherState.OXIDIZED)));
+            PROPS_OXIDIZED);
+
+    final var WAXED = register.apply("waxed_" + base, waxed, PROPS_UNAFFECTED);
+    final var WAXED_EXPOSED = register.apply("waxed_exposed_" + base, waxed, PROPS_EXPOSED);
+    final var WAXED_WEATHERED = register.apply("waxed_weathered_" + base, waxed, PROPS_WEATHERED);
+    final var WAXED_OXIDIZED = register.apply("waxed_oxidized_" + base, waxed, PROPS_OXIDIZED);
+
+    final var WEATHERING_MAP =
+        ImmutableBiMap.of(UNAFFECTED, EXPOSED, EXPOSED, WEATHERED, WEATHERED, OXIDIZED);
+
+    final var WAXED_MAP =
+        ImmutableBiMap.of(
+            UNAFFECTED,
+            WAXED,
+            EXPOSED,
+            WAXED_EXPOSED,
+            WEATHERED,
+            WAXED_WEATHERED,
+            OXIDIZED,
+            WAXED_OXIDIZED);
+
+    final var ALL =
+        ImmutableList.of(
+            UNAFFECTED,
+            WAXED,
+            EXPOSED,
+            WAXED_EXPOSED,
+            WEATHERED,
+            WAXED_WEATHERED,
+            OXIDIZED,
+            WAXED_OXIDIZED);
+
+    return new SpliceWeatheringCopperBlocks(
+        UNAFFECTED,
+        EXPOSED,
+        WEATHERED,
+        OXIDIZED,
+        WAXED,
+        WAXED_EXPOSED,
+        WAXED_WEATHERED,
+        WAXED_OXIDIZED,
+        WEATHERING_MAP,
+        WAXED_MAP,
+        ALL);
   }
 
   public ImmutableBiMap<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
       weatheringMapping() {
-    return ImmutableBiMap.of(
-        this.unaffected, this.exposed, this.exposed, this.weathered, this.weathered, this.oxidized);
+    return weatheringMap;
   }
 
   public ImmutableBiMap<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
       waxedMapping() {
-    return ImmutableBiMap.of(
-        this.unaffected,
-        this.waxed,
-        this.exposed,
-        this.waxedExposed,
-        this.weathered,
-        this.waxedWeathered,
-        this.oxidized,
-        this.waxedOxidized);
+    return waxedMap;
   }
 
   public ImmutableList<DeferredBlock<? extends Block>> asList() {
-    return ImmutableList.of(
-        this.unaffected,
-        this.waxed,
-        this.exposed,
-        this.waxedExposed,
-        this.weathered,
-        this.waxedWeathered,
-        this.oxidized,
-        this.waxedOxidized);
+    return all;
   }
 
   public void forEach(Consumer<DeferredBlock<? extends Block>> consumer) {

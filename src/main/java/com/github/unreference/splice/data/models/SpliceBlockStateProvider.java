@@ -18,8 +18,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
   @Override
   protected void registerStatesAndModels() {
-    // TODO: Temporary -- should be `waxedMapping`
-    SpliceBlocks.COPPER_BARS.weatheringMapping().forEach(this::createBarsAndItem);
+    SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::createBarsAndItem);
   }
 
   private void createBarsAndItem(
@@ -34,10 +33,11 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     }
 
     final String NAME = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
-    ResourceLocation pane = modLoc("block/%s".formatted(NAME));
-    ResourceLocation edge = pane;
+    final String TEXTURE_NAME =
+        NAME.startsWith("waxed_") ? NAME.substring("waxed_".length()) : NAME;
+    final ResourceLocation PANE = modLoc("block/%s".formatted(TEXTURE_NAME));
 
-    paneBlockWithRenderType(ironBarsBlock, pane, edge, mcLoc("cutout_mipped"));
-    itemModels().withExistingParent(NAME, mcLoc("item/generated")).texture("layer0", pane);
+    paneBlockWithRenderType(ironBarsBlock, PANE, PANE, mcLoc("cutout_mipped"));
+    itemModels().withExistingParent(NAME, mcLoc("item/generated")).texture("layer0", PANE);
   }
 }

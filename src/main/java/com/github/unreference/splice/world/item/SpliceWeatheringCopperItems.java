@@ -17,31 +17,46 @@ public record SpliceWeatheringCopperItems(
     DeferredItem<BlockItem> waxed,
     DeferredItem<BlockItem> waxedExposed,
     DeferredItem<BlockItem> waxedWeathered,
-    DeferredItem<BlockItem> waxedOxidized) {
+    DeferredItem<BlockItem> waxedOxidized,
+    ImmutableBiMap<DeferredItem<BlockItem>, DeferredItem<BlockItem>> waxedMap) {
   public static SpliceWeatheringCopperItems create(
-      SpliceWeatheringCopperBlocks weatheringCopperBlocks,
-      Function<DeferredBlock<? extends Block>, DeferredItem<BlockItem>> weather) {
+      SpliceWeatheringCopperBlocks blocks,
+      Function<DeferredBlock<? extends Block>, DeferredItem<BlockItem>> weathering) {
+    final var UNAFFECTED = weathering.apply(blocks.unaffected());
+    final var EXPOSED = weathering.apply(blocks.exposed());
+    final var WEATHERED = weathering.apply(blocks.weathered());
+    final var OXIDIZED = weathering.apply(blocks.oxidized());
+
+    final var WAXED = weathering.apply(blocks.waxed());
+    final var WAXED_EXPOSED = weathering.apply(blocks.waxedExposed());
+    final var WAXED_WEATHERED = weathering.apply(blocks.waxedWeathered());
+    final var WAXED_OXIDIZED = weathering.apply(blocks.waxedOxidized());
+
+    final var MAP =
+        ImmutableBiMap.of(
+            UNAFFECTED,
+            WAXED,
+            EXPOSED,
+            WAXED_EXPOSED,
+            WEATHERED,
+            WAXED_WEATHERED,
+            OXIDIZED,
+            WAXED_OXIDIZED);
+
     return new SpliceWeatheringCopperItems(
-        weather.apply(weatheringCopperBlocks.unaffected()),
-        weather.apply(weatheringCopperBlocks.exposed()),
-        weather.apply(weatheringCopperBlocks.weathered()),
-        weather.apply(weatheringCopperBlocks.oxidized()),
-        weather.apply(weatheringCopperBlocks.waxed()),
-        weather.apply(weatheringCopperBlocks.waxedExposed()),
-        weather.apply(weatheringCopperBlocks.waxedWeathered()),
-        weather.apply(weatheringCopperBlocks.waxedOxidized()));
+        UNAFFECTED,
+        EXPOSED,
+        WEATHERED,
+        OXIDIZED,
+        WAXED,
+        WAXED_EXPOSED,
+        WAXED_WEATHERED,
+        WAXED_OXIDIZED,
+        MAP);
   }
 
   public ImmutableBiMap<DeferredItem<BlockItem>, DeferredItem<BlockItem>> waxedMapping() {
-    return ImmutableBiMap.of(
-        this.unaffected,
-        this.waxed,
-        this.exposed,
-        this.waxedExposed,
-        this.weathered,
-        this.waxedWeathered,
-        this.oxidized,
-        this.waxedOxidized);
+    return waxedMap;
   }
 
   public void forEach(Consumer<DeferredItem<BlockItem>> consumer) {
