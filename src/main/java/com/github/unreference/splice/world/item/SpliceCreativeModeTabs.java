@@ -11,5 +11,9 @@ public final class SpliceCreativeModeTabs {
       event.accept(SpliceItems.FIELD_MASONED_BANNER_PATTERN.get());
       event.accept(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN.get());
     }
+
+    if (event.getTabKey().equals(CreativeModeTabs.BUILDING_BLOCKS)) {
+      SpliceItems.COPPER_BARS.forEach(event::accept);
+    }
   }
 }

@@ -1,4 +1,4 @@
-package com.github.unreference.splice.client.model;
+package com.github.unreference.splice.data.models;
 
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.world.item.SpliceItems;

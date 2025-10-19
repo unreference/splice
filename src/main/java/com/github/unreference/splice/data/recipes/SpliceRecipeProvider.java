@@ -1,13 +1,11 @@
 package com.github.unreference.splice.data.recipes;
 
 import com.github.unreference.splice.world.item.SpliceItems;
+import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
@@ -17,7 +15,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     super(output, registries);
   }
 
-  private static void buildBanners(RecipeOutput recipeOutput) {
+  private static void buildBannerPatternRecipes(RecipeOutput recipeOutput) {
     ShapelessRecipeBuilder.shapeless(
             RecipeCategory.MISC, SpliceItems.FIELD_MASONED_BANNER_PATTERN.get())
         .requires(Items.PAPER)
@@ -33,8 +31,20 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput);
   }
 
+  private static void buildCopperRecipes(RecipeOutput recipeOutput) {
+    // TODO -- Won't work.  Need to change vanilla copper trapdoor recipe.
+    ShapedRecipeBuilder.shaped(
+            RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_BARS.unaffected(), 16)
+        .define('#', Items.COPPER_INGOT)
+        .pattern("###")
+        .pattern("###")
+        .unlockedBy("has_copper_ingot", has(Items.COPPER_INGOT))
+        .save(recipeOutput);
+  }
+
   @Override
   protected void buildRecipes(RecipeOutput recipeOutput) {
-    buildBanners(recipeOutput);
+    buildBannerPatternRecipes(recipeOutput);
+    buildCopperRecipes(recipeOutput);
   }
 }

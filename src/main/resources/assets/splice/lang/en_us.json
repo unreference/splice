@@ -3,5 +3,13 @@
   "item.splice.field_masoned_banner_pattern": "Banner Pattern",
   "item.splice.field_masoned_banner_pattern.desc": "Field Masoned",
   "item.splice.bordure_indented_banner_pattern": "Banner Pattern",
-  "item.splice.bordure_indented_banner_pattern.desc": "Bordure Indented"
+  "item.splice.bordure_indented_banner_pattern.desc": "Bordure Indented",
+  "block.splice.copper_bars": "Copper Bars",
+  "block.splice.exposed_copper_bars": "Exposed Copper Bars",
+  "block.splice.oxidized_copper_bars": "Oxidized Copper Bars",
+  "block.splice.waxed_copper_bars": "Waxed Copper Bars",
+  "block.splice.waxed_exposed_copper_bars": "Waxed Exposed Copper Bars",
+  "block.splice.waxed_oxidized_copper_bars": "Waxed Oxidized Copper Bars",
+  "block.splice.waxed_weathered_copper_bars": "Waxed Weathered Copper Bars",
+  "block.splice.weathered_copper_bars": "Weathered Copper Bars"
 }
