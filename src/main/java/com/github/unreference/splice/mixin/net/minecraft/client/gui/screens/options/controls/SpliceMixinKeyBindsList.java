@@ -62,7 +62,7 @@ public abstract class SpliceMixinKeyBindsList {
         CallbackInfo callback) {
       this.splice$unbind =
           Button.builder(
-                  Component.translatable("splice.controls.unbind"), button -> splice$unbindNow())
+                  Component.translatable("controls.splice.unbind"), button -> splice$unbindNow())
               .bounds(0, 0, splice$unbindCachedWidth, 20)
               .build();
 

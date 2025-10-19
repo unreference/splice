@@ -1,5 +1,7 @@
 package com.github.unreference.splice;
 
+import com.github.unreference.splice.data.SpliceDataGenerator;
+import com.github.unreference.splice.world.item.SpliceItems;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -14,6 +16,10 @@ public final class SpliceMain {
 
   public SpliceMain(IEventBus modEventBus, ModContainer modContainer) {
     modEventBus.addListener(this::onFmlCommonSetup);
+
+    modEventBus.addListener(SpliceDataGenerator::onGatherData);
+
+    SpliceItems.register(modEventBus);
   }
 
   private void onFmlCommonSetup(FMLCommonSetupEvent event) {}

@@ -1,3 +1,7 @@
 {
-  "splice.controls.unbind": "Unbind"
+  "controls.splice.unbind": "Unbind",
+  "item.splice.field_masoned_banner_pattern": "Banner Pattern",
+  "item.splice.field_masoned_banner_pattern.desc": "Field Masoned",
+  "item.splice.bordure_indented_banner_pattern": "Banner Pattern",
+  "item.splice.bordure_indented_banner_pattern.desc": "Bordure Indented"
 }
