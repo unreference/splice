@@ -21,8 +21,6 @@ import net.minecraft.client.gui.screens.options.controls.KeyBindsScreen;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.settings.KeyModifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,11 +31,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@OnlyIn(Dist.CLIENT)
 @Mixin(KeyBindsList.class)
 public abstract class SpliceMixinKeyBindsList {
-
-  @OnlyIn(Dist.CLIENT)
   @Mixin(KeyBindsList.KeyEntry.class)
   public abstract static class MixinKeyBindsListKeyEntry
       implements SpliceMixinKeyBindsScreenHelper {

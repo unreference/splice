@@ -1,6 +1,7 @@
 package com.github.unreference.splice;
 
 import com.github.unreference.splice.data.SpliceDataGenerator;
+import com.github.unreference.splice.world.item.SpliceCreativeModeTabs;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
@@ -19,6 +20,7 @@ public final class SpliceMain {
 
     modEventBus.addListener(SpliceDataGenerator::onGatherData);
 
+    modEventBus.addListener(SpliceCreativeModeTabs::onBuildCreativeModeTabContents);
     SpliceItems.register(modEventBus);
   }
 
