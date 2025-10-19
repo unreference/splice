@@ -8,7 +8,8 @@
     "net.minecraft.client.gui.screens.options.controls.SpliceMixinKeyBindsList",
     "net.minecraft.client.gui.screens.options.controls.SpliceMixinKeyBindsList$MixinKeyBindsListKeyEntry",
     "net.minecraft.client.gui.screens.options.controls.SpliceMixinKeyBindsScreen",
-    "net.minecraft.client.gui.screens.options.controls.SpliceMixinKeyBindsScreenAccessors"
+    "net.minecraft.client.gui.screens.options.controls.SpliceMixinKeyBindsScreenAccessors",
+    "net.minecraft.client.renderer.entity.SpliceMixinLivingEntityRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
