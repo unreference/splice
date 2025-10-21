@@ -21,6 +21,7 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
 
   private void registerCopperModels() {
     this.basicItem(SpliceItems.COPPER_NUGGET.get());
+    this.handheldItem(SpliceItems.COPPER_SWORD.get());
     this.handheldItem(SpliceItems.COPPER_PICKAXE.get());
   }
 }

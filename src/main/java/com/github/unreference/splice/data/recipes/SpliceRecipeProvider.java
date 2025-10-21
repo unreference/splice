@@ -99,34 +99,47 @@ public final class SpliceRecipeProvider extends RecipeProvider {
                 SpliceMain.MOD_ID, getConversionRecipeName(to, Items.HONEYCOMB)));
   }
 
-  private static void buildCopperToolRecipes(RecipeOutput recipeOutput) {
+  private static void buildCopperEquipmentRecipes(RecipeOutput recipeOutput) {
     final var INGOT = Items.COPPER_INGOT;
+    final var TOOL_MATERIALS = SpliceItemTags.COPPER_TOOL_MATERIALS;
 
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_PICKAXE.get())
-        .define('C', SpliceItemTags.COPPER_TOOL_MATERIALS)
+        .define('C', TOOL_MATERIALS)
         .define('S', Items.STICK)
         .pattern("CCC")
         .pattern(" S ")
         .pattern(" S ")
-        .unlockedBy(getHasName(INGOT), has(SpliceItemTags.COPPER_TOOL_MATERIALS))
+        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .save(recipeOutput);
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_SWORD.get())
+        .define('C', TOOL_MATERIALS)
+        .define('S', Items.STICK)
+        .pattern("C")
+        .pattern("C")
+        .pattern("S")
+        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
         .save(recipeOutput);
   }
 
   private static void buildCopperFurnaceRecipes(RecipeOutput recipeOutput) {
     var PICKAXE = SpliceItems.COPPER_PICKAXE.get();
+    var SWORD = SpliceItems.COPPER_SWORD.get();
     var NUGGET = SpliceItems.COPPER_NUGGET.get();
 
     SimpleCookingRecipeBuilder.smelting(
-            Ingredient.of(PICKAXE), RecipeCategory.MISC, NUGGET, 0.1f, 200)
+            Ingredient.of(PICKAXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 200)
         .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
+        .unlockedBy(getHasName(SWORD), has(SWORD))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(
                 SpliceMain.MOD_ID, getSmeltingRecipeName(NUGGET)));
 
     SimpleCookingRecipeBuilder.blasting(
-            Ingredient.of(PICKAXE), RecipeCategory.MISC, NUGGET, 0.1f, 100)
+            Ingredient.of(PICKAXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 100)
         .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
+        .unlockedBy(getHasName(SWORD), has(SWORD))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(
@@ -143,7 +156,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   protected void buildRecipes(RecipeOutput recipeOutput) {
     buildBannerPatternRecipes(recipeOutput);
     buildCopperBlockRecipes(recipeOutput);
-    buildCopperToolRecipes(recipeOutput);
+    buildCopperEquipmentRecipes(recipeOutput);
     buildCopperFurnaceRecipes(recipeOutput);
     buildWaxableRecipes(recipeOutput);
   }

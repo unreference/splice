@@ -35,6 +35,14 @@ public final class SpliceItems {
 
   public static final Supplier<Item> COPPER_NUGGET = ITEMS.registerSimpleItem("copper_nugget");
 
+  public static final Supplier<Item> COPPER_SWORD =
+      ITEMS.registerItem(
+          "copper_sword",
+          props ->
+              new SwordItem(
+                  SpliceTiers.COPPER,
+                  props.attributes(SwordItem.createAttributes(SpliceTiers.COPPER, 3.0f, -2.4f))));
+
   public static final Supplier<Item> COPPER_PICKAXE =
       ITEMS.registerItem(
           "copper_pickaxe",
