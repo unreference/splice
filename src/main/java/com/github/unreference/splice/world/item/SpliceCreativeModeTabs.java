@@ -10,6 +10,7 @@ public final class SpliceCreativeModeTabs {
     if (event.getTabKey().equals(CreativeModeTabs.INGREDIENTS)) {
       event.accept(SpliceItems.FIELD_MASONED_BANNER_PATTERN.get());
       event.accept(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN.get());
+      event.accept(SpliceItems.COPPER_NUGGET.get());
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.BUILDING_BLOCKS)) {

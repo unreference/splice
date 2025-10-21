@@ -35,15 +35,30 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   }
 
   private static void buildCopperRecipes(RecipeOutput recipeOutput) {
-    twoByTwoPacker(
-        recipeOutput, RecipeCategory.REDSTONE, Blocks.COPPER_TRAPDOOR, Items.COPPER_INGOT);
+    final var INGOT = Items.COPPER_INGOT;
+    final var NUGGET = SpliceItems.COPPER_NUGGET.get();
 
+    // Trapdoor
+    twoByTwoPacker(recipeOutput, RecipeCategory.REDSTONE, Blocks.COPPER_TRAPDOOR, INGOT);
+
+    // Bars
     ShapedRecipeBuilder.shaped(
             RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_BARS.unaffected(), 16)
-        .define('#', Items.COPPER_INGOT)
-        .pattern("###")
-        .pattern("###")
-        .unlockedBy(getHasName(Items.COPPER_INGOT), has(Items.COPPER_INGOT))
+        .define('I', INGOT)
+        .pattern("III")
+        .pattern("III")
+        .unlockedBy(getHasName(INGOT), has(INGOT))
+        .save(recipeOutput);
+
+    // Chain
+    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_CHAIN.unaffected())
+        .define('I', INGOT)
+        .define('N', NUGGET)
+        .pattern("N")
+        .pattern("I")
+        .pattern("N")
+        .unlockedBy(getHasName(NUGGET), has(NUGGET))
+        .unlockedBy(getHasName(INGOT), has(INGOT))
         .save(recipeOutput);
   }
 

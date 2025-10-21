@@ -5,10 +5,7 @@ import com.github.unreference.splice.tags.SpliceBannerPatternTags;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.function.Supplier;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class SpliceItems {
@@ -30,18 +27,12 @@ public final class SpliceItems {
                   SpliceBannerPatternTags.PATTERN_ITEM_BORDURE_INDENTED, props.stacksTo(1)));
 
   public static final SpliceWeatheringCopperItems COPPER_BARS =
-      SpliceWeatheringCopperItems.create(SpliceBlocks.COPPER_BARS, SpliceItems::registerBlock);
+      SpliceWeatheringCopperItems.create(SpliceBlocks.COPPER_BARS, ITEMS::registerSimpleBlockItem);
 
   public static final SpliceWeatheringCopperItems COPPER_CHAIN =
-      SpliceWeatheringCopperItems.create(SpliceBlocks.COPPER_CHAIN, SpliceItems::registerBlock);
+      SpliceWeatheringCopperItems.create(SpliceBlocks.COPPER_CHAIN, ITEMS::registerSimpleBlockItem);
 
-  private static DeferredItem<BlockItem> registerBlock(DeferredBlock<? extends Block> block) {
-    return ITEMS.registerSimpleBlockItem(block);
-  }
-
-  public static <T extends Block> void registerBlock(String key, DeferredBlock<T> block) {
-    ITEMS.register(key, () -> new BlockItem(block.get(), new Item.Properties()));
-  }
+  public static final Supplier<Item> COPPER_NUGGET = ITEMS.registerSimpleItem("copper_nugget");
 
   public static void register(IEventBus bus) {
     ITEMS.register(bus);

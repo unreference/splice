@@ -2,7 +2,6 @@ package com.github.unreference.splice.data;
 
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
-import com.github.unreference.splice.world.level.block.SpliceWeatheringCopperBlocks;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
