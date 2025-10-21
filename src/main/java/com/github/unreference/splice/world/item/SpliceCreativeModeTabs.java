@@ -26,6 +26,7 @@ public final class SpliceCreativeModeTabs {
       event.accept(SpliceItems.COPPER_SHOVEL.get());
       event.accept(SpliceItems.COPPER_PICKAXE.get());
       event.accept(SpliceItems.COPPER_AXE.get());
+      event.accept(SpliceItems.COPPER_HOE.get());
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.COMBAT)) {

@@ -130,6 +130,15 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
         .save(recipeOutput);
 
+    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_HOE.get())
+        .define('C', TOOL_MATERIALS)
+        .define('S', Items.STICK)
+        .pattern("CC")
+        .pattern(" S")
+        .pattern(" S")
+        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .save(recipeOutput);
+
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_SWORD.get())
         .define('C', TOOL_MATERIALS)
         .define('S', Items.STICK)
@@ -144,14 +153,16 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     var SHOVEL = SpliceItems.COPPER_SHOVEL.get();
     var PICKAXE = SpliceItems.COPPER_PICKAXE.get();
     var AXE = SpliceItems.COPPER_AXE.get();
+    var HOE = SpliceItems.COPPER_HOE.get();
     var SWORD = SpliceItems.COPPER_SWORD.get();
     var NUGGET = SpliceItems.COPPER_NUGGET.get();
 
     SimpleCookingRecipeBuilder.smelting(
-            Ingredient.of(SHOVEL, PICKAXE, AXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 200)
+            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 200)
         .unlockedBy(getHasName(SHOVEL), has(SHOVEL))
         .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
         .unlockedBy(getHasName(AXE), has(AXE))
+        .unlockedBy(getHasName(HOE), has(HOE))
         .unlockedBy(getHasName(SWORD), has(SWORD))
         .save(
             recipeOutput,
@@ -159,10 +170,11 @@ public final class SpliceRecipeProvider extends RecipeProvider {
                 SpliceMain.MOD_ID, getSmeltingRecipeName(NUGGET)));
 
     SimpleCookingRecipeBuilder.blasting(
-            Ingredient.of(SHOVEL, PICKAXE, AXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 100)
+            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 100)
         .unlockedBy(getHasName(SHOVEL), has(SHOVEL))
         .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
         .unlockedBy(getHasName(AXE), has(AXE))
+        .unlockedBy(getHasName(HOE), has(HOE))
         .unlockedBy(getHasName(SWORD), has(SWORD))
         .save(
             recipeOutput,
@@ -176,12 +188,16 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .forEach(entry -> waxable(output, entry.getKey().get(), entry.getValue().get()));
   }
 
-  @Override
-  protected void buildRecipes(RecipeOutput recipeOutput) {
-    buildBannerPatternRecipes(recipeOutput);
+  private static void buildCopperRecipes(RecipeOutput recipeOutput) {
     buildCopperBlockRecipes(recipeOutput);
     buildCopperEquipmentRecipes(recipeOutput);
     buildCopperFurnaceRecipes(recipeOutput);
     buildWaxableRecipes(recipeOutput);
+  }
+
+  @Override
+  protected void buildRecipes(RecipeOutput recipeOutput) {
+    buildBannerPatternRecipes(recipeOutput);
+    buildCopperRecipes(recipeOutput);
   }
 }

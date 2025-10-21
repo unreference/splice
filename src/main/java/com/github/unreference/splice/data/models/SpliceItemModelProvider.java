@@ -24,6 +24,7 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.handheldItem(SpliceItems.COPPER_SHOVEL.get());
     this.handheldItem(SpliceItems.COPPER_PICKAXE.get());
     this.handheldItem(SpliceItems.COPPER_AXE.get());
+    this.handheldItem(SpliceItems.COPPER_HOE.get());
     this.handheldItem(SpliceItems.COPPER_SWORD.get());
   }
 }
