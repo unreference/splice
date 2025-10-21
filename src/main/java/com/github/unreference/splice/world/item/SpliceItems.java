@@ -35,13 +35,13 @@ public final class SpliceItems {
 
   public static final Supplier<Item> COPPER_NUGGET = ITEMS.registerSimpleItem("copper_nugget");
 
-  public static final Supplier<Item> COPPER_SWORD =
+  public static final Supplier<Item> COPPER_SHOVEL =
       ITEMS.registerItem(
-          "copper_sword",
+          "copper_shovel",
           props ->
-              new SwordItem(
+              new ShovelItem(
                   SpliceTiers.COPPER,
-                  props.attributes(SwordItem.createAttributes(SpliceTiers.COPPER, 3.0f, -2.4f))));
+                  props.attributes(ShovelItem.createAttributes(SpliceTiers.COPPER, 1.5f, -3.0f))));
 
   public static final Supplier<Item> COPPER_PICKAXE =
       ITEMS.registerItem(
@@ -50,6 +50,14 @@ public final class SpliceItems {
               new PickaxeItem(
                   SpliceTiers.COPPER,
                   props.attributes(PickaxeItem.createAttributes(SpliceTiers.COPPER, 1.0f, -2.8f))));
+
+  public static final Supplier<Item> COPPER_SWORD =
+      ITEMS.registerItem(
+          "copper_sword",
+          props ->
+              new SwordItem(
+                  SpliceTiers.COPPER,
+                  props.attributes(SwordItem.createAttributes(SpliceTiers.COPPER, 3.0f, -2.4f))));
 
   public static void register(IEventBus bus) {
     ITEMS.register(bus);

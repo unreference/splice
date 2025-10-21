@@ -23,6 +23,7 @@ public final class SpliceCreativeModeTabs {
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.TOOLS_AND_UTILITIES)) {
+      event.accept(SpliceItems.COPPER_SHOVEL.get());
       event.accept(SpliceItems.COPPER_PICKAXE.get());
     }
 

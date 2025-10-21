@@ -103,6 +103,15 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     final var INGOT = Items.COPPER_INGOT;
     final var TOOL_MATERIALS = SpliceItemTags.COPPER_TOOL_MATERIALS;
 
+    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_SHOVEL.get())
+        .define('C', TOOL_MATERIALS)
+        .define('S', Items.STICK)
+        .pattern("C")
+        .pattern("S")
+        .pattern("S")
+        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .save(recipeOutput);
+
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_PICKAXE.get())
         .define('C', TOOL_MATERIALS)
         .define('S', Items.STICK)
@@ -123,12 +132,14 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   }
 
   private static void buildCopperFurnaceRecipes(RecipeOutput recipeOutput) {
+    var SHOVEL = SpliceItems.COPPER_SHOVEL.get();
     var PICKAXE = SpliceItems.COPPER_PICKAXE.get();
     var SWORD = SpliceItems.COPPER_SWORD.get();
     var NUGGET = SpliceItems.COPPER_NUGGET.get();
 
     SimpleCookingRecipeBuilder.smelting(
-            Ingredient.of(PICKAXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 200)
+            Ingredient.of(SHOVEL, PICKAXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 200)
+        .unlockedBy(getHasName(SHOVEL), has(SHOVEL))
         .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
         .unlockedBy(getHasName(SWORD), has(SWORD))
         .save(
@@ -137,7 +148,8 @@ public final class SpliceRecipeProvider extends RecipeProvider {
                 SpliceMain.MOD_ID, getSmeltingRecipeName(NUGGET)));
 
     SimpleCookingRecipeBuilder.blasting(
-            Ingredient.of(PICKAXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 100)
+            Ingredient.of(SHOVEL, PICKAXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 100)
+        .unlockedBy(getHasName(SHOVEL), has(SHOVEL))
         .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
         .unlockedBy(getHasName(SWORD), has(SWORD))
         .save(
