@@ -1,6 +1,7 @@
 package com.github.unreference.splice.data.recipes;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.tags.SpliceItemTags;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.concurrent.CompletableFuture;
@@ -9,6 +10,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -19,6 +21,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   }
 
   private static void buildBannerPatternRecipes(RecipeOutput recipeOutput) {
+    // Field masoned
     ShapelessRecipeBuilder.shapeless(
             RecipeCategory.MISC, SpliceItems.FIELD_MASONED_BANNER_PATTERN.get())
         .requires(Items.PAPER)
@@ -26,6 +29,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(Blocks.BRICKS), has(Blocks.BRICKS))
         .save(recipeOutput);
 
+    // Bordure indented
     ShapelessRecipeBuilder.shapeless(
             RecipeCategory.MISC, SpliceItems.BORDURE_INDENTED_BANNER_PATTERN.get())
         .requires(Items.PAPER)
@@ -34,7 +38,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput);
   }
 
-  private static void buildCopperRecipes(RecipeOutput recipeOutput) {
+  private static void buildCopperBlockRecipes(RecipeOutput recipeOutput) {
     final var INGOT = Items.COPPER_INGOT;
     final var NUGGET = SpliceItems.COPPER_NUGGET.get();
 
@@ -50,10 +54,31 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(INGOT), has(INGOT))
         .save(recipeOutput);
 
+    // Ingot
+    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, INGOT)
+        .define('I', NUGGET)
+        .pattern("III")
+        .pattern("III")
+        .pattern("III")
+        .unlockedBy(getHasName(NUGGET), has(NUGGET))
+        .save(
+            recipeOutput,
+            ResourceLocation.fromNamespaceAndPath(
+                SpliceMain.MOD_ID, getConversionRecipeName(INGOT, NUGGET)));
+
+    // Nugget
+    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NUGGET, 9)
+        .requires(INGOT)
+        .unlockedBy(getHasName(INGOT), has(INGOT))
+        .save(
+            recipeOutput,
+            ResourceLocation.fromNamespaceAndPath(
+                SpliceMain.MOD_ID, getConversionRecipeName(NUGGET, INGOT)));
+
     // Chain
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_CHAIN.unaffected())
-        .define('I', INGOT)
         .define('N', NUGGET)
+        .define('I', INGOT)
         .pattern("N")
         .pattern("I")
         .pattern("N")
@@ -74,6 +99,40 @@ public final class SpliceRecipeProvider extends RecipeProvider {
                 SpliceMain.MOD_ID, getConversionRecipeName(to, Items.HONEYCOMB)));
   }
 
+  private static void buildCopperToolRecipes(RecipeOutput recipeOutput) {
+    final var INGOT = Items.COPPER_INGOT;
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_PICKAXE.get())
+        .define('C', SpliceItemTags.COPPER_TOOL_MATERIALS)
+        .define('S', Items.STICK)
+        .pattern("CCC")
+        .pattern(" S ")
+        .pattern(" S ")
+        .unlockedBy(getHasName(INGOT), has(SpliceItemTags.COPPER_TOOL_MATERIALS))
+        .save(recipeOutput);
+  }
+
+  private static void buildCopperFurnaceRecipes(RecipeOutput recipeOutput) {
+    var PICKAXE = SpliceItems.COPPER_PICKAXE.get();
+    var NUGGET = SpliceItems.COPPER_NUGGET.get();
+
+    SimpleCookingRecipeBuilder.smelting(
+            Ingredient.of(PICKAXE), RecipeCategory.MISC, NUGGET, 0.1f, 200)
+        .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
+        .save(
+            recipeOutput,
+            ResourceLocation.fromNamespaceAndPath(
+                SpliceMain.MOD_ID, getSmeltingRecipeName(NUGGET)));
+
+    SimpleCookingRecipeBuilder.blasting(
+            Ingredient.of(PICKAXE), RecipeCategory.MISC, NUGGET, 0.1f, 100)
+        .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
+        .save(
+            recipeOutput,
+            ResourceLocation.fromNamespaceAndPath(
+                SpliceMain.MOD_ID, getBlastingRecipeName(NUGGET)));
+  }
+
   private static void buildWaxableRecipes(RecipeOutput output) {
     SpliceBlocks.getCopperFamily().stream()
         .flatMap(f -> f.waxedMapping().entrySet().stream())
@@ -83,7 +142,9 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   @Override
   protected void buildRecipes(RecipeOutput recipeOutput) {
     buildBannerPatternRecipes(recipeOutput);
-    buildCopperRecipes(recipeOutput);
+    buildCopperBlockRecipes(recipeOutput);
+    buildCopperToolRecipes(recipeOutput);
+    buildCopperFurnaceRecipes(recipeOutput);
     buildWaxableRecipes(recipeOutput);
   }
 }

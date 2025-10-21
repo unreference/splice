@@ -9,6 +9,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class SpliceItems {
+
   private static final DeferredRegister.Items ITEMS =
       DeferredRegister.createItems(SpliceMain.MOD_ID);
 
@@ -33,6 +34,14 @@ public final class SpliceItems {
       SpliceWeatheringCopperItems.create(SpliceBlocks.COPPER_CHAIN, ITEMS::registerSimpleBlockItem);
 
   public static final Supplier<Item> COPPER_NUGGET = ITEMS.registerSimpleItem("copper_nugget");
+
+  public static final Supplier<Item> COPPER_PICKAXE =
+      ITEMS.registerItem(
+          "copper_pickaxe",
+          props ->
+              new PickaxeItem(
+                  SpliceTiers.COPPER,
+                  props.attributes(PickaxeItem.createAttributes(SpliceTiers.COPPER, 1.0f, -2.8f))));
 
   public static void register(IEventBus bus) {
     ITEMS.register(bus);

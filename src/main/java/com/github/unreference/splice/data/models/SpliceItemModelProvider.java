@@ -15,6 +15,12 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
   protected void registerModels() {
     this.basicItem(SpliceItems.FIELD_MASONED_BANNER_PATTERN.get());
     this.basicItem(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN.get());
+
+    this.registerCopperModels();
+  }
+
+  private void registerCopperModels() {
     this.basicItem(SpliceItems.COPPER_NUGGET.get());
+    this.handheldItem(SpliceItems.COPPER_PICKAXE.get());
   }
 }
