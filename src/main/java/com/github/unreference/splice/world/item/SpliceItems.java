@@ -85,6 +85,33 @@ public final class SpliceItems {
                   ArmorItem.Type.HELMET,
                   props.durability(ArmorItem.Type.HELMET.getDurability(11))));
 
+  public static final DeferredItem<ArmorItem> COPPER_CHESTPLATE =
+      ITEMS.registerItem(
+          "copper_chestplate",
+          props ->
+              new ArmorItem(
+                  SpliceArmorMaterials.COPPER,
+                  ArmorItem.Type.CHESTPLATE,
+                  props.durability(ArmorItem.Type.CHESTPLATE.getDurability(11))));
+
+  public static final DeferredItem<ArmorItem> COPPER_LEGGINGS =
+      ITEMS.registerItem(
+          "copper_leggings",
+          props ->
+              new ArmorItem(
+                  SpliceArmorMaterials.COPPER,
+                  ArmorItem.Type.LEGGINGS,
+                  props.durability(ArmorItem.Type.LEGGINGS.getDurability(11))));
+
+  public static final DeferredItem<ArmorItem> COPPER_BOOTS =
+      ITEMS.registerItem(
+          "copper_boots",
+          props ->
+              new ArmorItem(
+                  SpliceArmorMaterials.COPPER,
+                  ArmorItem.Type.BOOTS,
+                  props.durability(ArmorItem.Type.BOOTS.getDurability(11))));
+
   public static void register(IEventBus bus) {
     ITEMS.register(bus);
   }

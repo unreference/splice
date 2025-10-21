@@ -32,5 +32,8 @@ public final class SpliceItemTagsProvider extends ItemTagsProvider {
     this.tag(ItemTags.HOES).add(SpliceItems.COPPER_HOE.get());
     this.tag(ItemTags.SWORDS).add(SpliceItems.COPPER_SWORD.get());
     this.tag(ItemTags.HEAD_ARMOR).add(SpliceItems.COPPER_HELMET.get());
+    this.tag(ItemTags.CHEST_ARMOR).add(SpliceItems.COPPER_CHESTPLATE.get());
+    this.tag(ItemTags.LEG_ARMOR).add(SpliceItems.COPPER_LEGGINGS.get());
+    this.tag(ItemTags.FOOT_ARMOR).add(SpliceItems.COPPER_BOOTS.get());
   }
 }

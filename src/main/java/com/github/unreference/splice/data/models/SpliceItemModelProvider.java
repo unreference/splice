@@ -53,10 +53,13 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.handheldItem(SpliceItems.COPPER_HOE.get());
     this.handheldItem(SpliceItems.COPPER_SWORD.get());
 
-    this.generateTrimmableItem(SpliceItems.COPPER_HELMET);
+    this.generateTrimmableArmor(SpliceItems.COPPER_HELMET);
+    this.generateTrimmableArmor(SpliceItems.COPPER_CHESTPLATE);
+    this.generateTrimmableArmor(SpliceItems.COPPER_LEGGINGS);
+    this.generateTrimmableArmor(SpliceItems.COPPER_BOOTS);
   }
 
-  private void generateTrimmableItem(DeferredItem<ArmorItem> item) {
+  private void generateTrimmableArmor(DeferredItem<ArmorItem> item) {
     final String MOD_ID = SpliceMain.MOD_ID;
 
     Item armorItem = item.get();

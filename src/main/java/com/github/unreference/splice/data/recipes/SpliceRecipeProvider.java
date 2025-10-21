@@ -101,11 +101,12 @@ public final class SpliceRecipeProvider extends RecipeProvider {
 
   private static void buildCopperEquipmentRecipes(RecipeOutput recipeOutput) {
     final var INGOT = Items.COPPER_INGOT;
+    final var STICK = Items.STICK;
     final var TOOL_MATERIALS = SpliceItemTags.COPPER_TOOL_MATERIALS;
 
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_SHOVEL.get())
         .define('C', TOOL_MATERIALS)
-        .define('S', Items.STICK)
+        .define('S', STICK)
         .pattern("C")
         .pattern("S")
         .pattern("S")
@@ -114,7 +115,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
 
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_PICKAXE.get())
         .define('C', TOOL_MATERIALS)
-        .define('S', Items.STICK)
+        .define('S', STICK)
         .pattern("CCC")
         .pattern(" S ")
         .pattern(" S ")
@@ -123,7 +124,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
 
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_AXE.get())
         .define('C', TOOL_MATERIALS)
-        .define('S', Items.STICK)
+        .define('S', STICK)
         .pattern("CC")
         .pattern("CS")
         .pattern(" S")
@@ -132,7 +133,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
 
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_HOE.get())
         .define('C', TOOL_MATERIALS)
-        .define('S', Items.STICK)
+        .define('S', STICK)
         .pattern("CC")
         .pattern(" S")
         .pattern(" S")
@@ -141,7 +142,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
 
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_SWORD.get())
         .define('C', TOOL_MATERIALS)
-        .define('S', Items.STICK)
+        .define('S', STICK)
         .pattern("C")
         .pattern("C")
         .pattern("S")
@@ -154,19 +155,45 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .pattern("C C")
         .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
         .save(recipeOutput);
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_CHESTPLATE.get())
+        .define('C', TOOL_MATERIALS)
+        .pattern("C C")
+        .pattern("CCC")
+        .pattern("CCC")
+        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .save(recipeOutput);
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_LEGGINGS.get())
+        .define('C', TOOL_MATERIALS)
+        .pattern("CCC")
+        .pattern("C C")
+        .pattern("C C")
+        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .save(recipeOutput);
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_BOOTS.get())
+        .define('C', TOOL_MATERIALS)
+        .pattern("C C")
+        .pattern("C C")
+        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .save(recipeOutput);
   }
 
   private static void buildCopperFurnaceRecipes(RecipeOutput recipeOutput) {
-    var SHOVEL = SpliceItems.COPPER_SHOVEL.get();
-    var PICKAXE = SpliceItems.COPPER_PICKAXE.get();
-    var AXE = SpliceItems.COPPER_AXE.get();
-    var HOE = SpliceItems.COPPER_HOE.get();
-    var SWORD = SpliceItems.COPPER_SWORD.get();
-    var HELMET = SpliceItems.COPPER_HELMET.get();
-    var NUGGET = SpliceItems.COPPER_NUGGET.get();
+    final var SHOVEL = SpliceItems.COPPER_SHOVEL.get();
+    final var PICKAXE = SpliceItems.COPPER_PICKAXE.get();
+    final var AXE = SpliceItems.COPPER_AXE.get();
+    final var HOE = SpliceItems.COPPER_HOE.get();
+    final var SWORD = SpliceItems.COPPER_SWORD.get();
+    final var HELMET = SpliceItems.COPPER_HELMET.get();
+    final var CHESTPLATE = SpliceItems.COPPER_CHESTPLATE.get();
+    final var LEGGINGS = SpliceItems.COPPER_LEGGINGS.get();
+    final var BOOTS = SpliceItems.COPPER_BOOTS.get();
+    final var NUGGET = SpliceItems.COPPER_NUGGET.get();
 
     SimpleCookingRecipeBuilder.smelting(
-            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET),
+            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET, CHESTPLATE, LEGGINGS, BOOTS),
             RecipeCategory.MISC,
             NUGGET,
             0.1f,
@@ -176,13 +203,17 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(AXE), has(AXE))
         .unlockedBy(getHasName(HOE), has(HOE))
         .unlockedBy(getHasName(SWORD), has(SWORD))
+        .unlockedBy(getHasName(HELMET), has(HELMET))
+        .unlockedBy(getHasName(CHESTPLATE), has(CHESTPLATE))
+        .unlockedBy(getHasName(LEGGINGS), has(LEGGINGS))
+        .unlockedBy(getHasName(BOOTS), has(BOOTS))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(
                 SpliceMain.MOD_ID, getSmeltingRecipeName(NUGGET)));
 
     SimpleCookingRecipeBuilder.blasting(
-            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET),
+            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET, CHESTPLATE, LEGGINGS, BOOTS),
             RecipeCategory.MISC,
             NUGGET,
             0.1f,
@@ -193,6 +224,9 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(HOE), has(HOE))
         .unlockedBy(getHasName(SWORD), has(SWORD))
         .unlockedBy(getHasName(HELMET), has(HELMET))
+        .unlockedBy(getHasName(CHESTPLATE), has(CHESTPLATE))
+        .unlockedBy(getHasName(LEGGINGS), has(LEGGINGS))
+        .unlockedBy(getHasName(BOOTS), has(BOOTS))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(
