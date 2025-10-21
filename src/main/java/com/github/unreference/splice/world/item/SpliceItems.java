@@ -51,6 +51,14 @@ public final class SpliceItems {
                   SpliceTiers.COPPER,
                   props.attributes(PickaxeItem.createAttributes(SpliceTiers.COPPER, 1.0f, -2.8f))));
 
+  public static final Supplier<Item> COPPER_AXE =
+      ITEMS.registerItem(
+          "copper_axe",
+          props ->
+              new AxeItem(
+                  SpliceTiers.COPPER,
+                  props.attributes(AxeItem.createAttributes(SpliceTiers.COPPER, 7.0f, -3.2f))));
+
   public static final Supplier<Item> COPPER_SWORD =
       ITEMS.registerItem(
           "copper_sword",

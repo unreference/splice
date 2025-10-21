@@ -87,7 +87,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput);
   }
 
-  private static void waxableRecipe(RecipeOutput recipeOutput, Block from, Block to) {
+  private static void waxable(RecipeOutput recipeOutput, Block from, Block to) {
     ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, to)
         .requires(from)
         .requires(Items.HONEYCOMB)
@@ -121,6 +121,15 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
         .save(recipeOutput);
 
+    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_AXE.get())
+        .define('C', TOOL_MATERIALS)
+        .define('S', Items.STICK)
+        .pattern("CC")
+        .pattern("CS")
+        .pattern(" S")
+        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .save(recipeOutput);
+
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_SWORD.get())
         .define('C', TOOL_MATERIALS)
         .define('S', Items.STICK)
@@ -134,13 +143,15 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   private static void buildCopperFurnaceRecipes(RecipeOutput recipeOutput) {
     var SHOVEL = SpliceItems.COPPER_SHOVEL.get();
     var PICKAXE = SpliceItems.COPPER_PICKAXE.get();
+    var AXE = SpliceItems.COPPER_AXE.get();
     var SWORD = SpliceItems.COPPER_SWORD.get();
     var NUGGET = SpliceItems.COPPER_NUGGET.get();
 
     SimpleCookingRecipeBuilder.smelting(
-            Ingredient.of(SHOVEL, PICKAXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 200)
+            Ingredient.of(SHOVEL, PICKAXE, AXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 200)
         .unlockedBy(getHasName(SHOVEL), has(SHOVEL))
         .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
+        .unlockedBy(getHasName(AXE), has(AXE))
         .unlockedBy(getHasName(SWORD), has(SWORD))
         .save(
             recipeOutput,
@@ -148,9 +159,10 @@ public final class SpliceRecipeProvider extends RecipeProvider {
                 SpliceMain.MOD_ID, getSmeltingRecipeName(NUGGET)));
 
     SimpleCookingRecipeBuilder.blasting(
-            Ingredient.of(SHOVEL, PICKAXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 100)
+            Ingredient.of(SHOVEL, PICKAXE, AXE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 100)
         .unlockedBy(getHasName(SHOVEL), has(SHOVEL))
         .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
+        .unlockedBy(getHasName(AXE), has(AXE))
         .unlockedBy(getHasName(SWORD), has(SWORD))
         .save(
             recipeOutput,
@@ -161,7 +173,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   private static void buildWaxableRecipes(RecipeOutput output) {
     SpliceBlocks.getCopperFamily().stream()
         .flatMap(f -> f.waxedMapping().entrySet().stream())
-        .forEach(entry -> waxableRecipe(output, entry.getKey().get(), entry.getValue().get()));
+        .forEach(entry -> waxable(output, entry.getKey().get(), entry.getValue().get()));
   }
 
   @Override
