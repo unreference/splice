@@ -1,8 +1,10 @@
 package com.github.unreference.splice.world.level.block;
 
 import com.github.unreference.splice.SpliceMain;
+import java.util.List;
 import java.util.function.Function;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -27,11 +29,32 @@ public final class SpliceBlocks {
                   .sound(SoundType.COPPER)
                   .noOcclusion());
 
+  public static final SpliceWeatheringCopperBlocks COPPER_CHAIN =
+      SpliceWeatheringCopperBlocks.create(
+          "copper_chain",
+          SpliceBlocks::register,
+          ChainBlock::new,
+          SpliceWeatheringCopperChainBlock::new,
+          weatherState ->
+              BlockBehaviour.Properties.of()
+                  .forceSolidOn()
+                  .requiresCorrectToolForDrops()
+                  .strength(5.0f, 6.0f)
+                  .sound(SoundType.CHAIN)
+                  .noOcclusion());
+
+  private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
+      List.of(COPPER_BARS, COPPER_CHAIN);
+
   private static <B extends Block> DeferredBlock<B> register(
       String key,
       Function<BlockBehaviour.Properties, ? extends B> ctor,
       BlockBehaviour.Properties properties) {
     return BLOCKS.registerBlock(key, ctor, properties);
+  }
+
+  public static List<SpliceWeatheringCopperBlocks> getCopperFamily() {
+    return COPPER_FAMILY;
   }
 
   public static void register(IEventBus bus) {

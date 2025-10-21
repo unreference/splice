@@ -3,8 +3,6 @@ package com.github.unreference.splice.data.recipes;
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
-import com.ibm.icu.impl.Pair;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -13,20 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.registries.DeferredBlock;
 
 public final class SpliceRecipeProvider extends RecipeProvider {
-  private static final List<
-          Pair<? extends DeferredBlock<? extends Block>, ? extends DeferredBlock<? extends Block>>>
-      WAXABLES =
-          List.of(
-              Pair.of(SpliceBlocks.COPPER_BARS.unaffected(), SpliceBlocks.COPPER_BARS.waxed()),
-              Pair.of(SpliceBlocks.COPPER_BARS.exposed(), SpliceBlocks.COPPER_BARS.waxedExposed()),
-              Pair.of(
-                  SpliceBlocks.COPPER_BARS.weathered(), SpliceBlocks.COPPER_BARS.waxedWeathered()),
-              Pair.of(
-                  SpliceBlocks.COPPER_BARS.oxidized(), SpliceBlocks.COPPER_BARS.waxedOxidized()));
-
   public SpliceRecipeProvider(
       PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
     super(output, registries);
@@ -61,27 +47,22 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput);
   }
 
-  private static void buildWaxableRecipes(RecipeOutput recipeOutput) {
-    for (var pair : WAXABLES) {
-      Block from = pair.first.get();
-      Block to = pair.second.get();
-
-      ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, to)
-          .requires(from)
-          .requires(Items.HONEYCOMB)
-          .group(getItemName(to))
-          .unlockedBy(getHasName(from), has(from))
-          .save(
-              recipeOutput,
-              ResourceLocation.fromNamespaceAndPath(
-                  SpliceMain.MOD_ID, getConversionRecipeName(to, Items.HONEYCOMB)));
-    }
+  private static void waxableRecipe(RecipeOutput recipeOutput, Block from, Block to) {
+    ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, to)
+        .requires(from)
+        .requires(Items.HONEYCOMB)
+        .group(getItemName(to))
+        .unlockedBy(getHasName(from), has(from))
+        .save(
+            recipeOutput,
+            ResourceLocation.fromNamespaceAndPath(
+                SpliceMain.MOD_ID, getConversionRecipeName(to, Items.HONEYCOMB)));
   }
 
-  public static List<
-          Pair<? extends DeferredBlock<? extends Block>, ? extends DeferredBlock<? extends Block>>>
-      getWaxables() {
-    return WAXABLES;
+  private static void buildWaxableRecipes(RecipeOutput output) {
+    SpliceBlocks.getCopperFamily().stream()
+        .flatMap(f -> f.waxedMapping().entrySet().stream())
+        .forEach(entry -> waxableRecipe(output, entry.getKey().get(), entry.getValue().get()));
   }
 
   @Override

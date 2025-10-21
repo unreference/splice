@@ -5,32 +5,30 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class SpliceWeatheringCopperBarsBlock extends IronBarsBlock
-    implements WeatheringCopper {
-  private static final MapCodec<SpliceWeatheringCopperBarsBlock> CODEC =
+public final class SpliceWeatheringCopperChainBlock extends ChainBlock implements WeatheringCopper {
+  private static final MapCodec<SpliceWeatheringCopperChainBlock> CODEC =
       RecordCodecBuilder.mapCodec(
           instance ->
               instance
                   .group(
                       WeatherState.CODEC
                           .fieldOf("weathering_state")
-                          .forGetter(SpliceWeatheringCopperBarsBlock::getAge),
+                          .forGetter(SpliceWeatheringCopperChainBlock::getAge),
                       propertiesCodec())
-                  .apply(instance, SpliceWeatheringCopperBarsBlock::new));
+                  .apply(instance, SpliceWeatheringCopperChainBlock::new));
 
-  private final WeatheringCopper.WeatherState weatherState;
+  private final WeatherState weatherState;
 
-  public SpliceWeatheringCopperBarsBlock(
-      WeatheringCopper.WeatherState weatherState, Properties properties) {
+  public SpliceWeatheringCopperChainBlock(WeatherState weatherState, Properties properties) {
     super(properties);
     this.weatherState = weatherState;
   }
 
-  public static MapCodec<SpliceWeatheringCopperBarsBlock> getCodec() {
+  public static MapCodec<SpliceWeatheringCopperChainBlock> getCodec() {
     return CODEC;
   }
 

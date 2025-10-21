@@ -32,6 +32,9 @@ public final class SpliceItems {
   public static final SpliceWeatheringCopperItems COPPER_BARS =
       SpliceWeatheringCopperItems.create(SpliceBlocks.COPPER_BARS, SpliceItems::registerBlock);
 
+  public static final SpliceWeatheringCopperItems COPPER_CHAIN =
+      SpliceWeatheringCopperItems.create(SpliceBlocks.COPPER_CHAIN, SpliceItems::registerBlock);
+
   private static DeferredItem<BlockItem> registerBlock(DeferredBlock<? extends Block> block) {
     return ITEMS.registerSimpleBlockItem(block);
   }

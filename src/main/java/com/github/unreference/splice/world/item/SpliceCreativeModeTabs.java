@@ -14,6 +14,11 @@ public final class SpliceCreativeModeTabs {
 
     if (event.getTabKey().equals(CreativeModeTabs.BUILDING_BLOCKS)) {
       SpliceItems.COPPER_BARS.forEach(event::accept);
+      SpliceItems.COPPER_CHAIN.forEach(event::accept);
+    }
+
+    if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS)) {
+      SpliceItems.COPPER_CHAIN.forEach(event::accept);
     }
   }
 }
