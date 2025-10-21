@@ -32,6 +32,7 @@ public final class SpliceCreativeModeTabs {
     if (event.getTabKey().equals(CreativeModeTabs.COMBAT)) {
       event.accept(SpliceItems.COPPER_SWORD.get());
       event.accept(SpliceItems.COPPER_AXE.get());
+      event.accept(SpliceItems.COPPER_HELMET.get());
     }
   }
 }

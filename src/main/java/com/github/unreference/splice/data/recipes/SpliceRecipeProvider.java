@@ -147,6 +147,13 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .pattern("S")
         .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
         .save(recipeOutput);
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_HELMET.get())
+        .define('C', TOOL_MATERIALS)
+        .pattern("CCC")
+        .pattern("C C")
+        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .save(recipeOutput);
   }
 
   private static void buildCopperFurnaceRecipes(RecipeOutput recipeOutput) {
@@ -155,10 +162,15 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     var AXE = SpliceItems.COPPER_AXE.get();
     var HOE = SpliceItems.COPPER_HOE.get();
     var SWORD = SpliceItems.COPPER_SWORD.get();
+    var HELMET = SpliceItems.COPPER_HELMET.get();
     var NUGGET = SpliceItems.COPPER_NUGGET.get();
 
     SimpleCookingRecipeBuilder.smelting(
-            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 200)
+            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET),
+            RecipeCategory.MISC,
+            NUGGET,
+            0.1f,
+            200)
         .unlockedBy(getHasName(SHOVEL), has(SHOVEL))
         .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
         .unlockedBy(getHasName(AXE), has(AXE))
@@ -170,12 +182,17 @@ public final class SpliceRecipeProvider extends RecipeProvider {
                 SpliceMain.MOD_ID, getSmeltingRecipeName(NUGGET)));
 
     SimpleCookingRecipeBuilder.blasting(
-            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD), RecipeCategory.MISC, NUGGET, 0.1f, 100)
+            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET),
+            RecipeCategory.MISC,
+            NUGGET,
+            0.1f,
+            100)
         .unlockedBy(getHasName(SHOVEL), has(SHOVEL))
         .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
         .unlockedBy(getHasName(AXE), has(AXE))
         .unlockedBy(getHasName(HOE), has(HOE))
         .unlockedBy(getHasName(SWORD), has(SWORD))
+        .unlockedBy(getHasName(HELMET), has(HELMET))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(

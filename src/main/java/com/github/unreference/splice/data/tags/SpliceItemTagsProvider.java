@@ -27,9 +27,10 @@ public final class SpliceItemTagsProvider extends ItemTagsProvider {
     this.tag(SpliceItemTags.COPPER_TOOL_MATERIALS).add(Items.COPPER_INGOT);
     this.tag(ItemTags.SHOVELS).add(SpliceItems.COPPER_SHOVEL.get());
     this.tag(ItemTags.PICKAXES).add(SpliceItems.COPPER_PICKAXE.get());
+    this.tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(SpliceItems.COPPER_PICKAXE.get());
     this.tag(ItemTags.AXES).add(SpliceItems.COPPER_AXE.get());
     this.tag(ItemTags.HOES).add(SpliceItems.COPPER_HOE.get());
     this.tag(ItemTags.SWORDS).add(SpliceItems.COPPER_SWORD.get());
-    this.tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(SpliceItems.COPPER_PICKAXE.get());
+    this.tag(ItemTags.HEAD_ARMOR).add(SpliceItems.COPPER_HELMET.get());
   }
 }
