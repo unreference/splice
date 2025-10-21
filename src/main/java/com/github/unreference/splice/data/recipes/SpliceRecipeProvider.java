@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 public final class SpliceRecipeProvider extends RecipeProvider {
-  // TODO: Find a better way to handle this.
   private static final List<
           Pair<? extends DeferredBlock<? extends Block>, ? extends DeferredBlock<? extends Block>>>
       WAXABLES =
@@ -77,6 +76,12 @@ public final class SpliceRecipeProvider extends RecipeProvider {
               ResourceLocation.fromNamespaceAndPath(
                   SpliceMain.MOD_ID, getConversionRecipeName(to, Items.HONEYCOMB)));
     }
+  }
+
+  public static List<
+          Pair<? extends DeferredBlock<? extends Block>, ? extends DeferredBlock<? extends Block>>>
+      getWaxables() {
+    return WAXABLES;
   }
 
   @Override

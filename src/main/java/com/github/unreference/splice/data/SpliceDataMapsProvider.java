@@ -1,6 +1,7 @@
 package com.github.unreference.splice.data;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.data.recipes.SpliceRecipeProvider;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import com.github.unreference.splice.world.level.block.SpliceWeatheringCopperBlocks;
 import java.util.concurrent.CompletableFuture;
@@ -21,13 +22,15 @@ public final class SpliceDataMapsProvider extends DataMapProvider {
 
   @Override
   protected void gather(HolderLookup.Provider provider) {
-    final var OXIDIZABLE = builder(NeoForgeDataMaps.OXIDIZABLES);
-    BARS.weatheringMapping()
-        .forEach((from, to) -> OXIDIZABLE.add(from.getKey(), new Oxidizable(to.get()), false));
+    final var OXIDIZABLES = builder(NeoForgeDataMaps.OXIDIZABLES);
+    final var WAXABLES = builder(NeoForgeDataMaps.WAXABLES);
 
-    final var WAXABLE = builder(NeoForgeDataMaps.WAXABLES);
-    BARS.waxedMapping()
-        .forEach((from, to) -> WAXABLE.add(from.getKey(), new Waxable(to.get()), false));
+    BARS.weatheringMapping()
+        .forEach((from, to) -> OXIDIZABLES.add(from.getKey(), new Oxidizable(to.get()), false));
+
+    for (var p : SpliceRecipeProvider.getWaxables()) {
+      WAXABLES.add(p.first.getKey(), new Waxable(p.second.get()), false);
+    }
   }
 
   @Override
