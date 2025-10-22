@@ -1,6 +1,7 @@
 package com.github.unreference.splice.world.item.equipment;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import com.google.common.collect.Maps;
 import java.util.EnumMap;
 import java.util.List;
@@ -11,7 +12,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
@@ -23,7 +23,7 @@ public final class SpliceArmorMaterials {
           "copper",
           makeDefense(1, 3, 4, 2, 4),
           8,
-          SoundEvents.ARMOR_EQUIP_GENERIC,
+          SpliceSoundEvents.ARMOR_EQUIP_COPPER,
           0.0f,
           0.0f,
           () -> Ingredient.of(Items.COPPER_INGOT));

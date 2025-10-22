@@ -1,6 +1,7 @@
 package com.github.unreference.splice;
 
 import com.github.unreference.splice.data.SpliceDataGenerator;
+import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import com.github.unreference.splice.world.item.SpliceCreativeModeTabs;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlockTypes;
@@ -22,6 +23,7 @@ public final class SpliceMain {
 
     modEventBus.addListener(SpliceDataGenerator::onGatherData);
 
+    SpliceSoundEvents.register(modEventBus);
     SpliceBlocks.register(modEventBus);
     SpliceBlockTypes.register(modEventBus);
     SpliceItems.register(modEventBus);

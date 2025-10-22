@@ -1,0 +1,13 @@
+{
+  "item.armor.equip_copper": {
+    "subtitle": "subtitles.splice.item.armor.equip_copper",
+    "sounds": [
+      "splice:item/armor/equip_copper1",
+      "splice:item/armor/equip_copper2",
+      "splice:item/armor/equip_copper3",
+      "splice:item/armor/equip_copper4",
+      "splice:item/armor/equip_copper5",
+      "splice:item/armor/equip_copper6"
+    ]
+  }
+}
