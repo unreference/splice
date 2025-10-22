@@ -81,6 +81,10 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.createChest(SpliceBlocks.EXPOSED_COPPER_CHEST, Blocks.EXPOSED_COPPER);
     this.createChest(SpliceBlocks.WEATHERED_COPPER_CHEST, Blocks.WEATHERED_COPPER);
     this.createChest(SpliceBlocks.OXIDIZED_COPPER_CHEST, Blocks.OXIDIZED_COPPER);
+    this.copyModel(SpliceBlocks.COPPER_CHEST, SpliceBlocks.WAXED_COPPER_CHEST);
+    this.copyModel(SpliceBlocks.EXPOSED_COPPER_CHEST, SpliceBlocks.WAXED_EXPOSED_COPPER_CHEST);
+    this.copyModel(SpliceBlocks.WEATHERED_COPPER_CHEST, SpliceBlocks.WAXED_WEATHERED_COPPER_CHEST);
+    this.copyModel(SpliceBlocks.OXIDIZED_COPPER_CHEST, SpliceBlocks.WAXED_OXIDIZED_COPPER_CHEST);
   }
 
   private void createChest(DeferredBlock<? extends Block> block, Block particle) {
@@ -93,5 +97,18 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
             .texture("particle", SpliceBlockUtil.getTexture(particle));
     simpleBlock(id, model);
     itemModels().withExistingParent(name, mcLoc("item/chest"));
+  }
+
+  private void copyModel(DeferredBlock<? extends Block> from, DeferredBlock<? extends Block> to) {
+    final Block fromBlock = from.get();
+    final Block toBlock = to.get();
+
+    final String fromName = SpliceBlockUtil.getId(fromBlock).getPath();
+    final String toName = SpliceBlockUtil.getId(toBlock).getPath();
+
+    final ModelFile toModel = models().withExistingParent(toName, modLoc("block/" + fromName));
+
+    simpleBlock(toBlock, toModel);
+    itemModels().withExistingParent(toName, modLoc("item/" + fromName));
   }
 }

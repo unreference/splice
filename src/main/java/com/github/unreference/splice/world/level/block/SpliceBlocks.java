@@ -44,6 +44,7 @@ public final class SpliceBlocks {
 
   private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
       List.of(COPPER_BARS, COPPER_CHAIN);
+
   // TODO: Add to block loot
   public static final DeferredBlock<Block> COPPER_CHEST =
       register(
@@ -54,7 +55,8 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_OPEN,
                   SpliceSoundEvents.COPPER_CHEST_CLOSE,
                   props),
-          baseCopperChestProps());
+          unaffectedCopperChestProps());
+
   // TODO: Add to block loot
   public static final DeferredBlock<Block> EXPOSED_COPPER_CHEST =
       register(
@@ -65,7 +67,8 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_OPEN,
                   SpliceSoundEvents.COPPER_CHEST_CLOSE,
                   props),
-          baseCopperChestProps().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY));
+          getExposedCopperChestProps());
+
   // TODO: Add to block loot
   public static final DeferredBlock<Block> WEATHERED_COPPER_CHEST =
       register(
@@ -76,7 +79,8 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_WEATHERED_OPEN,
                   SpliceSoundEvents.COPPER_CHEST_WEATHERED_CLOSE,
                   props),
-          baseCopperChestProps().mapColor(MapColor.WARPED_STEM));
+          getWeatheredCopperChestProps());
+
   // TODO: Add to block loot
   public static final DeferredBlock<Block> OXIDIZED_COPPER_CHEST =
       register(
@@ -87,14 +91,74 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_OXIDIZED_OPEN,
                   SpliceSoundEvents.COPPER_CHEST_OXIDIZED_CLOSE,
                   props),
-          baseCopperChestProps().mapColor(MapColor.WARPED_NYLIUM));
+          getOxidizedCopperChestProps());
 
-  private static BlockBehaviour.Properties baseCopperChestProps() {
+  // TODO: Add to block loot
+  public static final DeferredBlock<Block> WAXED_COPPER_CHEST =
+      register(
+          "waxed_copper_chest",
+          props ->
+              new SpliceCopperChestBlock(
+                  WeatheringCopper.WeatherState.UNAFFECTED,
+                  SpliceSoundEvents.COPPER_CHEST_OPEN,
+                  SpliceSoundEvents.COPPER_CHEST_CLOSE,
+                  props),
+          unaffectedCopperChestProps());
+
+  // TODO: Add to block loot
+  public static final DeferredBlock<Block> WAXED_EXPOSED_COPPER_CHEST =
+      register(
+          "waxed_exposed_copper_chest",
+          props ->
+              new SpliceCopperChestBlock(
+                  WeatheringCopper.WeatherState.EXPOSED,
+                  SpliceSoundEvents.COPPER_CHEST_OPEN,
+                  SpliceSoundEvents.COPPER_CHEST_CLOSE,
+                  props),
+          getExposedCopperChestProps());
+
+  // TODO: Add to block loot
+  public static final DeferredBlock<Block> WAXED_WEATHERED_COPPER_CHEST =
+      register(
+          "waxed_weathered_copper_chest",
+          props ->
+              new SpliceCopperChestBlock(
+                  WeatheringCopper.WeatherState.WEATHERED,
+                  SpliceSoundEvents.COPPER_CHEST_WEATHERED_OPEN,
+                  SpliceSoundEvents.COPPER_CHEST_WEATHERED_CLOSE,
+                  props),
+          getWeatheredCopperChestProps());
+
+  // TODO: Add to block loot
+  public static final DeferredBlock<Block> WAXED_OXIDIZED_COPPER_CHEST =
+      register(
+          "waxed_oxidized_copper_chest",
+          props ->
+              new SpliceCopperChestBlock(
+                  WeatheringCopper.WeatherState.OXIDIZED,
+                  SpliceSoundEvents.COPPER_CHEST_OXIDIZED_OPEN,
+                  SpliceSoundEvents.COPPER_CHEST_OXIDIZED_CLOSE,
+                  props),
+          getOxidizedCopperChestProps());
+
+  private static BlockBehaviour.Properties unaffectedCopperChestProps() {
     return BlockBehaviour.Properties.of()
         .mapColor(Blocks.COPPER_BLOCK.defaultMapColor())
         .strength(3.0f, 6.0f)
         .sound(SoundType.COPPER)
         .requiresCorrectToolForDrops();
+  }
+
+  private static BlockBehaviour.Properties getExposedCopperChestProps() {
+    return unaffectedCopperChestProps().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY);
+  }
+
+  private static BlockBehaviour.Properties getWeatheredCopperChestProps() {
+    return unaffectedCopperChestProps().mapColor(MapColor.WARPED_STEM);
+  }
+
+  private static BlockBehaviour.Properties getOxidizedCopperChestProps() {
+    return unaffectedCopperChestProps().mapColor(MapColor.WARPED_NYLIUM);
   }
 
   private static <B extends Block> DeferredBlock<B> register(

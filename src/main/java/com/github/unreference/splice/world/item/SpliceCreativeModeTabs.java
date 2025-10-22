@@ -24,6 +24,10 @@ public final class SpliceCreativeModeTabs {
       event.accept(SpliceItems.EXPOSED_COPPER_CHEST);
       event.accept(SpliceItems.WEATHERED_COPPER_CHEST);
       event.accept(SpliceItems.OXIDIZED_COPPER_CHEST);
+      event.accept(SpliceItems.WAXED_COPPER_CHEST);
+      event.accept(SpliceItems.WAXED_EXPOSED_COPPER_CHEST);
+      event.accept(SpliceItems.WAXED_WEATHERED_COPPER_CHEST);
+      event.accept(SpliceItems.WAXED_OXIDIZED_COPPER_CHEST);
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.TOOLS_AND_UTILITIES)) {

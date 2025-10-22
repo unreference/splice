@@ -25,6 +25,10 @@ public final class SpliceBlockEntityType {
                       SpliceBlocks.COPPER_CHEST.get(),
                       SpliceBlocks.EXPOSED_COPPER_CHEST.get(),
                       SpliceBlocks.WEATHERED_COPPER_CHEST.get(),
-                      SpliceBlocks.OXIDIZED_COPPER_CHEST.get())
+                      SpliceBlocks.OXIDIZED_COPPER_CHEST.get(),
+                      SpliceBlocks.WAXED_COPPER_CHEST.get(),
+                      SpliceBlocks.WAXED_EXPOSED_COPPER_CHEST.get(),
+                      SpliceBlocks.WAXED_WEATHERED_COPPER_CHEST.get(),
+                      SpliceBlocks.WAXED_OXIDIZED_COPPER_CHEST.get())
                   .build(null));
 }

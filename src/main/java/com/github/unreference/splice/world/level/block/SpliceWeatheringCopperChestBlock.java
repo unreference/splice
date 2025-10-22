@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import org.jetbrains.annotations.NotNull;
 
 public final class SpliceWeatheringCopperChestBlock extends SpliceCopperChestBlock
     implements WeatheringCopper {
@@ -44,7 +45,7 @@ public final class SpliceWeatheringCopperChestBlock extends SpliceCopperChestBlo
   }
 
   @Override
-  public WeatherState getAge() {
+  public @NotNull WeatherState getAge() {
     return this.getState();
   }
 
@@ -55,7 +56,10 @@ public final class SpliceWeatheringCopperChestBlock extends SpliceCopperChestBlo
 
   @Override
   protected void randomTick(
-      BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+      BlockState state,
+      @NotNull ServerLevel level,
+      @NotNull BlockPos pos,
+      @NotNull RandomSource random) {
     if (!(state.getValue(ChestBlock.TYPE)).equals(ChestType.RIGHT)
         && level.getBlockEntity(pos) instanceof SpliceCopperChestBlockEntity chestBlock
         && chestBlock.isEmpty()) {

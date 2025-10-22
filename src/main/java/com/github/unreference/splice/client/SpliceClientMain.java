@@ -69,9 +69,13 @@ public final class SpliceClientMain {
           }
         };
 
-    event.registerItem(extension, SpliceBlocks.COPPER_CHEST.get().asItem());
-    event.registerItem(extension, SpliceBlocks.EXPOSED_COPPER_CHEST.get().asItem());
-    event.registerItem(extension, SpliceBlocks.WEATHERED_COPPER_CHEST.get().asItem());
-    event.registerItem(extension, SpliceBlocks.OXIDIZED_COPPER_CHEST.get().asItem());
+    event.registerItem(extension, SpliceBlocks.COPPER_CHEST.asItem());
+    event.registerItem(extension, SpliceBlocks.EXPOSED_COPPER_CHEST.asItem());
+    event.registerItem(extension, SpliceBlocks.WEATHERED_COPPER_CHEST.asItem());
+    event.registerItem(extension, SpliceBlocks.OXIDIZED_COPPER_CHEST.asItem());
+    event.registerItem(extension, SpliceBlocks.WAXED_COPPER_CHEST.asItem());
+    event.registerItem(extension, SpliceBlocks.WAXED_EXPOSED_COPPER_CHEST.asItem());
+    event.registerItem(extension, SpliceBlocks.WAXED_WEATHERED_COPPER_CHEST.asItem());
+    event.registerItem(extension, SpliceBlocks.WAXED_OXIDIZED_COPPER_CHEST.asItem());
   }
 }

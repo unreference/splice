@@ -14,19 +14,20 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
+import org.jetbrains.annotations.NotNull;
 
 public final class SpliceCopperChestBlockEntity extends ChestBlockEntity {
   private final ContainerOpenersCounter openersCounter =
       new ContainerOpenersCounter() {
         @Override
-        protected void onOpen(Level level, BlockPos pos, BlockState state) {
+        protected void onOpen(@NotNull Level level, @NotNull BlockPos pos, BlockState state) {
           if (state.getBlock() instanceof SpliceCopperChestBlock chest) {
             playSound(level, pos, state, chest.getOpenSound());
           }
         }
 
         @Override
-        protected void onClose(Level level, BlockPos pos, BlockState state) {
+        protected void onClose(@NotNull Level level, @NotNull BlockPos pos, BlockState state) {
           if (state.getBlock() instanceof SpliceCopperChestBlock chest) {
             playSound(level, pos, state, chest.getCloseSound());
           }
@@ -34,7 +35,11 @@ public final class SpliceCopperChestBlockEntity extends ChestBlockEntity {
 
         @Override
         protected void openerCountChanged(
-            Level level, BlockPos pos, BlockState state, int count, int openCount) {
+            @NotNull Level level,
+            @NotNull BlockPos pos,
+            @NotNull BlockState state,
+            int count,
+            int openCount) {
           SpliceCopperChestBlockEntity.this.signalOpenCount(level, pos, state, count, openCount);
         }
 
@@ -82,7 +87,7 @@ public final class SpliceCopperChestBlockEntity extends ChestBlockEntity {
   }
 
   @Override
-  public void startOpen(Player player) {
+  public void startOpen(@NotNull Player player) {
     if (!this.remove && !player.isSpectator()) {
       this.openersCounter.incrementOpeners(
           player, this.getLevel(), this.getBlockPos(), this.getBlockState());
@@ -90,7 +95,7 @@ public final class SpliceCopperChestBlockEntity extends ChestBlockEntity {
   }
 
   @Override
-  public void stopOpen(Player player) {
+  public void stopOpen(@NotNull Player player) {
     if (!this.remove && !player.isSpectator()) {
       this.openersCounter.decrementOpeners(
           player, this.getLevel(), this.getBlockPos(), this.getBlockState());
