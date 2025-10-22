@@ -40,8 +40,10 @@ public final class SpliceBlocks {
                   .strength(5.0f, 6.0f)
                   .sound(SoundType.CHAIN)
                   .noOcclusion());
+
   private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
       List.of(COPPER_BARS, COPPER_CHAIN);
+
   public static DeferredBlock<Block> COPPER_CHEST =
       register(
           "copper_chest",

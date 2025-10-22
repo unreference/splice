@@ -66,7 +66,7 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     final String armor = item.get().getType().getName();
     final ItemModelBuilder base =
         this.withExistingParent(armorItem, mcLoc("item/generated"))
-            .texture("layer0", modLoc("item/%s".formatted(armorItem)));
+            .texture("layer0", modLoc("item/" + armorItem));
 
     final ArrayList<Map.Entry<ResourceKey<TrimMaterial>, Float>> toSort =
         new ArrayList<>(TRIM_MATERIALS.entrySet());
@@ -77,22 +77,21 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
           final String material = entry.getKey().location().getPath();
           final float modelIndex = entry.getValue();
           final ResourceLocation trimTexture =
-              ResourceLocation.withDefaultNamespace(
-                  "trims/items/%s_trim_%s".formatted(armor, material));
+              ResourceLocation.withDefaultNamespace("trims/items/" + armor + "_trim_" + material);
 
           existingFileHelper.trackGenerated(
               trimTexture, PackType.CLIENT_RESOURCES, ".png", "textures");
 
-          final String trimModel = "%s_%s_trim".formatted(armorItem, material);
+          final String trimModel = armorItem + '_' + material + "_trim";
 
           getBuilder(trimModel)
               .parent(new ModelFile.UncheckedModelFile(mcLoc("item/generated")))
-              .texture("layer0", modLoc("item/%s".formatted(armorItem)))
+              .texture("layer0", modLoc("item/" + armorItem))
               .texture("layer1", trimTexture);
 
           base.override()
               .predicate(mcLoc("trim_type"), modelIndex)
-              .model(new ModelFile.UncheckedModelFile(modLoc("item/%s".formatted(trimModel))))
+              .model(new ModelFile.UncheckedModelFile(modLoc("item/" + trimModel)))
               .end();
         });
   }

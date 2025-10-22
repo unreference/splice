@@ -13,6 +13,6 @@ public final class SpliceBannerPatternTags {
   private static TagKey<BannerPattern> create(String key) {
     return TagKey.create(
         Registries.BANNER_PATTERN,
-        ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, "pattern_item/%s".formatted(key)));
+        ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, "pattern_item/" + key));
   }
 }

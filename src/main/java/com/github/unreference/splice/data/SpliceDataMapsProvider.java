@@ -42,6 +42,6 @@ public final class SpliceDataMapsProvider extends DataMapProvider {
 
   @Override
   public @NotNull String getName() {
-    return "%s Data Maps".formatted(SpliceMain.MOD_ID);
+    return SpliceMain.MOD_ID + "Data Maps";
   }
 }

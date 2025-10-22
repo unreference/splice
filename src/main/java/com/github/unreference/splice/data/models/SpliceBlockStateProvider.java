@@ -36,12 +36,12 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
   private void createCopperBars(DeferredBlock<? extends Block> block) {
     if (!(block.get() instanceof IronBarsBlock ironBarsBlock)) {
-      throw new IllegalArgumentException("Expected IronBarsBlock: %s".formatted(block.get()));
+      throw new IllegalArgumentException("Expected IronBarsBlock: " + block.get());
     }
 
     final String name = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
     final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
-    final ResourceLocation paneTexture = modLoc("block/%s".formatted(textureName));
+    final ResourceLocation paneTexture = modLoc("block/" + textureName);
 
     this.paneBlockWithRenderType(ironBarsBlock, paneTexture, paneTexture, mcLoc("cutout_mipped"));
     itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", paneTexture);
@@ -55,14 +55,14 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
   private void createCopperChain(DeferredBlock<? extends Block> block) {
     if (!(block.get() instanceof ChainBlock chainBlock)) {
-      throw new IllegalArgumentException("Expected ChainBlock: %s".formatted(block.get()));
+      throw new IllegalArgumentException("Expected ChainBlock: " + block.get());
     }
 
     final String name = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
     final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
 
-    final ResourceLocation copperChainBlockTexture = modLoc("block/%s".formatted(textureName));
-    final ResourceLocation copperChainItemTexture = modLoc("item/%s".formatted(textureName));
+    final ResourceLocation copperChainBlockTexture = modLoc("block/" + textureName);
+    final ResourceLocation copperChainItemTexture = modLoc("item/" + textureName);
     final ModelFile copperChainModel =
         models()
             .withExistingParent(name, mcLoc("block/chain"))

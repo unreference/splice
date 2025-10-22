@@ -32,89 +32,89 @@ public record SpliceWeatheringCopperBlocks(
                   BlockBehaviour.Properties,
                   DeferredBlock<? extends Block>>
               register,
-          Function<BlockBehaviour.Properties, ? extends Waxed> waxed,
+          Function<BlockBehaviour.Properties, ? extends Waxed> waxedFunction,
           BiFunction<WeatheringCopper.WeatherState, BlockBehaviour.Properties, ? extends Weathering>
-              weathering,
+              weatheringFunc,
           Function<WeatheringCopper.WeatherState, BlockBehaviour.Properties> weatherProps) {
-    final BlockBehaviour.Properties PROPS_UNAFFECTED =
+    final BlockBehaviour.Properties propsUnaffected =
         weatherProps.apply(WeatheringCopper.WeatherState.UNAFFECTED);
-    final BlockBehaviour.Properties PROPS_EXPOSED =
+    final BlockBehaviour.Properties propsExposed =
         weatherProps.apply(WeatheringCopper.WeatherState.EXPOSED);
-    final BlockBehaviour.Properties PROPS_WEATHERED =
+    final BlockBehaviour.Properties propsWeathered =
         weatherProps.apply(WeatheringCopper.WeatherState.WEATHERED);
-    final BlockBehaviour.Properties PROPS_OXIDIZED =
+    final BlockBehaviour.Properties propsOxidized =
         weatherProps.apply(WeatheringCopper.WeatherState.OXIDIZED);
 
-    final DeferredBlock<?> UNAFFECTED =
+    final DeferredBlock<?> unaffected =
         register.apply(
             base,
-            props -> weathering.apply(WeatheringCopper.WeatherState.UNAFFECTED, props),
-            PROPS_UNAFFECTED);
+            props -> weatheringFunc.apply(WeatheringCopper.WeatherState.UNAFFECTED, props),
+            propsUnaffected);
 
-    final DeferredBlock<?> EXPOSED =
+    final DeferredBlock<?> exposed =
         register.apply(
             "exposed_" + base,
-            props -> weathering.apply(WeatheringCopper.WeatherState.EXPOSED, props),
-            PROPS_EXPOSED);
+            props -> weatheringFunc.apply(WeatheringCopper.WeatherState.EXPOSED, props),
+            propsExposed);
 
-    final DeferredBlock<?> WEATHERED =
+    final DeferredBlock<?> weathered =
         register.apply(
             "weathered_" + base,
-            props -> weathering.apply(WeatheringCopper.WeatherState.WEATHERED, props),
-            PROPS_WEATHERED);
+            props -> weatheringFunc.apply(WeatheringCopper.WeatherState.WEATHERED, props),
+            propsWeathered);
 
-    final DeferredBlock<?> OXIDIZED =
+    final DeferredBlock<?> oxidized =
         register.apply(
             "oxidized_" + base,
-            props -> weathering.apply(WeatheringCopper.WeatherState.OXIDIZED, props),
-            PROPS_OXIDIZED);
+            props -> weatheringFunc.apply(WeatheringCopper.WeatherState.OXIDIZED, props),
+            propsOxidized);
 
-    final DeferredBlock<?> WAXED = register.apply("waxed_" + base, waxed, PROPS_UNAFFECTED);
-    final DeferredBlock<?> WAXED_EXPOSED =
-        register.apply("waxed_exposed_" + base, waxed, PROPS_EXPOSED);
-    final DeferredBlock<?> WAXED_WEATHERED =
-        register.apply("waxed_weathered_" + base, waxed, PROPS_WEATHERED);
-    final DeferredBlock<?> WAXED_OXIDIZED =
-        register.apply("waxed_oxidized_" + base, waxed, PROPS_OXIDIZED);
+    final DeferredBlock<?> waxed = register.apply("waxed_" + base, waxedFunction, propsUnaffected);
+    final DeferredBlock<?> waxedExposed =
+        register.apply("waxed_exposed_" + base, waxedFunction, propsExposed);
+    final DeferredBlock<?> waxedWeathered =
+        register.apply("waxed_weathered_" + base, waxedFunction, propsWeathered);
+    final DeferredBlock<?> waxedOxidized =
+        register.apply("waxed_oxidized_" + base, waxedFunction, propsOxidized);
 
     final ImmutableBiMap<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
-        WEATHERING_MAP =
-            ImmutableBiMap.of(UNAFFECTED, EXPOSED, EXPOSED, WEATHERED, WEATHERED, OXIDIZED);
+        weatheringMap =
+            ImmutableBiMap.of(unaffected, exposed, exposed, weathered, weathered, oxidized);
 
-    final ImmutableBiMap<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>> WAXED_MAP =
+    final ImmutableBiMap<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>> waxedMap =
         ImmutableBiMap.of(
-            UNAFFECTED,
-            WAXED,
-            EXPOSED,
-            WAXED_EXPOSED,
-            WEATHERED,
-            WAXED_WEATHERED,
-            OXIDIZED,
-            WAXED_OXIDIZED);
+            unaffected,
+            waxed,
+            exposed,
+            waxedExposed,
+            weathered,
+            waxedWeathered,
+            oxidized,
+            waxedOxidized);
 
-    final ImmutableList<DeferredBlock<? extends Block>> ALL =
+    final ImmutableList<DeferredBlock<? extends Block>> all =
         ImmutableList.of(
-            UNAFFECTED,
-            WAXED,
-            EXPOSED,
-            WAXED_EXPOSED,
-            WEATHERED,
-            WAXED_WEATHERED,
-            OXIDIZED,
-            WAXED_OXIDIZED);
+            unaffected,
+            waxed,
+            exposed,
+            waxedExposed,
+            weathered,
+            waxedWeathered,
+            oxidized,
+            waxedOxidized);
 
     return new SpliceWeatheringCopperBlocks(
-        UNAFFECTED,
-        EXPOSED,
-        WEATHERED,
-        OXIDIZED,
-        WAXED,
-        WAXED_EXPOSED,
-        WAXED_WEATHERED,
-        WAXED_OXIDIZED,
-        WEATHERING_MAP,
-        WAXED_MAP,
-        ALL);
+        unaffected,
+        exposed,
+        weathered,
+        oxidized,
+        waxed,
+        waxedExposed,
+        waxedWeathered,
+        waxedOxidized,
+        weatheringMap,
+        waxedMap,
+        all);
   }
 
   public ImmutableBiMap<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
