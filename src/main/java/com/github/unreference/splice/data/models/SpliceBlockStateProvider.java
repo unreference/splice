@@ -79,6 +79,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
   private void createCopperChests() {
     this.createChest(SpliceBlocks.COPPER_CHEST, Blocks.COPPER_BLOCK);
     this.createChest(SpliceBlocks.EXPOSED_COPPER_CHEST, Blocks.EXPOSED_COPPER);
+    this.createChest(SpliceBlocks.WEATHERED_COPPER_CHEST, Blocks.WEATHERED_COPPER);
   }
 
   private void createChest(DeferredBlock<? extends Block> block, Block particle) {

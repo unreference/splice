@@ -23,6 +23,7 @@ public final class SpliceBlockEntityType {
               BlockEntityType.Builder.of(
                       SpliceCopperChestBlockEntity::new,
                       SpliceBlocks.COPPER_CHEST.get(),
-                      SpliceBlocks.EXPOSED_COPPER_CHEST.get())
+                      SpliceBlocks.EXPOSED_COPPER_CHEST.get(),
+                      SpliceBlocks.WEATHERED_COPPER_CHEST.get())
                   .build(null));
 }

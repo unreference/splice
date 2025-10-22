@@ -48,7 +48,8 @@ public final class SpliceCopperChestRenderer extends ChestRenderer<SpliceCopperC
   }
 
   @Override
-  protected @NotNull Material getMaterial(@NotNull SpliceCopperChestBlockEntity blockEntity, ChestType chestType) {
+  protected @NotNull Material getMaterial(
+      @NotNull SpliceCopperChestBlockEntity blockEntity, ChestType chestType) {
     ChestMaterials material = getMaterials(getVariantKey(blockEntity));
     return switch (chestType) {
       case LEFT -> material.left();
