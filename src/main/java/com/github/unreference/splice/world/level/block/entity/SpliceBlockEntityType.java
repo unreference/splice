@@ -24,6 +24,7 @@ public final class SpliceBlockEntityType {
                       SpliceCopperChestBlockEntity::new,
                       SpliceBlocks.COPPER_CHEST.get(),
                       SpliceBlocks.EXPOSED_COPPER_CHEST.get(),
-                      SpliceBlocks.WEATHERED_COPPER_CHEST.get())
+                      SpliceBlocks.WEATHERED_COPPER_CHEST.get(),
+                      SpliceBlocks.OXIDIZED_COPPER_CHEST.get())
                   .build(null));
 }

@@ -29,7 +29,8 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
     this.tag(SpliceBlockTags.COPPER_CHESTS)
         .add(SpliceBlocks.COPPER_CHEST.get())
         .add(SpliceBlocks.EXPOSED_COPPER_CHEST.get())
-        .add(SpliceBlocks.WEATHERED_COPPER_CHEST.get());
+        .add(SpliceBlocks.WEATHERED_COPPER_CHEST.get())
+        .add(SpliceBlocks.OXIDIZED_COPPER_CHEST.get());
 
     this.tag(BlockTags.GUARDED_BY_PIGLINS).addTag(SpliceBlockTags.COPPER_CHESTS);
     this.tag(BlockTags.MINEABLE_WITH_PICKAXE).addTag(SpliceBlockTags.COPPER_CHESTS);

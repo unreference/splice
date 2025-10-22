@@ -41,5 +41,21 @@
       "splice:block/copper_chest/copper_chest_weathered_close2",
       "splice:block/copper_chest/copper_chest_weathered_close3"
     ]
+  },
+  "block.copper_chest.oxidized_open": {
+    "subtitle": "subtitles.block.chest.open",
+    "sounds": [
+      "splice:block/copper_chest/copper_chest_oxidized_open1",
+      "splice:block/copper_chest/copper_chest_oxidized_open2",
+      "splice:block/copper_chest/copper_chest_oxidized_open3"
+    ]
+  },
+  "block.copper_chest.oxidized_close": {
+    "subtitle": "subtitles.block.chest.close",
+    "sounds": [
+      "splice:block/copper_chest/copper_chest_oxidized_close1",
+      "splice:block/copper_chest/copper_chest_oxidized_close2",
+      "splice:block/copper_chest/copper_chest_oxidized_close3"
+    ]
   }
 }

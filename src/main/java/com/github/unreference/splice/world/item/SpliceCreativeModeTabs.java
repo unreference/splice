@@ -23,6 +23,7 @@ public final class SpliceCreativeModeTabs {
       event.accept(SpliceItems.COPPER_CHEST);
       event.accept(SpliceItems.EXPOSED_COPPER_CHEST);
       event.accept(SpliceItems.WEATHERED_COPPER_CHEST);
+      event.accept(SpliceItems.OXIDIZED_COPPER_CHEST);
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.TOOLS_AND_UTILITIES)) {

@@ -77,6 +77,17 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_WEATHERED_CLOSE,
                   props),
           baseCopperChestProps().mapColor(MapColor.WARPED_STEM));
+  // TODO: Add to block loot
+  public static final DeferredBlock<Block> OXIDIZED_COPPER_CHEST =
+      register(
+          "oxidized_copper_chest",
+          props ->
+              new SpliceWeatheringCopperChestBlock(
+                  WeatheringCopper.WeatherState.OXIDIZED,
+                  SpliceSoundEvents.COPPER_CHEST_OXIDIZED_OPEN,
+                  SpliceSoundEvents.COPPER_CHEST_OXIDIZED_CLOSE,
+                  props),
+          baseCopperChestProps().mapColor(MapColor.WARPED_NYLIUM));
 
   private static BlockBehaviour.Properties baseCopperChestProps() {
     return BlockBehaviour.Properties.of()
