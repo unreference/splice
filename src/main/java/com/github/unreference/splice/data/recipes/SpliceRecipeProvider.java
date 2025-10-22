@@ -190,10 +190,12 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     final var CHESTPLATE = SpliceItems.COPPER_CHESTPLATE.get();
     final var LEGGINGS = SpliceItems.COPPER_LEGGINGS.get();
     final var BOOTS = SpliceItems.COPPER_BOOTS.get();
+    final var HORSE_ARMOR = SpliceItems.COPPER_HORSE_ARMOR.get();
     final var NUGGET = SpliceItems.COPPER_NUGGET.get();
 
     SimpleCookingRecipeBuilder.smelting(
-            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET, CHESTPLATE, LEGGINGS, BOOTS),
+            Ingredient.of(
+                SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET, CHESTPLATE, LEGGINGS, BOOTS, HORSE_ARMOR),
             RecipeCategory.MISC,
             NUGGET,
             0.1f,
@@ -207,13 +209,15 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(CHESTPLATE), has(CHESTPLATE))
         .unlockedBy(getHasName(LEGGINGS), has(LEGGINGS))
         .unlockedBy(getHasName(BOOTS), has(BOOTS))
+        .unlockedBy(getHasName(HORSE_ARMOR), has(HORSE_ARMOR))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(
                 SpliceMain.MOD_ID, getSmeltingRecipeName(NUGGET)));
 
     SimpleCookingRecipeBuilder.blasting(
-            Ingredient.of(SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET, CHESTPLATE, LEGGINGS, BOOTS),
+            Ingredient.of(
+                SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET, CHESTPLATE, LEGGINGS, BOOTS, HORSE_ARMOR),
             RecipeCategory.MISC,
             NUGGET,
             0.1f,
@@ -227,6 +231,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(CHESTPLATE), has(CHESTPLATE))
         .unlockedBy(getHasName(LEGGINGS), has(LEGGINGS))
         .unlockedBy(getHasName(BOOTS), has(BOOTS))
+        .unlockedBy(getHasName(HORSE_ARMOR), has(HORSE_ARMOR))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(

@@ -76,6 +76,7 @@ public final class SpliceItems {
                   SpliceTiers.COPPER,
                   props.attributes(SwordItem.createAttributes(SpliceTiers.COPPER, 3.0f, -2.4f))));
 
+  // TODO: Add to possible mob equipment spawns
   public static final DeferredItem<ArmorItem> COPPER_HELMET =
       ITEMS.registerItem(
           "copper_helmet",
@@ -85,6 +86,7 @@ public final class SpliceItems {
                   ArmorItem.Type.HELMET,
                   props.durability(ArmorItem.Type.HELMET.getDurability(11))));
 
+  // TODO: Add to possible mob equipment spawns
   public static final DeferredItem<ArmorItem> COPPER_CHESTPLATE =
       ITEMS.registerItem(
           "copper_chestplate",
@@ -94,6 +96,7 @@ public final class SpliceItems {
                   ArmorItem.Type.CHESTPLATE,
                   props.durability(ArmorItem.Type.CHESTPLATE.getDurability(11))));
 
+  // TODO: Add to possible mob equipment spawns
   public static final DeferredItem<ArmorItem> COPPER_LEGGINGS =
       ITEMS.registerItem(
           "copper_leggings",
@@ -103,6 +106,7 @@ public final class SpliceItems {
                   ArmorItem.Type.LEGGINGS,
                   props.durability(ArmorItem.Type.LEGGINGS.getDurability(11))));
 
+  // TODO: Add to possible mob equipment spawns
   public static final DeferredItem<ArmorItem> COPPER_BOOTS =
       ITEMS.registerItem(
           "copper_boots",
@@ -111,6 +115,17 @@ public final class SpliceItems {
                   SpliceArmorMaterials.COPPER,
                   ArmorItem.Type.BOOTS,
                   props.durability(ArmorItem.Type.BOOTS.getDurability(11))));
+
+  // TODO: Add to chest loot and trade rebalance chest loot
+  public static final DeferredItem<AnimalArmorItem> COPPER_HORSE_ARMOR =
+      ITEMS.registerItem(
+          "copper_horse_armor",
+          props ->
+              new AnimalArmorItem(
+                  SpliceArmorMaterials.COPPER,
+                  AnimalArmorItem.BodyType.EQUESTRIAN,
+                  false,
+                  props.stacksTo(1)));
 
   public static void register(IEventBus bus) {
     ITEMS.register(bus);

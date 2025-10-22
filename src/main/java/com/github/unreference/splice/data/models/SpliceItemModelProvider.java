@@ -57,12 +57,13 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.generateTrimmableArmor(SpliceItems.COPPER_CHESTPLATE);
     this.generateTrimmableArmor(SpliceItems.COPPER_LEGGINGS);
     this.generateTrimmableArmor(SpliceItems.COPPER_BOOTS);
+
+    this.basicItem(SpliceItems.COPPER_HORSE_ARMOR.get());
   }
 
   private void generateTrimmableArmor(DeferredItem<ArmorItem> item) {
-    final String MOD_ID = SpliceMain.MOD_ID;
-
     Item armorItem = item.get();
+
     TRIM_MATERIALS.forEach(
         (trimMaterial, value) -> {
           float trimValue = value;
@@ -108,7 +109,7 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
               .texture(
                   "layer0",
                   ResourceLocation.fromNamespaceAndPath(
-                      MOD_ID, "item/%s".formatted(item.getId().getPath())));
+                      SpliceMain.MOD_ID, "item/%s".formatted(item.getId().getPath())));
         });
   }
 }

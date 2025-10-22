@@ -36,6 +36,7 @@ public final class SpliceCreativeModeTabs {
       event.accept(SpliceItems.COPPER_CHESTPLATE.get());
       event.accept(SpliceItems.COPPER_LEGGINGS.get());
       event.accept(SpliceItems.COPPER_BOOTS.get());
+      event.accept(SpliceItems.COPPER_HORSE_ARMOR.get());
     }
   }
 }
