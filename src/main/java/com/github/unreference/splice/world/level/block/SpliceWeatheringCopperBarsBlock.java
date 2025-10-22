@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public final class SpliceWeatheringCopperBarsBlock extends IronBarsBlock
     implements WeatheringCopper {
-  private static final MapCodec<SpliceWeatheringCopperBarsBlock> CODEC =
+  public static final MapCodec<SpliceWeatheringCopperBarsBlock> CODEC =
       RecordCodecBuilder.mapCodec(
           instance ->
               instance
@@ -28,10 +28,6 @@ public final class SpliceWeatheringCopperBarsBlock extends IronBarsBlock
       WeatheringCopper.WeatherState weatherState, Properties properties) {
     super(properties);
     this.weatherState = weatherState;
-  }
-
-  public static MapCodec<SpliceWeatheringCopperBarsBlock> getCodec() {
-    return CODEC;
   }
 
   @Override

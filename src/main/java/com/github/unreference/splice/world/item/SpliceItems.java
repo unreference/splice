@@ -127,6 +127,9 @@ public final class SpliceItems {
                   false,
                   props.stacksTo(1)));
 
+  public static final DeferredItem<BlockItem> COPPER_CHEST =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.COPPER_CHEST);
+
   public static void register(IEventBus bus) {
     ITEMS.register(bus);
   }

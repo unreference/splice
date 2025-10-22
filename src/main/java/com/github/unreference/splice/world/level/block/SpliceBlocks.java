@@ -1,12 +1,10 @@
 package com.github.unreference.splice.world.level.block;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import java.util.List;
 import java.util.function.Function;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ChainBlock;
-import net.minecraft.world.level.block.IronBarsBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -42,6 +40,21 @@ public final class SpliceBlocks {
                   .strength(5.0f, 6.0f)
                   .sound(SoundType.CHAIN)
                   .noOcclusion());
+
+  public static DeferredBlock<Block> COPPER_CHEST =
+      register(
+          "copper_chest",
+          props ->
+              new SpliceWeatheringCopperChestBlock(
+                  WeatheringCopper.WeatherState.UNAFFECTED,
+                  SpliceSoundEvents.COPPER_CHEST_OPEN,
+                  SpliceSoundEvents.COPPER_CHEST_CLOSE,
+                  props),
+          BlockBehaviour.Properties.of()
+              .mapColor(Blocks.COPPER_BLOCK.defaultMapColor())
+              .strength(3.0f, 6.0f)
+              .sound(SoundType.COPPER)
+              .requiresCorrectToolForDrops());
 
   private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
       List.of(COPPER_BARS, COPPER_CHAIN);

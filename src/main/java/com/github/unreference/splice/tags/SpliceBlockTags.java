@@ -7,8 +7,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
 public final class SpliceBlockTags {
-  public static final TagKey<Block> COPPER = create("copper");
   public static final TagKey<Block> INCORRECT_FOR_COPPER_TOOL = create("incorrect_for_copper_tool");
+  public static final TagKey<Block> COPPER_CHESTS = create("copper_chests");
 
   private static TagKey<Block> create(String key) {
     return TagKey.create(

@@ -1,5 +1,6 @@
 package com.github.unreference.splice.world.item;
 
+import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -20,6 +21,7 @@ public final class SpliceCreativeModeTabs {
 
     if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS)) {
       SpliceItems.COPPER_CHAIN.forEach(event::accept);
+      event.accept(SpliceBlocks.COPPER_CHEST.get());
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.TOOLS_AND_UTILITIES)) {

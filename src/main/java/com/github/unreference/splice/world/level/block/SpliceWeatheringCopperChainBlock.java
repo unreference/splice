@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 
 public final class SpliceWeatheringCopperChainBlock extends ChainBlock implements WeatheringCopper {
-  private static final MapCodec<SpliceWeatheringCopperChainBlock> CODEC =
+  public static final MapCodec<SpliceWeatheringCopperChainBlock> CODEC =
       RecordCodecBuilder.mapCodec(
           instance ->
               instance
@@ -26,10 +26,6 @@ public final class SpliceWeatheringCopperChainBlock extends ChainBlock implement
   public SpliceWeatheringCopperChainBlock(WeatherState weatherState, Properties properties) {
     super(properties);
     this.weatherState = weatherState;
-  }
-
-  public static MapCodec<SpliceWeatheringCopperChainBlock> getCodec() {
-    return CODEC;
   }
 
   @Override

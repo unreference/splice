@@ -1,11 +1,13 @@
 package com.github.unreference.splice.data.models;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.util.SpliceBlockUtil;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
@@ -22,6 +24,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
   protected void registerStatesAndModels() {
     SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::createCopperBars);
     SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::createCopperChain);
+    this.createChest(SpliceBlocks.COPPER_CHEST, Blocks.COPPER_BLOCK);
   }
 
   private void createCopperBars(
@@ -71,5 +74,17 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     itemModels()
         .withExistingParent(NAME, mcLoc("item/generated"))
         .texture("layer0", COPPER_CHAIN_ITEM_TEXTURE);
+  }
+
+  private void createChest(DeferredBlock<? extends Block> block, Block particle) {
+    final var BLOCK = block.get();
+    final var NAME = SpliceBlockUtil.getId(BLOCK).getPath();
+
+    final var MODEL =
+        models()
+            .withExistingParent(NAME, mcLoc("block/chest"))
+            .texture("particle", SpliceBlockUtil.getTexture(particle));
+    simpleBlock(BLOCK, MODEL);
+    itemModels().withExistingParent(NAME, mcLoc("item/chest"));
   }
 }

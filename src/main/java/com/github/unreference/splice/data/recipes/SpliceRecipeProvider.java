@@ -85,6 +85,17 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(NUGGET), has(NUGGET))
         .unlockedBy(getHasName(INGOT), has(INGOT))
         .save(recipeOutput);
+
+    // Chest
+    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_CHEST)
+        .define('I', INGOT)
+        .define('C', Blocks.CHEST)
+        .pattern("III")
+        .pattern("ICI")
+        .pattern("III")
+        .unlockedBy(
+            getHasName(SpliceBlocks.COPPER_CHEST.get()), has(SpliceBlocks.COPPER_CHEST.get()))
+        .save(recipeOutput);
   }
 
   private static void waxable(RecipeOutput recipeOutput, Block from, Block to) {

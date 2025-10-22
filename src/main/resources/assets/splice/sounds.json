@@ -9,5 +9,21 @@
       "splice:item/armor/equip_copper5",
       "splice:item/armor/equip_copper6"
     ]
+  },
+  "block.copper_chest.open": {
+    "subtitle": "subtitles.block.chest.open",
+    "sounds": [
+      "splice:block/copper_chest/copper_chest_open1",
+      "splice:block/copper_chest/copper_chest_open2",
+      "splice:block/copper_chest/copper_chest_open3"
+    ]
+  },
+  "block.copper_chest.close": {
+    "subtitle": "subtitles.block.chest.close",
+    "sounds": [
+      "splice:block/copper_chest/copper_chest_close1",
+      "splice:block/copper_chest/copper_chest_close2",
+      "splice:block/copper_chest/copper_chest_close3"
+    ]
   }
 }
