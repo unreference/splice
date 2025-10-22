@@ -21,6 +21,8 @@ public final class SpliceBlockEntityType {
           "copper_chest",
           () ->
               BlockEntityType.Builder.of(
-                      SpliceCopperChestBlockEntity::new, SpliceBlocks.COPPER_CHEST.get())
+                      SpliceCopperChestBlockEntity::new,
+                      SpliceBlocks.COPPER_CHEST.get(),
+                      SpliceBlocks.EXPOSED_COPPER_CHEST.get())
                   .build(null));
 }

@@ -11,6 +11,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class SpliceItemTagsProvider extends ItemTagsProvider {
@@ -23,8 +24,9 @@ public final class SpliceItemTagsProvider extends ItemTagsProvider {
   }
 
   @Override
-  protected void addTags(HolderLookup.Provider provider) {
+  protected void addTags(HolderLookup.@NotNull Provider provider) {
     this.tag(SpliceItemTags.COPPER_TOOL_MATERIALS).add(Items.COPPER_INGOT);
+
     this.tag(ItemTags.SHOVELS).add(SpliceItems.COPPER_SHOVEL.get());
     this.tag(ItemTags.PICKAXES).add(SpliceItems.COPPER_PICKAXE.get());
     this.tag(ItemTags.CLUSTER_MAX_HARVESTABLES).add(SpliceItems.COPPER_PICKAXE.get());

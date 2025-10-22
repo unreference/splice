@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -43,8 +44,8 @@ public final class SpliceBlocks {
 
   private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
       List.of(COPPER_BARS, COPPER_CHAIN);
-
-  public static DeferredBlock<Block> COPPER_CHEST =
+  // TODO: Add to block loot
+  public static final DeferredBlock<Block> COPPER_CHEST =
       register(
           "copper_chest",
           props ->
@@ -53,11 +54,26 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_OPEN,
                   SpliceSoundEvents.COPPER_CHEST_CLOSE,
                   props),
-          BlockBehaviour.Properties.of()
-              .mapColor(Blocks.COPPER_BLOCK.defaultMapColor())
-              .strength(3.0f, 6.0f)
-              .sound(SoundType.COPPER)
-              .requiresCorrectToolForDrops());
+          baseCopperChestProps());
+  // TODO: Add to block loot
+  public static final DeferredBlock<Block> EXPOSED_COPPER_CHEST =
+      register(
+          "exposed_copper_chest",
+          props ->
+              new SpliceWeatheringCopperChestBlock(
+                  WeatheringCopper.WeatherState.EXPOSED,
+                  SpliceSoundEvents.COPPER_CHEST_OPEN,
+                  SpliceSoundEvents.COPPER_CHEST_CLOSE,
+                  props),
+          baseCopperChestProps().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY));
+
+  private static BlockBehaviour.Properties baseCopperChestProps() {
+    return BlockBehaviour.Properties.of()
+        .mapColor(Blocks.COPPER_BLOCK.defaultMapColor())
+        .strength(3.0f, 6.0f)
+        .sound(SoundType.COPPER)
+        .requiresCorrectToolForDrops();
+  }
 
   private static <B extends Block> DeferredBlock<B> register(
       String key,

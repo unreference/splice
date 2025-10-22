@@ -25,7 +25,8 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
   protected void registerStatesAndModels() {
     SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::createCopperBars);
     SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::createCopperChain);
-    this.createChest(SpliceBlocks.COPPER_CHEST, Blocks.COPPER_BLOCK);
+
+    createCopperChests();
   }
 
   private void createCopperBars(
@@ -73,6 +74,11 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     itemModels()
         .withExistingParent(name, mcLoc("item/generated"))
         .texture("layer0", copperChainItemTexture);
+  }
+
+  private void createCopperChests() {
+    this.createChest(SpliceBlocks.COPPER_CHEST, Blocks.COPPER_BLOCK);
+    this.createChest(SpliceBlocks.EXPOSED_COPPER_CHEST, Blocks.EXPOSED_COPPER);
   }
 
   private void createChest(DeferredBlock<? extends Block> block, Block particle) {

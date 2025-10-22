@@ -130,6 +130,9 @@ public final class SpliceItems {
   public static final DeferredItem<BlockItem> COPPER_CHEST =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.COPPER_CHEST);
 
+  public static final DeferredItem<BlockItem> EXPOSED_COPPER_CHEST =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.EXPOSED_COPPER_CHEST);
+
   public static void register(IEventBus bus) {
     ITEMS.register(bus);
   }

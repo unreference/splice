@@ -1,20 +1,20 @@
 package com.github.unreference.splice.client;
 
-import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.client.renderer.entity.blockentity.SpliceCopperChestRenderer;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import com.github.unreference.splice.world.level.block.entity.SpliceBlockEntityType;
 import com.github.unreference.splice.world.level.block.entity.SpliceCopperChestBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -22,11 +22,6 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import org.jetbrains.annotations.NotNull;
 
 public final class SpliceClientMain {
-  private static final Material COPPER_CHEST_MATERIAL =
-      new Material(
-          Sheets.CHEST_SHEET,
-          ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, "entity/chest/copper"));
-
   @SubscribeEvent
   public static void onEntityRenderersEvent(EntityRenderersEvent.RegisterRenderers event) {
     event.registerBlockEntityRenderer(
@@ -35,15 +30,20 @@ public final class SpliceClientMain {
 
   @SubscribeEvent
   public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
-    event.registerItem(
+    IClientItemExtensions extension =
         new IClientItemExtensions() {
           private static final Minecraft MC = Minecraft.getInstance();
           private static final BlockEntityWithoutLevelRenderer BLOCK_ENTITY_RENDERER =
               new BlockEntityWithoutLevelRenderer(
                   MC.getBlockEntityRenderDispatcher(), MC.getEntityModels()) {
-                private static final SpliceCopperChestBlockEntity COPPER_CHEST_SINGLE =
-                    new SpliceCopperChestBlockEntity(
-                        BlockPos.ZERO, SpliceBlocks.COPPER_CHEST.get().defaultBlockState());
+
+                private final Map<Block, SpliceCopperChestBlockEntity> chests = new HashMap<>();
+
+                private SpliceCopperChestBlockEntity getBlockEntityRendererFor(Block block) {
+                  return chests.computeIfAbsent(
+                      block,
+                      b -> new SpliceCopperChestBlockEntity(BlockPos.ZERO, b.defaultBlockState()));
+                }
 
                 @Override
                 public void renderByItem(
@@ -53,9 +53,13 @@ public final class SpliceClientMain {
                     @NotNull MultiBufferSource buffer,
                     int packedLight,
                     int packedOverlay) {
-                  MC.getBlockEntityRenderDispatcher()
-                      .renderItem(
-                          COPPER_CHEST_SINGLE, poseStack, buffer, packedLight, packedOverlay);
+                  if (stack.getItem() instanceof BlockItem blockItem) {
+                    final SpliceCopperChestBlockEntity blockEntity =
+                        getBlockEntityRendererFor(blockItem.getBlock());
+
+                    MC.getBlockEntityRenderDispatcher()
+                        .renderItem(blockEntity, poseStack, buffer, packedLight, packedOverlay);
+                  }
                 }
               };
 
@@ -63,7 +67,9 @@ public final class SpliceClientMain {
           public @NotNull BlockEntityWithoutLevelRenderer getCustomRenderer() {
             return BLOCK_ENTITY_RENDERER;
           }
-        },
-        SpliceBlocks.COPPER_CHEST.get().asItem());
+        };
+
+    event.registerItem(extension, SpliceBlocks.COPPER_CHEST.get().asItem());
+    event.registerItem(extension, SpliceBlocks.EXPOSED_COPPER_CHEST.get().asItem());
   }
 }
