@@ -102,27 +102,27 @@ public abstract class SpliceMixinKeyBindsList {
         boolean hovering,
         float partialTick,
         CallbackInfo callback) {
-      final int PAD = PADDING;
-      final int BETWIXT = PAD / 2;
+      final int pad = PADDING;
+      final int betwixt = pad / 2;
 
-      final int UNBIND_WIDTH = splice$computeUnbindWidth();
-      if (this.splice$unbind.getWidth() != UNBIND_WIDTH) {
-        this.splice$unbind.setWidth(UNBIND_WIDTH);
+      final int unbindWidth = splice$computeUnbindWidth();
+      if (this.splice$unbind.getWidth() != unbindWidth) {
+        this.splice$unbind.setWidth(unbindWidth);
       }
 
-      final int GUTTER_RIGHT =
+      final int gutterRight =
           ((SpliceMixinAbstractSelectionListAccessors) this.this$0).splice$getScrollbarPosition();
-      final int ROW_LEFT = left + PADDING;
+      final int rowLeft = left + pad;
 
-      int unbindLeft = GUTTER_RIGHT - UNBIND_WIDTH - PADDING;
-      int resetLeft = unbindLeft - BETWIXT - this.resetButton.getWidth();
+      int unbindLeft = gutterRight - unbindWidth - pad;
+      int resetLeft = unbindLeft - betwixt - this.resetButton.getWidth();
 
-      int changeLeft = resetLeft - BETWIXT - this.changeButton.getWidth();
-      if (changeLeft < ROW_LEFT) {
-        final int FIX = ROW_LEFT - changeLeft;
-        changeLeft += FIX;
-        resetLeft += FIX;
-        unbindLeft += FIX;
+      int changeLeft = resetLeft - betwixt - this.changeButton.getWidth();
+      if (changeLeft < rowLeft) {
+        final int fix = rowLeft - changeLeft;
+        changeLeft += fix;
+        resetLeft += fix;
+        unbindLeft += fix;
       }
 
       this.changeButton.setX(changeLeft);
@@ -147,13 +147,13 @@ public abstract class SpliceMixinKeyBindsList {
         int y,
         int color,
         Operation<Integer> original) {
-      final int MARKER = PADDING + 5;
-      final int MAX_X = Math.max(x, this.changeButton.getX() - MARKER);
+      final int marker = PADDING + 5;
+      final int maxX = Math.max(x, this.changeButton.getX() - marker);
 
-      final int LINE_Y_TOP = y - font.lineHeight / 2;
+      final int lineYTop = y - font.lineHeight / 2;
       AbstractWidget.renderScrollingString(
-          guiGraphics, font, text, x, LINE_Y_TOP, MAX_X, LINE_Y_TOP + font.lineHeight, color);
-      return Math.min(font.width(text), MAX_X - x);
+          guiGraphics, font, text, x, lineYTop, maxX, lineYTop + font.lineHeight, color);
+      return Math.min(font.width(text), maxX - x);
     }
 
     @Inject(method = "render", at = @At("TAIL"))
@@ -176,14 +176,14 @@ public abstract class SpliceMixinKeyBindsList {
 
     @Override
     public void splice$unbindNow() {
-      final KeyMapping MAPPING = this.key;
-      MAPPING.setKeyModifierAndCode(KeyModifier.NONE, InputConstants.UNKNOWN);
+      final KeyMapping mapping = this.key;
+      mapping.setKeyModifierAndCode(KeyModifier.NONE, InputConstants.UNKNOWN);
 
-      final Minecraft MC = Minecraft.getInstance();
-      MC.options.setKey(MAPPING, InputConstants.UNKNOWN);
+      final Minecraft mc = Minecraft.getInstance();
+      mc.options.setKey(mapping, InputConstants.UNKNOWN);
 
-      KeyBindsScreen keyBindsScreen = (MC.screen instanceof KeyBindsScreen kbs) ? kbs : null;
-      if (keyBindsScreen != null && keyBindsScreen.selectedKey == MAPPING) {
+      final KeyBindsScreen keyBindsScreen = (mc.screen instanceof KeyBindsScreen kbs) ? kbs : null;
+      if (keyBindsScreen != null && keyBindsScreen.selectedKey == mapping) {
         keyBindsScreen.selectedKey = null;
         keyBindsScreen.lastKeySelection = Util.getMillis();
       }
@@ -205,12 +205,12 @@ public abstract class SpliceMixinKeyBindsList {
       if (this.splice$unbindCachedWidth < 0 || LANG != this.splice$lastLang) {
         this.splice$lastLang = LANG;
 
-        final int PAD = PADDING;
-        final int MIN = 50;
-        final int MAX = MIN * 2;
-        final int TEXT = splice$mc.font.width(this.splice$unbind.getMessage());
+        final int pad = PADDING;
+        final int min = 50;
+        final int max = min * 2;
+        final int text = splice$mc.font.width(this.splice$unbind.getMessage());
 
-        this.splice$unbindCachedWidth = Mth.clamp(TEXT + PAD, MIN, MAX);
+        this.splice$unbindCachedWidth = Mth.clamp(text + pad, min, max);
       }
 
       return this.splice$unbindCachedWidth;

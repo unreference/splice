@@ -29,7 +29,7 @@ public final class SpliceSoundEvents {
       register("block.copper_chest.oxidized_close");
 
   private static DeferredHolder<SoundEvent, SoundEvent> register(String key) {
-    final var ID = ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, key);
+    final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, key);
     return SOUND_EVENTS.register(key, () -> SoundEvent.createVariableRangeEvent(ID));
   }
 

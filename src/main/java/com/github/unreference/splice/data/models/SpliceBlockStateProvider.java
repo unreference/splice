@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -38,13 +39,12 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
       throw new IllegalArgumentException("Expected IronBarsBlock: %s".formatted(block.get()));
     }
 
-    final String NAME = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
-    final String TEXTURE_NAME =
-        NAME.startsWith("waxed_") ? NAME.substring("waxed_".length()) : NAME;
-    final ResourceLocation PANE_TEXTURE = modLoc("block/%s".formatted(TEXTURE_NAME));
+    final String name = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
+    final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
+    final ResourceLocation paneTexture = modLoc("block/%s".formatted(textureName));
 
-    this.paneBlockWithRenderType(ironBarsBlock, PANE_TEXTURE, PANE_TEXTURE, mcLoc("cutout_mipped"));
-    itemModels().withExistingParent(NAME, mcLoc("item/generated")).texture("layer0", PANE_TEXTURE);
+    this.paneBlockWithRenderType(ironBarsBlock, paneTexture, paneTexture, mcLoc("cutout_mipped"));
+    itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", paneTexture);
   }
 
   private void createCopperChain(
@@ -58,33 +58,32 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
       throw new IllegalArgumentException("Expected ChainBlock: %s".formatted(block.get()));
     }
 
-    final String NAME = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
-    final String TEXTURE_NAME =
-        NAME.startsWith("waxed_") ? NAME.substring("waxed_".length()) : NAME;
+    final String name = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
+    final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
 
-    final ResourceLocation COPPER_CHAIN_BLOCK_TEXTURE = modLoc("block/%s".formatted(TEXTURE_NAME));
-    final ResourceLocation COPPER_CHAIN_ITEM_TEXTURE = modLoc("item/%s".formatted(TEXTURE_NAME));
-    final ModelFile COPPER_CHAIN_MODEL =
+    final ResourceLocation copperChainBlockTexture = modLoc("block/%s".formatted(textureName));
+    final ResourceLocation copperChainItemTexture = modLoc("item/%s".formatted(textureName));
+    final ModelFile copperChainModel =
         models()
-            .withExistingParent(NAME, mcLoc("block/chain"))
+            .withExistingParent(name, mcLoc("block/chain"))
             .renderType("minecraft:cutout")
-            .texture("all", COPPER_CHAIN_BLOCK_TEXTURE);
+            .texture("all", copperChainBlockTexture);
 
-    this.axisBlock(chainBlock, COPPER_CHAIN_MODEL, COPPER_CHAIN_MODEL);
+    this.axisBlock(chainBlock, copperChainModel, copperChainModel);
     itemModels()
-        .withExistingParent(NAME, mcLoc("item/generated"))
-        .texture("layer0", COPPER_CHAIN_ITEM_TEXTURE);
+        .withExistingParent(name, mcLoc("item/generated"))
+        .texture("layer0", copperChainItemTexture);
   }
 
   private void createChest(DeferredBlock<? extends Block> block, Block particle) {
-    final var BLOCK = block.get();
-    final var NAME = SpliceBlockUtil.getId(BLOCK).getPath();
+    final Block id = block.get();
+    final String name = SpliceBlockUtil.getId(id).getPath();
 
-    final var MODEL =
+    final BlockModelBuilder model =
         models()
-            .withExistingParent(NAME, mcLoc("block/chest"))
+            .withExistingParent(name, mcLoc("block/chest"))
             .texture("particle", SpliceBlockUtil.getTexture(particle));
-    simpleBlock(BLOCK, MODEL);
-    itemModels().withExistingParent(NAME, mcLoc("item/chest"));
+    simpleBlock(id, model);
+    itemModels().withExistingParent(name, mcLoc("item/chest"));
   }
 }

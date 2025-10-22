@@ -10,7 +10,7 @@ public final class SpliceBlockUtil {
   }
 
   public static ResourceLocation getTexture(Block block) {
-    final var ID = getId(block);
+    final ResourceLocation ID = getId(block);
     return ResourceLocation.fromNamespaceAndPath(ID.getNamespace(), "block/" + ID.getPath());
   }
 }

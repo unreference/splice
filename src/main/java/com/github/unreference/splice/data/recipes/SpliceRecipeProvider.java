@@ -9,10 +9,12 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
 
 public final class SpliceRecipeProvider extends RecipeProvider {
   public SpliceRecipeProvider(
@@ -39,56 +41,56 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   }
 
   private static void buildCopperBlockRecipes(RecipeOutput recipeOutput) {
-    final var INGOT = Items.COPPER_INGOT;
-    final var NUGGET = SpliceItems.COPPER_NUGGET.get();
+    final Item ingot = Items.COPPER_INGOT;
+    final Item nugget = SpliceItems.COPPER_NUGGET.get();
 
     // Trapdoor
-    twoByTwoPacker(recipeOutput, RecipeCategory.REDSTONE, Blocks.COPPER_TRAPDOOR, INGOT);
+    twoByTwoPacker(recipeOutput, RecipeCategory.REDSTONE, Blocks.COPPER_TRAPDOOR, ingot);
 
     // Bars
     ShapedRecipeBuilder.shaped(
             RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_BARS.unaffected(), 16)
-        .define('I', INGOT)
+        .define('I', ingot)
         .pattern("III")
         .pattern("III")
-        .unlockedBy(getHasName(INGOT), has(INGOT))
+        .unlockedBy(getHasName(ingot), has(ingot))
         .save(recipeOutput);
 
     // Ingot
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, INGOT)
-        .define('I', NUGGET)
+    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ingot)
+        .define('I', nugget)
         .pattern("III")
         .pattern("III")
         .pattern("III")
-        .unlockedBy(getHasName(NUGGET), has(NUGGET))
+        .unlockedBy(getHasName(nugget), has(nugget))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(
-                SpliceMain.MOD_ID, getConversionRecipeName(INGOT, NUGGET)));
+                SpliceMain.MOD_ID, getConversionRecipeName(ingot, nugget)));
 
     // Nugget
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, NUGGET, 9)
-        .requires(INGOT)
-        .unlockedBy(getHasName(INGOT), has(INGOT))
+    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, nugget, 9)
+        .requires(ingot)
+        .unlockedBy(getHasName(ingot), has(ingot))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(
-                SpliceMain.MOD_ID, getConversionRecipeName(NUGGET, INGOT)));
+                SpliceMain.MOD_ID, getConversionRecipeName(nugget, ingot)));
 
     // Chain
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_CHAIN.unaffected())
-        .define('N', NUGGET)
-        .define('I', INGOT)
+        .define('N', nugget)
+        .define('I', ingot)
         .pattern("N")
         .pattern("I")
         .pattern("N")
-        .unlockedBy(getHasName(NUGGET), has(NUGGET))
-        .unlockedBy(getHasName(INGOT), has(INGOT))
+        .unlockedBy(getHasName(nugget), has(nugget))
+        .unlockedBy(getHasName(ingot), has(ingot))
         .save(recipeOutput);
 
     // Chest
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_CHEST)
-        .define('I', INGOT)
+        .define('I', ingot)
         .define('C', Blocks.CHEST)
         .pattern("III")
         .pattern("ICI")
@@ -111,142 +113,142 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   }
 
   private static void buildCopperEquipmentRecipes(RecipeOutput recipeOutput) {
-    final var INGOT = Items.COPPER_INGOT;
-    final var STICK = Items.STICK;
-    final var TOOL_MATERIALS = SpliceItemTags.COPPER_TOOL_MATERIALS;
+    final Item ingot = Items.COPPER_INGOT;
+    final Item stick = Items.STICK;
+    final TagKey<Item> copperMaterials = SpliceItemTags.COPPER_TOOL_MATERIALS;
 
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_SHOVEL.get())
-        .define('C', TOOL_MATERIALS)
-        .define('S', STICK)
+        .define('C', copperMaterials)
+        .define('S', stick)
         .pattern("C")
         .pattern("S")
         .pattern("S")
-        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_PICKAXE.get())
-        .define('C', TOOL_MATERIALS)
-        .define('S', STICK)
+        .define('C', copperMaterials)
+        .define('S', stick)
         .pattern("CCC")
         .pattern(" S ")
         .pattern(" S ")
-        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_AXE.get())
-        .define('C', TOOL_MATERIALS)
-        .define('S', STICK)
+        .define('C', copperMaterials)
+        .define('S', stick)
         .pattern("CC")
         .pattern("CS")
         .pattern(" S")
-        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_HOE.get())
-        .define('C', TOOL_MATERIALS)
-        .define('S', STICK)
+        .define('C', copperMaterials)
+        .define('S', stick)
         .pattern("CC")
         .pattern(" S")
         .pattern(" S")
-        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_SWORD.get())
-        .define('C', TOOL_MATERIALS)
-        .define('S', STICK)
+        .define('C', copperMaterials)
+        .define('S', stick)
         .pattern("C")
         .pattern("C")
         .pattern("S")
-        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_HELMET.get())
-        .define('C', TOOL_MATERIALS)
+        .define('C', copperMaterials)
         .pattern("CCC")
         .pattern("C C")
-        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_CHESTPLATE.get())
-        .define('C', TOOL_MATERIALS)
+        .define('C', copperMaterials)
         .pattern("C C")
         .pattern("CCC")
         .pattern("CCC")
-        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_LEGGINGS.get())
-        .define('C', TOOL_MATERIALS)
+        .define('C', copperMaterials)
         .pattern("CCC")
         .pattern("C C")
         .pattern("C C")
-        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_BOOTS.get())
-        .define('C', TOOL_MATERIALS)
+        .define('C', copperMaterials)
         .pattern("C C")
         .pattern("C C")
-        .unlockedBy(getHasName(INGOT), has(TOOL_MATERIALS))
+        .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
   }
 
   private static void buildCopperFurnaceRecipes(RecipeOutput recipeOutput) {
-    final var SHOVEL = SpliceItems.COPPER_SHOVEL.get();
-    final var PICKAXE = SpliceItems.COPPER_PICKAXE.get();
-    final var AXE = SpliceItems.COPPER_AXE.get();
-    final var HOE = SpliceItems.COPPER_HOE.get();
-    final var SWORD = SpliceItems.COPPER_SWORD.get();
-    final var HELMET = SpliceItems.COPPER_HELMET.get();
-    final var CHESTPLATE = SpliceItems.COPPER_CHESTPLATE.get();
-    final var LEGGINGS = SpliceItems.COPPER_LEGGINGS.get();
-    final var BOOTS = SpliceItems.COPPER_BOOTS.get();
-    final var HORSE_ARMOR = SpliceItems.COPPER_HORSE_ARMOR.get();
-    final var NUGGET = SpliceItems.COPPER_NUGGET.get();
+    final ShovelItem shovel = SpliceItems.COPPER_SHOVEL.get();
+    final PickaxeItem pickaxe = SpliceItems.COPPER_PICKAXE.get();
+    final AxeItem axe = SpliceItems.COPPER_AXE.get();
+    final HoeItem hoe = SpliceItems.COPPER_HOE.get();
+    final SwordItem sword = SpliceItems.COPPER_SWORD.get();
+    final ArmorItem helmet = SpliceItems.COPPER_HELMET.get();
+    final ArmorItem chestplate = SpliceItems.COPPER_CHESTPLATE.get();
+    final ArmorItem leggings = SpliceItems.COPPER_LEGGINGS.get();
+    final ArmorItem boots = SpliceItems.COPPER_BOOTS.get();
+    final AnimalArmorItem horseArmor = SpliceItems.COPPER_HORSE_ARMOR.get();
+    final Item nugget = SpliceItems.COPPER_NUGGET.get();
 
     SimpleCookingRecipeBuilder.smelting(
             Ingredient.of(
-                SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET, CHESTPLATE, LEGGINGS, BOOTS, HORSE_ARMOR),
+                shovel, pickaxe, axe, hoe, sword, helmet, chestplate, leggings, boots, horseArmor),
             RecipeCategory.MISC,
-            NUGGET,
+            nugget,
             0.1f,
             200)
-        .unlockedBy(getHasName(SHOVEL), has(SHOVEL))
-        .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
-        .unlockedBy(getHasName(AXE), has(AXE))
-        .unlockedBy(getHasName(HOE), has(HOE))
-        .unlockedBy(getHasName(SWORD), has(SWORD))
-        .unlockedBy(getHasName(HELMET), has(HELMET))
-        .unlockedBy(getHasName(CHESTPLATE), has(CHESTPLATE))
-        .unlockedBy(getHasName(LEGGINGS), has(LEGGINGS))
-        .unlockedBy(getHasName(BOOTS), has(BOOTS))
-        .unlockedBy(getHasName(HORSE_ARMOR), has(HORSE_ARMOR))
+        .unlockedBy(getHasName(shovel), has(shovel))
+        .unlockedBy(getHasName(pickaxe), has(pickaxe))
+        .unlockedBy(getHasName(axe), has(axe))
+        .unlockedBy(getHasName(hoe), has(hoe))
+        .unlockedBy(getHasName(sword), has(sword))
+        .unlockedBy(getHasName(helmet), has(helmet))
+        .unlockedBy(getHasName(chestplate), has(chestplate))
+        .unlockedBy(getHasName(leggings), has(leggings))
+        .unlockedBy(getHasName(boots), has(boots))
+        .unlockedBy(getHasName(horseArmor), has(horseArmor))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(
-                SpliceMain.MOD_ID, getSmeltingRecipeName(NUGGET)));
+                SpliceMain.MOD_ID, getSmeltingRecipeName(nugget)));
 
     SimpleCookingRecipeBuilder.blasting(
             Ingredient.of(
-                SHOVEL, PICKAXE, AXE, HOE, SWORD, HELMET, CHESTPLATE, LEGGINGS, BOOTS, HORSE_ARMOR),
+                shovel, pickaxe, axe, hoe, sword, helmet, chestplate, leggings, boots, horseArmor),
             RecipeCategory.MISC,
-            NUGGET,
+            nugget,
             0.1f,
             100)
-        .unlockedBy(getHasName(SHOVEL), has(SHOVEL))
-        .unlockedBy(getHasName(PICKAXE), has(PICKAXE))
-        .unlockedBy(getHasName(AXE), has(AXE))
-        .unlockedBy(getHasName(HOE), has(HOE))
-        .unlockedBy(getHasName(SWORD), has(SWORD))
-        .unlockedBy(getHasName(HELMET), has(HELMET))
-        .unlockedBy(getHasName(CHESTPLATE), has(CHESTPLATE))
-        .unlockedBy(getHasName(LEGGINGS), has(LEGGINGS))
-        .unlockedBy(getHasName(BOOTS), has(BOOTS))
-        .unlockedBy(getHasName(HORSE_ARMOR), has(HORSE_ARMOR))
+        .unlockedBy(getHasName(shovel), has(shovel))
+        .unlockedBy(getHasName(pickaxe), has(pickaxe))
+        .unlockedBy(getHasName(axe), has(axe))
+        .unlockedBy(getHasName(hoe), has(hoe))
+        .unlockedBy(getHasName(sword), has(sword))
+        .unlockedBy(getHasName(helmet), has(helmet))
+        .unlockedBy(getHasName(chestplate), has(chestplate))
+        .unlockedBy(getHasName(leggings), has(leggings))
+        .unlockedBy(getHasName(boots), has(boots))
+        .unlockedBy(getHasName(horseArmor), has(horseArmor))
         .save(
             recipeOutput,
             ResourceLocation.fromNamespaceAndPath(
-                SpliceMain.MOD_ID, getBlastingRecipeName(NUGGET)));
+                SpliceMain.MOD_ID, getBlastingRecipeName(nugget)));
   }
 
   private static void buildWaxableRecipes(RecipeOutput output) {
@@ -263,7 +265,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   }
 
   @Override
-  protected void buildRecipes(RecipeOutput recipeOutput) {
+  protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
     buildBannerPatternRecipes(recipeOutput);
     buildCopperRecipes(recipeOutput);
   }

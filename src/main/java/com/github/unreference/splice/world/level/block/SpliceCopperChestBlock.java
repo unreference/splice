@@ -14,12 +14,14 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.neoforged.neoforge.common.DataMapHooks;
+import org.jetbrains.annotations.NotNull;
 
 public class SpliceCopperChestBlock extends ChestBlock {
   public static final MapCodec<SpliceCopperChestBlock> CODEC =
@@ -58,24 +60,27 @@ public class SpliceCopperChestBlock extends ChestBlock {
 
   private static BlockState getLeastWeatheredChest(
       BlockState state, Level level, BlockPos clickedPos) {
-    final var STATE_2 = level.getBlockState(clickedPos.relative(getConnectedDirection(state)));
-    if (!state.getValue(ChestBlock.TYPE).equals(ChestType.SINGLE)
-        && state.getBlock() instanceof SpliceCopperChestBlock chest
-        && STATE_2.getBlock() instanceof SpliceCopperChestBlock chest2) {
+    final Direction connectedDirection = getConnectedDirection(state);
+    final BlockPos neighborPosition = clickedPos.relative(connectedDirection);
+    final BlockState neighborState = level.getBlockState(neighborPosition);
 
-      var state3 = state;
-      var state4 = STATE_2;
+    if (state.getValue(ChestBlock.TYPE) != ChestType.SINGLE
+        && state.getBlock() instanceof SpliceCopperChestBlock thisChest
+        && neighborState.getBlock() instanceof SpliceCopperChestBlock otherChest) {
+      BlockState left = state;
+      BlockState right = neighborState;
 
-      if (chest.isWaxed() != chest2.isWaxed()) {
-        state3 = unwax(chest, state).orElse(state);
-        state4 = unwax(chest2, STATE_2).orElse(STATE_2);
+      if (thisChest.isWaxed() != otherChest.isWaxed()) {
+        left = unwax(thisChest, left).orElse(left);
+        right = unwax(otherChest, right).orElse(right);
       }
 
-      final var BLOCK =
-          chest.weatherState.ordinal() <= chest2.weatherState.ordinal()
-              ? state3.getBlock()
-              : state4.getBlock();
-      return BLOCK.withPropertiesOf(state3);
+      final Block chosen =
+          thisChest.weatherState.compareTo(otherChest.weatherState) <= 0
+              ? left.getBlock()
+              : right.getBlock();
+
+      return chosen.withPropertiesOf(left);
     }
 
     return state;
@@ -86,7 +91,7 @@ public class SpliceCopperChestBlock extends ChestBlock {
       return Optional.of(state);
     }
 
-    var unwaxed = DataMapHooks.getBlockUnwaxed(state.getBlock());
+    final Block unwaxed = DataMapHooks.getBlockUnwaxed(state.getBlock());
     return Optional.ofNullable(unwaxed).map(block -> block.withPropertiesOf(state));
   }
 
@@ -107,28 +112,30 @@ public class SpliceCopperChestBlock extends ChestBlock {
   }
 
   @Override
-  public BlockState getStateForPlacement(BlockPlaceContext context) {
-    var state = super.getStateForPlacement(context);
-    return getLeastWeatheredChest(state, context.getLevel(), context.getClickedPos());
+  public @NotNull BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+    final BlockState initial = super.getStateForPlacement(context);
+    return getLeastWeatheredChest(initial, context.getLevel(), context.getClickedPos());
   }
 
   @Override
-  protected BlockState updateShape(
-      BlockState state,
-      Direction facing,
-      BlockState facingState,
-      LevelAccessor level,
-      BlockPos currentPos,
-      BlockPos facingPos) {
-    final var STATE_3 = super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+  protected @NotNull BlockState updateShape(
+      @NotNull BlockState state,
+      @NotNull Direction facing,
+      @NotNull BlockState facingState,
+      @NotNull LevelAccessor level,
+      @NotNull BlockPos currentPos,
+      @NotNull BlockPos facingPos) {
+    final BlockState updated =
+        super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+
     if (this.isConnectable(facingState)) {
-      var chestType = STATE_3.getValue(ChestBlock.TYPE);
-      if (!chestType.equals(ChestType.SINGLE) && getConnectedDirection(STATE_3) == facing) {
-        return facingState.getBlock().withPropertiesOf(STATE_3);
+      final ChestType type = updated.getValue(ChestBlock.TYPE);
+      if (!type.equals(ChestType.SINGLE) && getConnectedDirection(updated) == facing) {
+        return facingState.getBlock().withPropertiesOf(updated);
       }
     }
 
-    return STATE_3;
+    return updated;
   }
 
   public boolean isWaxed() {
@@ -136,7 +143,7 @@ public class SpliceCopperChestBlock extends ChestBlock {
   }
 
   @Override
-  public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+  public @NotNull BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
     return new SpliceCopperChestBlockEntity(pos, state);
   }
 }

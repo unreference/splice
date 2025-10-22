@@ -22,17 +22,17 @@ public record SpliceWeatheringCopperItems(
   public static SpliceWeatheringCopperItems create(
       SpliceWeatheringCopperBlocks blocks,
       Function<DeferredBlock<? extends Block>, DeferredItem<BlockItem>> weathering) {
-    final var UNAFFECTED = weathering.apply(blocks.unaffected());
-    final var EXPOSED = weathering.apply(blocks.exposed());
-    final var WEATHERED = weathering.apply(blocks.weathered());
-    final var OXIDIZED = weathering.apply(blocks.oxidized());
+    final DeferredItem<BlockItem> UNAFFECTED = weathering.apply(blocks.unaffected());
+    final DeferredItem<BlockItem> EXPOSED = weathering.apply(blocks.exposed());
+    final DeferredItem<BlockItem> WEATHERED = weathering.apply(blocks.weathered());
+    final DeferredItem<BlockItem> OXIDIZED = weathering.apply(blocks.oxidized());
 
-    final var WAXED = weathering.apply(blocks.waxed());
-    final var WAXED_EXPOSED = weathering.apply(blocks.waxedExposed());
-    final var WAXED_WEATHERED = weathering.apply(blocks.waxedWeathered());
-    final var WAXED_OXIDIZED = weathering.apply(blocks.waxedOxidized());
+    final DeferredItem<BlockItem> WAXED = weathering.apply(blocks.waxed());
+    final DeferredItem<BlockItem> WAXED_EXPOSED = weathering.apply(blocks.waxedExposed());
+    final DeferredItem<BlockItem> WAXED_WEATHERED = weathering.apply(blocks.waxedWeathered());
+    final DeferredItem<BlockItem> WAXED_OXIDIZED = weathering.apply(blocks.waxedOxidized());
 
-    final var MAP =
+    final ImmutableBiMap<DeferredItem<BlockItem>, DeferredItem<BlockItem>> MAP =
         ImmutableBiMap.of(
             UNAFFECTED,
             WAXED,

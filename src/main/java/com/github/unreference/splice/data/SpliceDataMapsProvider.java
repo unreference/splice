@@ -5,10 +5,12 @@ import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
 import net.neoforged.neoforge.registries.datamaps.builtin.Oxidizable;
 import net.neoforged.neoforge.registries.datamaps.builtin.Waxable;
+import org.jetbrains.annotations.NotNull;
 
 public final class SpliceDataMapsProvider extends DataMapProvider {
   public SpliceDataMapsProvider(
@@ -17,29 +19,29 @@ public final class SpliceDataMapsProvider extends DataMapProvider {
   }
 
   @Override
-  protected void gather(HolderLookup.Provider provider) {
+  protected void gather(HolderLookup.@NotNull Provider provider) {
     this.createCopperData();
   }
 
   private void createCopperData() {
-    final var WAXABLE = builder(NeoForgeDataMaps.WAXABLES);
-    final var WEATHERING = builder(NeoForgeDataMaps.OXIDIZABLES);
+    final Builder<Waxable, Block> waxable = builder(NeoForgeDataMaps.WAXABLES);
+    final Builder<Oxidizable, Block> weathering = builder(NeoForgeDataMaps.OXIDIZABLES);
 
     SpliceBlocks.getCopperFamily()
         .forEach(
             block -> {
               block
                   .waxedMapping()
-                  .forEach((from, to) -> WAXABLE.add(from.getKey(), new Waxable(to.get()), false));
+                  .forEach((from, to) -> waxable.add(from.getKey(), new Waxable(to.get()), false));
               block
                   .weatheringMapping()
                   .forEach(
-                      (from, to) -> WEATHERING.add(from.getKey(), new Oxidizable(to.get()), false));
+                      (from, to) -> weathering.add(from.getKey(), new Oxidizable(to.get()), false));
             });
   }
 
   @Override
-  public String getName() {
+  public @NotNull String getName() {
     return "%s Data Maps".formatted(SpliceMain.MOD_ID);
   }
 }

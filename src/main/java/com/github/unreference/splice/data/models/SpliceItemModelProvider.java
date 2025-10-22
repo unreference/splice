@@ -10,6 +10,7 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.item.armortrim.TrimMaterials;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -61,36 +62,38 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
   }
 
   private void trimmableArmor(DeferredItem<? extends ArmorItem> item) {
-    final var ITEM = item.getId().getPath();
-    final var ARMOR = item.get().getType().getName();
-    final var BASE =
-        this.withExistingParent(ITEM, mcLoc("item/generated"))
-            .texture("layer0", modLoc("item/%s".formatted(ITEM)));
+    final String armorItem = item.getId().getPath();
+    final String armor = item.get().getType().getName();
+    final ItemModelBuilder base =
+        this.withExistingParent(armorItem, mcLoc("item/generated"))
+            .texture("layer0", modLoc("item/%s".formatted(armorItem)));
 
-    final var TO_SORT = new ArrayList<>(TRIM_MATERIALS.entrySet());
-    TO_SORT.sort(Comparator.comparingDouble(Map.Entry::getValue));
+    final ArrayList<Map.Entry<ResourceKey<TrimMaterial>, Float>> toSort =
+        new ArrayList<>(TRIM_MATERIALS.entrySet());
+    toSort.sort(Comparator.comparingDouble(Map.Entry::getValue));
 
-    for (var entry : TO_SORT) {
-      final var MATERIAL = entry.getKey().location().getPath();
-      final var MODEL_INDEX = entry.getValue();
-      final var TRIM_TEXTURE =
-          ResourceLocation.withDefaultNamespace(
-              "trims/items/%s_trim_%s".formatted(ARMOR, MATERIAL));
+    toSort.forEach(
+        entry -> {
+          final String material = entry.getKey().location().getPath();
+          final float modelIndex = entry.getValue();
+          final ResourceLocation trimTexture =
+              ResourceLocation.withDefaultNamespace(
+                  "trims/items/%s_trim_%s".formatted(armor, material));
 
-      existingFileHelper.trackGenerated(
-          TRIM_TEXTURE, PackType.CLIENT_RESOURCES, ".png", "textures");
+          existingFileHelper.trackGenerated(
+              trimTexture, PackType.CLIENT_RESOURCES, ".png", "textures");
 
-      final var TRIM_MODEL = "%s_%s_trim".formatted(ITEM, MATERIAL);
+          final String trimModel = "%s_%s_trim".formatted(armorItem, material);
 
-      getBuilder(TRIM_MODEL)
-          .parent(new ModelFile.UncheckedModelFile(mcLoc("item/generated")))
-          .texture("layer0", modLoc("item/%s".formatted(ITEM)))
-          .texture("layer1", TRIM_TEXTURE);
+          getBuilder(trimModel)
+              .parent(new ModelFile.UncheckedModelFile(mcLoc("item/generated")))
+              .texture("layer0", modLoc("item/%s".formatted(armorItem)))
+              .texture("layer1", trimTexture);
 
-      BASE.override()
-          .predicate(mcLoc("trim_type"), MODEL_INDEX)
-          .model(new ModelFile.UncheckedModelFile(modLoc("item/%s".formatted(TRIM_MODEL))))
-          .end();
-    }
+          base.override()
+              .predicate(mcLoc("trim_type"), modelIndex)
+              .model(new ModelFile.UncheckedModelFile(modLoc("item/%s".formatted(trimModel))))
+              .end();
+        });
   }
 }

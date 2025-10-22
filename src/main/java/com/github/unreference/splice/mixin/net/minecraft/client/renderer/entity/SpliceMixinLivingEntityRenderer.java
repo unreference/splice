@@ -40,7 +40,7 @@ public abstract class SpliceMixinLivingEntityRenderer<T extends LivingEntity> {
       return true;
     }
 
-    final var MC = Minecraft.getInstance();
+    final Minecraft MC = Minecraft.getInstance();
 
     boolean isNamesShown = Minecraft.renderNames();
     boolean isThirdPerson = !MC.options.getCameraType().isFirstPerson();

@@ -19,6 +19,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import org.jetbrains.annotations.NotNull;
 
 public final class SpliceClientMain {
   private static final Material COPPER_CHEST_MATERIAL =
@@ -46,13 +47,12 @@ public final class SpliceClientMain {
 
                 @Override
                 public void renderByItem(
-                    ItemStack stack,
-                    ItemDisplayContext displayContext,
-                    PoseStack poseStack,
-                    MultiBufferSource buffer,
+                    @NotNull ItemStack stack,
+                    @NotNull ItemDisplayContext displayContext,
+                    @NotNull PoseStack poseStack,
+                    @NotNull MultiBufferSource buffer,
                     int packedLight,
                     int packedOverlay) {
-                  final var COPPER_CHEST = COPPER_CHEST_MATERIAL;
                   MC.getBlockEntityRenderDispatcher()
                       .renderItem(
                           COPPER_CHEST_SINGLE, poseStack, buffer, packedLight, packedOverlay);
@@ -60,7 +60,7 @@ public final class SpliceClientMain {
               };
 
           @Override
-          public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+          public @NotNull BlockEntityWithoutLevelRenderer getCustomRenderer() {
             return BLOCK_ENTITY_RENDERER;
           }
         },
