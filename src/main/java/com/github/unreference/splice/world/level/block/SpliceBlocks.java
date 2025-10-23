@@ -2,6 +2,8 @@ package com.github.unreference.splice.world.level.block;
 
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
+import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.function.Function;
 import net.minecraft.world.level.block.*;
@@ -42,9 +44,6 @@ public final class SpliceBlocks {
                   .sound(SoundType.CHAIN)
                   .noOcclusion());
 
-  private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
-      List.of(COPPER_BARS, COPPER_CHAIN);
-
   // TODO: Add to block loot
   public static final DeferredBlock<Block> COPPER_CHEST =
       register(
@@ -55,7 +54,7 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_OPEN,
                   SpliceSoundEvents.COPPER_CHEST_CLOSE,
                   props),
-          unaffectedCopperChestProps());
+          getUnaffectedCopperChestProps());
 
   // TODO: Add to block loot
   public static final DeferredBlock<Block> EXPOSED_COPPER_CHEST =
@@ -92,7 +91,13 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_OXIDIZED_CLOSE,
                   props),
           getOxidizedCopperChestProps());
-
+  private static final ImmutableBiMap<
+          DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
+      COPPER_CHESTS_WEATHERING =
+          ImmutableBiMap.of(
+              COPPER_CHEST, EXPOSED_COPPER_CHEST,
+              EXPOSED_COPPER_CHEST, WEATHERED_COPPER_CHEST,
+              WEATHERED_COPPER_CHEST, OXIDIZED_COPPER_CHEST);
   // TODO: Add to block loot
   public static final DeferredBlock<Block> WAXED_COPPER_CHEST =
       register(
@@ -103,8 +108,7 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_OPEN,
                   SpliceSoundEvents.COPPER_CHEST_CLOSE,
                   props),
-          unaffectedCopperChestProps());
-
+          getUnaffectedCopperChestProps());
   // TODO: Add to block loot
   public static final DeferredBlock<Block> WAXED_EXPOSED_COPPER_CHEST =
       register(
@@ -116,7 +120,6 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_CLOSE,
                   props),
           getExposedCopperChestProps());
-
   // TODO: Add to block loot
   public static final DeferredBlock<Block> WAXED_WEATHERED_COPPER_CHEST =
       register(
@@ -128,7 +131,6 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_WEATHERED_CLOSE,
                   props),
           getWeatheredCopperChestProps());
-
   // TODO: Add to block loot
   public static final DeferredBlock<Block> WAXED_OXIDIZED_COPPER_CHEST =
       register(
@@ -140,8 +142,44 @@ public final class SpliceBlocks {
                   SpliceSoundEvents.COPPER_CHEST_OXIDIZED_CLOSE,
                   props),
           getOxidizedCopperChestProps());
+  private static final ImmutableBiMap<
+          DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
+      COPPER_CHESTS_WAXED =
+          ImmutableBiMap.of(
+              COPPER_CHEST, WAXED_COPPER_CHEST,
+              EXPOSED_COPPER_CHEST, WAXED_EXPOSED_COPPER_CHEST,
+              WEATHERED_COPPER_CHEST, WAXED_WEATHERED_COPPER_CHEST,
+              OXIDIZED_COPPER_CHEST, WAXED_OXIDIZED_COPPER_CHEST);
 
-  private static BlockBehaviour.Properties unaffectedCopperChestProps() {
+  private static final ImmutableList<DeferredBlock<? extends Block>> COPPER_CHESTS_ALL =
+      ImmutableList.of(
+          COPPER_CHEST,
+          WAXED_COPPER_CHEST,
+          EXPOSED_COPPER_CHEST,
+          WAXED_EXPOSED_COPPER_CHEST,
+          WEATHERED_COPPER_CHEST,
+          WAXED_WEATHERED_COPPER_CHEST,
+          OXIDIZED_COPPER_CHEST,
+          WAXED_OXIDIZED_COPPER_CHEST);
+
+  public static final SpliceWeatheringCopperBlocks COPPER_CHESTS =
+      new SpliceWeatheringCopperBlocks(
+          COPPER_CHEST,
+          EXPOSED_COPPER_CHEST,
+          WEATHERED_COPPER_CHEST,
+          OXIDIZED_COPPER_CHEST,
+          WAXED_COPPER_CHEST,
+          WAXED_EXPOSED_COPPER_CHEST,
+          WAXED_WEATHERED_COPPER_CHEST,
+          WAXED_OXIDIZED_COPPER_CHEST,
+          COPPER_CHESTS_WEATHERING,
+          COPPER_CHESTS_WAXED,
+          COPPER_CHESTS_ALL);
+
+  private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
+      List.of(COPPER_BARS, COPPER_CHAIN, COPPER_CHESTS);
+
+  private static BlockBehaviour.Properties getUnaffectedCopperChestProps() {
     return BlockBehaviour.Properties.of()
         .mapColor(Blocks.COPPER_BLOCK.defaultMapColor())
         .strength(3.0f, 6.0f)
@@ -150,15 +188,15 @@ public final class SpliceBlocks {
   }
 
   private static BlockBehaviour.Properties getExposedCopperChestProps() {
-    return unaffectedCopperChestProps().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY);
+    return getUnaffectedCopperChestProps().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY);
   }
 
   private static BlockBehaviour.Properties getWeatheredCopperChestProps() {
-    return unaffectedCopperChestProps().mapColor(MapColor.WARPED_STEM);
+    return getUnaffectedCopperChestProps().mapColor(MapColor.WARPED_STEM);
   }
 
   private static BlockBehaviour.Properties getOxidizedCopperChestProps() {
-    return unaffectedCopperChestProps().mapColor(MapColor.WARPED_NYLIUM);
+    return getUnaffectedCopperChestProps().mapColor(MapColor.WARPED_NYLIUM);
   }
 
   private static <B extends Block> DeferredBlock<B> register(

@@ -11,6 +11,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -60,12 +62,15 @@ public class SpliceCopperChestBlock extends ChestBlock {
 
   private static BlockState getLeastWeatheredChest(
       BlockState state, Level level, BlockPos clickedPos) {
+    if (state.getValue(ChestBlock.TYPE) == ChestType.SINGLE) {
+      return state;
+    }
+
     final Direction connectedDirection = getConnectedDirection(state);
     final BlockPos neighborPosition = clickedPos.relative(connectedDirection);
     final BlockState neighborState = level.getBlockState(neighborPosition);
 
-    if (state.getValue(ChestBlock.TYPE) != ChestType.SINGLE
-        && state.getBlock() instanceof SpliceCopperChestBlock thisChest
+    if (state.getBlock() instanceof SpliceCopperChestBlock thisChest
         && neighborState.getBlock() instanceof SpliceCopperChestBlock otherChest) {
       BlockState left = state;
       BlockState right = neighborState;
@@ -125,17 +130,47 @@ public class SpliceCopperChestBlock extends ChestBlock {
       @NotNull LevelAccessor level,
       @NotNull BlockPos currentPos,
       @NotNull BlockPos facingPos) {
+    final ChestType prevType = state.getValue(ChestBlock.TYPE);
+    final Direction prevConnection = getConnectedDirection(state);
     final BlockState updated =
         super.updateShape(state, facing, facingState, level, currentPos, facingPos);
 
-    if (this.isConnectable(facingState)) {
-      final ChestType type = updated.getValue(ChestBlock.TYPE);
-      if (!type.equals(ChestType.SINGLE) && getConnectedDirection(updated) == facing) {
-        return facingState.getBlock().withPropertiesOf(updated);
+    if (prevType != ChestType.SINGLE && facing == prevConnection && isConnectable(facingState)) {
+      BlockState result = facingState.getBlock().withPropertiesOf(updated);
+
+      if (result.hasProperty(ChestBlock.TYPE)) {
+        result = result.setValue(ChestBlock.TYPE, prevType);
       }
+
+      // TODO: Find a way to carry the particles over to connected chest.
+      return result;
     }
 
     return updated;
+  }
+
+  @Override
+  protected void onRemove(
+      BlockState state,
+      @NotNull Level level,
+      @NotNull BlockPos pos,
+      BlockState newState,
+      boolean isMoving) {
+    if (state.getBlock() == newState.getBlock()) {
+      return;
+    }
+
+    if (newState.is(SpliceBlockTags.COPPER_CHESTS)) {
+      return;
+    }
+
+    BlockEntity blockEntity = level.getBlockEntity(pos);
+    if (blockEntity instanceof Container container) {
+      Containers.dropContents(level, pos, container);
+      level.updateNeighbourForOutputSignal(pos, this);
+    }
+
+    super.onRemove(state, level, pos, newState, isMoving);
   }
 
   public boolean isWaxed() {

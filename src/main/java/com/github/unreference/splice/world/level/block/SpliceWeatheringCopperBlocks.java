@@ -119,16 +119,16 @@ public record SpliceWeatheringCopperBlocks(
 
   public ImmutableBiMap<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
       weatheringMapping() {
-    return weatheringMap;
+    return this.weatheringMap;
   }
 
   public ImmutableBiMap<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
       waxedMapping() {
-    return waxedMap;
+    return this.waxedMap;
   }
 
   public ImmutableList<DeferredBlock<? extends Block>> asList() {
-    return all;
+    return this.all;
   }
 
   public void forEach(Consumer<DeferredBlock<? extends Block>> consumer) {
