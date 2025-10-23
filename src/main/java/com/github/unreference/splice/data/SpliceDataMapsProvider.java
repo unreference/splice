@@ -1,6 +1,5 @@
 package com.github.unreference.splice.data;
 
-import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
@@ -38,10 +37,5 @@ public final class SpliceDataMapsProvider extends DataMapProvider {
                   .forEach(
                       (from, to) -> weathering.add(from.getKey(), new Oxidizable(to.get()), false));
             });
-  }
-
-  @Override
-  public @NotNull String getName() {
-    return SpliceMain.MOD_ID + "Data Maps";
   }
 }

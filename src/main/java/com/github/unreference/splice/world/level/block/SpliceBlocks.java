@@ -7,10 +7,12 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.function.Function;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -49,13 +51,15 @@ public final class SpliceBlocks {
   // TODO: Add to block loot
   public static final DeferredBlock<Block> COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.UNAFFECTED, false);
+
   public static final DeferredBlock<Block> EXPOSED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.EXPOSED, false);
+
   public static final DeferredBlock<Block> WEATHERED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.WEATHERED, false);
+
   public static final DeferredBlock<Block> OXIDIZED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.OXIDIZED, false);
-
   private static final ImmutableBiMap<
           DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
       CHEST_WEATHERING_CHAIN =
@@ -64,7 +68,28 @@ public final class SpliceBlocks {
               .put(EXPOSED_COPPER_CHEST, WEATHERED_COPPER_CHEST)
               .put(WEATHERED_COPPER_CHEST, OXIDIZED_COPPER_CHEST)
               .build();
-
+  // TODO: Add to block loot
+  public static final DeferredBlock<Block> COPPER_TORCH =
+      register(
+          "copper_torch",
+          props -> new TorchBlock(ParticleTypes.SOUL_FIRE_FLAME, props),
+          BlockBehaviour.Properties.of()
+              .noCollission()
+              .instabreak()
+              .lightLevel(emission -> 14)
+              .sound(SoundType.WOOD)
+              .pushReaction(PushReaction.DESTROY));
+  public static final DeferredBlock<Block> COPPER_WALL_TORCH =
+      register(
+          "copper_wall_torch",
+          props -> new WallTorchBlock(ParticleTypes.SOUL_FIRE_FLAME, props),
+          BlockBehaviour.Properties.of()
+              .noCollission()
+              .instabreak()
+              .lightLevel(emission -> 14)
+              .sound(SoundType.WOOD)
+              .lootFrom(COPPER_TORCH)
+              .pushReaction(PushReaction.DESTROY));
   public static final DeferredBlock<Block> WAXED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.UNAFFECTED, true);
   public static final DeferredBlock<Block> WAXED_EXPOSED_COPPER_CHEST =

@@ -4,6 +4,7 @@ import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.tags.SpliceBannerPatternTags;
 import com.github.unreference.splice.world.item.equipment.SpliceArmorMaterials;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.*;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -150,6 +151,16 @@ public final class SpliceItems {
 
   public static final DeferredItem<BlockItem> WAXED_OXIDIZED_COPPER_CHEST =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.WAXED_OXIDIZED_COPPER_CHEST);
+
+  public static final DeferredItem<Item> COPPER_TORCH =
+      ITEMS.register(
+          "copper_torch",
+          () ->
+              new StandingAndWallBlockItem(
+                  SpliceBlocks.COPPER_TORCH.get(),
+                  SpliceBlocks.COPPER_WALL_TORCH.get(),
+                  new Item.Properties(),
+                  Direction.DOWN));
 
   public static void register(IEventBus bus) {
     ITEMS.register(bus);

@@ -3,15 +3,15 @@ package com.github.unreference.splice.data.models;
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.util.SpliceBlockUtil;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChainBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
-import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
@@ -22,10 +22,50 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
   @Override
   protected void registerStatesAndModels() {
+    createTorch(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
     SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::createCopperBars);
     SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::createCopperChain);
 
     createCopperChests();
+  }
+
+  private void createTorch(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
+    final Block standingBlock = standing.get();
+    final Block wallBlock = wall.get();
+
+    final String standingName = SpliceBlockUtil.getId(standingBlock).getPath();
+    final String wallName = SpliceBlockUtil.getId(wallBlock).getPath();
+
+    final ResourceLocation torchTex = modLoc("block/" + standingName);
+
+    final ModelFile standingModel =
+        models().torch(standingName, torchTex).renderType("minecraft:cutout");
+    final ModelFile wallModel =
+        models().torchWall(wallName, torchTex).renderType("minecraft:cutout");
+
+    simpleBlock(standingBlock, standingModel);
+
+    VariantBlockStateBuilder state = getVariantBuilder(wallBlock);
+    state
+        .partialState()
+        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
+        .addModels(ConfiguredModel.builder().modelFile(wallModel).build());
+    state
+        .partialState()
+        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
+        .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(90).build());
+    state
+        .partialState()
+        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
+        .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(180).build());
+    state
+        .partialState()
+        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
+        .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(270).build());
+
+    itemModels()
+        .withExistingParent(standingName, mcLoc("item/generated"))
+        .texture("layer0", modLoc("block/" + standingName));
   }
 
   private void createCopperBars(
@@ -42,10 +82,10 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
     final String name = SpliceBlockUtil.getId(b).getPath();
     final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
-    final ResourceLocation blockTex = modLoc("block/" + textureName);
+    final ResourceLocation barTex = modLoc("block/" + textureName);
 
-    this.paneBlockWithRenderType(bars, blockTex, blockTex, mcLoc("cutout_mipped"));
-    itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", blockTex);
+    this.paneBlockWithRenderType(bars, barTex, barTex, mcLoc("cutout_mipped"));
+    itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", barTex);
   }
 
   private void createCopperChain(

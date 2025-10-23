@@ -22,14 +22,13 @@ public final class SpliceMain {
     modEventBus.addListener(SpliceDataGenerator::onGatherData);
 
     SpliceBlocks.register(modEventBus);
-    SpliceItems.register(modEventBus);
-    SpliceSoundEvents.register(modEventBus);
     SpliceBlockEntityType.register(modEventBus);
     SpliceBlockTypes.register(modEventBus);
-
-    modEventBus.addListener(SpliceClientMain::onEntityRenderersEvent);
-    modEventBus.addListener(SpliceClientMain::onRegisterClientExtensions);
+    SpliceItems.register(modEventBus);
+    SpliceSoundEvents.register(modEventBus);
 
     modEventBus.addListener(SpliceCreativeModeTabs::onBuildCreativeModeTabContents);
+    modEventBus.addListener(SpliceClientMain::onEntityRenderersEvent);
+    modEventBus.addListener(SpliceClientMain::onRegisterClientExtensions);
   }
 }

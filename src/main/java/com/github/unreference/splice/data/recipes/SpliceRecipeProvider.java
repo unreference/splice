@@ -21,6 +21,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   private static final float XP_NUGGET = 0.1f;
   private static final int TIME_SMELTING = 200;
   private static final int TIME_BLASTING = 100;
+
   public SpliceRecipeProvider(
       PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
     super(output, registries);
@@ -99,6 +100,17 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .pattern("III")
         .unlockedBy(
             getHasName(SpliceBlocks.COPPER_CHEST.get()), has(SpliceBlocks.COPPER_CHEST.get()))
+        .save(recipeOutput);
+
+    // Torch
+    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_TORCH, 4)
+        .define('N', nugget)
+        .define('C', Ingredient.of(Items.COAL, Items.CHARCOAL))
+        .define('S', Items.STICK)
+        .pattern("N")
+        .pattern("C")
+        .pattern("S")
+        .unlockedBy(getHasName(nugget), has(nugget))
         .save(recipeOutput);
   }
 

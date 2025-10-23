@@ -15,7 +15,6 @@ import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredItem;
-import org.jetbrains.annotations.NotNull;
 
 public final class SpliceItemModelProvider extends ItemModelProvider {
   private static final List<ResourceKey<TrimMaterial>> TRIM_ORDER =
@@ -42,14 +41,10 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
   }
 
   @Override
-  public @NotNull String getName() {
-    return SpliceMain.MOD_ID + "Item Model";
-  }
-
-  @Override
   protected void registerModels() {
     this.basicItem(SpliceItems.FIELD_MASONED_BANNER_PATTERN.get());
     this.basicItem(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN.get());
+
     this.registerCopperModels();
   }
 

@@ -17,6 +17,7 @@ public final class SpliceCopperChestRenderer extends ChestRenderer<SpliceCopperC
   private static final ChestMaterials MAT_COPPER_EXPOSED = getMaterials("copper_exposed");
   private static final ChestMaterials MAT_COPPER_WEATHERED = getMaterials("copper_weathered");
   private static final ChestMaterials MAT_COPPER_OXIDIZED = getMaterials("copper_oxidized");
+
   public SpliceCopperChestRenderer(BlockEntityRendererProvider.Context context) {
     super(context);
   }
