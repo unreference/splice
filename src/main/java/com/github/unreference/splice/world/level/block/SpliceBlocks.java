@@ -6,6 +6,8 @@ import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.function.Function;
+import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -46,121 +48,48 @@ public final class SpliceBlocks {
 
   // TODO: Add to block loot
   public static final DeferredBlock<Block> COPPER_CHEST =
-      register(
-          "copper_chest",
-          props ->
-              new SpliceWeatheringCopperChestBlock(
-                  WeatheringCopper.WeatherState.UNAFFECTED,
-                  SpliceSoundEvents.COPPER_CHEST_OPEN,
-                  SpliceSoundEvents.COPPER_CHEST_CLOSE,
-                  props),
-          getUnaffectedCopperChestProps());
-
-  // TODO: Add to block loot
+      registerChest(WeatheringCopper.WeatherState.UNAFFECTED, false);
   public static final DeferredBlock<Block> EXPOSED_COPPER_CHEST =
-      register(
-          "exposed_copper_chest",
-          props ->
-              new SpliceWeatheringCopperChestBlock(
-                  WeatheringCopper.WeatherState.EXPOSED,
-                  SpliceSoundEvents.COPPER_CHEST_OPEN,
-                  SpliceSoundEvents.COPPER_CHEST_CLOSE,
-                  props),
-          getExposedCopperChestProps());
-
-  // TODO: Add to block loot
+      registerChest(WeatheringCopper.WeatherState.EXPOSED, false);
   public static final DeferredBlock<Block> WEATHERED_COPPER_CHEST =
-      register(
-          "weathered_copper_chest",
-          props ->
-              new SpliceWeatheringCopperChestBlock(
-                  WeatheringCopper.WeatherState.WEATHERED,
-                  SpliceSoundEvents.COPPER_CHEST_WEATHERED_OPEN,
-                  SpliceSoundEvents.COPPER_CHEST_WEATHERED_CLOSE,
-                  props),
-          getWeatheredCopperChestProps());
-
-  // TODO: Add to block loot
+      registerChest(WeatheringCopper.WeatherState.WEATHERED, false);
   public static final DeferredBlock<Block> OXIDIZED_COPPER_CHEST =
-      register(
-          "oxidized_copper_chest",
-          props ->
-              new SpliceWeatheringCopperChestBlock(
-                  WeatheringCopper.WeatherState.OXIDIZED,
-                  SpliceSoundEvents.COPPER_CHEST_OXIDIZED_OPEN,
-                  SpliceSoundEvents.COPPER_CHEST_OXIDIZED_CLOSE,
-                  props),
-          getOxidizedCopperChestProps());
-  private static final ImmutableBiMap<
-          DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
-      COPPER_CHESTS_WEATHERING =
-          ImmutableBiMap.of(
-              COPPER_CHEST, EXPOSED_COPPER_CHEST,
-              EXPOSED_COPPER_CHEST, WEATHERED_COPPER_CHEST,
-              WEATHERED_COPPER_CHEST, OXIDIZED_COPPER_CHEST);
-  // TODO: Add to block loot
-  public static final DeferredBlock<Block> WAXED_COPPER_CHEST =
-      register(
-          "waxed_copper_chest",
-          props ->
-              new SpliceCopperChestBlock(
-                  WeatheringCopper.WeatherState.UNAFFECTED,
-                  SpliceSoundEvents.COPPER_CHEST_OPEN,
-                  SpliceSoundEvents.COPPER_CHEST_CLOSE,
-                  props),
-          getUnaffectedCopperChestProps());
-  // TODO: Add to block loot
-  public static final DeferredBlock<Block> WAXED_EXPOSED_COPPER_CHEST =
-      register(
-          "waxed_exposed_copper_chest",
-          props ->
-              new SpliceCopperChestBlock(
-                  WeatheringCopper.WeatherState.EXPOSED,
-                  SpliceSoundEvents.COPPER_CHEST_OPEN,
-                  SpliceSoundEvents.COPPER_CHEST_CLOSE,
-                  props),
-          getExposedCopperChestProps());
-  // TODO: Add to block loot
-  public static final DeferredBlock<Block> WAXED_WEATHERED_COPPER_CHEST =
-      register(
-          "waxed_weathered_copper_chest",
-          props ->
-              new SpliceCopperChestBlock(
-                  WeatheringCopper.WeatherState.WEATHERED,
-                  SpliceSoundEvents.COPPER_CHEST_WEATHERED_OPEN,
-                  SpliceSoundEvents.COPPER_CHEST_WEATHERED_CLOSE,
-                  props),
-          getWeatheredCopperChestProps());
-  // TODO: Add to block loot
-  public static final DeferredBlock<Block> WAXED_OXIDIZED_COPPER_CHEST =
-      register(
-          "waxed_oxidized_copper_chest",
-          props ->
-              new SpliceCopperChestBlock(
-                  WeatheringCopper.WeatherState.OXIDIZED,
-                  SpliceSoundEvents.COPPER_CHEST_OXIDIZED_OPEN,
-                  SpliceSoundEvents.COPPER_CHEST_OXIDIZED_CLOSE,
-                  props),
-          getOxidizedCopperChestProps());
-  private static final ImmutableBiMap<
-          DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
-      COPPER_CHESTS_WAXED =
-          ImmutableBiMap.of(
-              COPPER_CHEST, WAXED_COPPER_CHEST,
-              EXPOSED_COPPER_CHEST, WAXED_EXPOSED_COPPER_CHEST,
-              WEATHERED_COPPER_CHEST, WAXED_WEATHERED_COPPER_CHEST,
-              OXIDIZED_COPPER_CHEST, WAXED_OXIDIZED_COPPER_CHEST);
+      registerChest(WeatheringCopper.WeatherState.OXIDIZED, false);
 
-  private static final ImmutableList<DeferredBlock<? extends Block>> COPPER_CHESTS_ALL =
+  private static final ImmutableBiMap<
+          DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
+      CHEST_WEATHERING_CHAIN =
+          ImmutableBiMap.<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>builder()
+              .put(COPPER_CHEST, EXPOSED_COPPER_CHEST)
+              .put(EXPOSED_COPPER_CHEST, WEATHERED_COPPER_CHEST)
+              .put(WEATHERED_COPPER_CHEST, OXIDIZED_COPPER_CHEST)
+              .build();
+
+  public static final DeferredBlock<Block> WAXED_COPPER_CHEST =
+      registerChest(WeatheringCopper.WeatherState.UNAFFECTED, true);
+  public static final DeferredBlock<Block> WAXED_EXPOSED_COPPER_CHEST =
+      registerChest(WeatheringCopper.WeatherState.EXPOSED, true);
+  public static final DeferredBlock<Block> WAXED_WEATHERED_COPPER_CHEST =
+      registerChest(WeatheringCopper.WeatherState.WEATHERED, true);
+  public static final DeferredBlock<Block> WAXED_OXIDIZED_COPPER_CHEST =
+      registerChest(WeatheringCopper.WeatherState.OXIDIZED, true);
+
+  private static final ImmutableBiMap<
+          DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
+      CHEST_WAXED_MAP =
+          ImmutableBiMap.<DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>builder()
+              .put(COPPER_CHEST, WAXED_COPPER_CHEST)
+              .put(EXPOSED_COPPER_CHEST, WAXED_EXPOSED_COPPER_CHEST)
+              .put(WEATHERED_COPPER_CHEST, WAXED_WEATHERED_COPPER_CHEST)
+              .put(OXIDIZED_COPPER_CHEST, WAXED_OXIDIZED_COPPER_CHEST)
+              .build();
+
+  private static final ImmutableList<DeferredBlock<? extends Block>> ALL_CHEST_VARIANTS =
       ImmutableList.of(
-          COPPER_CHEST,
-          WAXED_COPPER_CHEST,
-          EXPOSED_COPPER_CHEST,
-          WAXED_EXPOSED_COPPER_CHEST,
-          WEATHERED_COPPER_CHEST,
-          WAXED_WEATHERED_COPPER_CHEST,
-          OXIDIZED_COPPER_CHEST,
-          WAXED_OXIDIZED_COPPER_CHEST);
+          COPPER_CHEST, WAXED_COPPER_CHEST,
+          EXPOSED_COPPER_CHEST, WAXED_EXPOSED_COPPER_CHEST,
+          WEATHERED_COPPER_CHEST, WAXED_WEATHERED_COPPER_CHEST,
+          OXIDIZED_COPPER_CHEST, WAXED_OXIDIZED_COPPER_CHEST);
 
   public static final SpliceWeatheringCopperBlocks COPPER_CHESTS =
       new SpliceWeatheringCopperBlocks(
@@ -172,31 +101,61 @@ public final class SpliceBlocks {
           WAXED_EXPOSED_COPPER_CHEST,
           WAXED_WEATHERED_COPPER_CHEST,
           WAXED_OXIDIZED_COPPER_CHEST,
-          COPPER_CHESTS_WEATHERING,
-          COPPER_CHESTS_WAXED,
-          COPPER_CHESTS_ALL);
+          CHEST_WEATHERING_CHAIN,
+          CHEST_WAXED_MAP,
+          ALL_CHEST_VARIANTS);
 
   private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
       List.of(COPPER_BARS, COPPER_CHAIN, COPPER_CHESTS);
 
-  private static BlockBehaviour.Properties getUnaffectedCopperChestProps() {
+  private static DeferredBlock<Block> registerChest(
+      WeatheringCopper.WeatherState state, boolean isWaxed) {
+    final String id =
+        (isWaxed ? "waxed_" : "")
+            + switch (state) {
+              case UNAFFECTED -> "copper_chest";
+              case EXPOSED -> "exposed_copper_chest";
+              case WEATHERED -> "weathered_copper_chest";
+              case OXIDIZED -> "oxidized_copper_chest";
+            };
+
+    final Holder<SoundEvent> openSound =
+        switch (state) {
+          case UNAFFECTED, EXPOSED -> SpliceSoundEvents.COPPER_CHEST_OPEN;
+          case WEATHERED -> SpliceSoundEvents.COPPER_CHEST_WEATHERED_OPEN;
+          case OXIDIZED -> SpliceSoundEvents.COPPER_CHEST_OXIDIZED_OPEN;
+        };
+    final Holder<SoundEvent> closeSound =
+        switch (state) {
+          case UNAFFECTED, EXPOSED -> SpliceSoundEvents.COPPER_CHEST_CLOSE;
+          case WEATHERED -> SpliceSoundEvents.COPPER_CHEST_WEATHERED_CLOSE;
+          case OXIDIZED -> SpliceSoundEvents.COPPER_CHEST_OXIDIZED_CLOSE;
+        };
+
+    final BlockBehaviour.Properties props = getChestProps(state);
+
+    final Function<BlockBehaviour.Properties, ? extends Block> ctor =
+        isWaxed
+            ? (p) -> new SpliceCopperChestBlock(state, openSound, closeSound, p)
+            : (p) -> new SpliceWeatheringCopperChestBlock(state, openSound, closeSound, p);
+
+    return register(id, ctor, props);
+  }
+
+  private static BlockBehaviour.Properties getChestProps(WeatheringCopper.WeatherState state) {
+    final MapColor color =
+        switch (state) {
+          case UNAFFECTED -> Blocks.COPPER_BLOCK.defaultMapColor();
+          case EXPOSED -> MapColor.TERRACOTTA_LIGHT_GRAY;
+          case WEATHERED -> MapColor.WARPED_STEM;
+          case OXIDIZED -> MapColor.WARPED_NYLIUM;
+        };
+
     return BlockBehaviour.Properties.of()
-        .mapColor(Blocks.COPPER_BLOCK.defaultMapColor())
+        .mapColor(color)
         .strength(3.0f, 6.0f)
         .sound(SoundType.COPPER)
         .requiresCorrectToolForDrops();
-  }
-
-  private static BlockBehaviour.Properties getExposedCopperChestProps() {
-    return getUnaffectedCopperChestProps().mapColor(MapColor.TERRACOTTA_LIGHT_GRAY);
-  }
-
-  private static BlockBehaviour.Properties getWeatheredCopperChestProps() {
-    return getUnaffectedCopperChestProps().mapColor(MapColor.WARPED_STEM);
-  }
-
-  private static BlockBehaviour.Properties getOxidizedCopperChestProps() {
-    return getUnaffectedCopperChestProps().mapColor(MapColor.WARPED_NYLIUM);
   }
 
   private static <B extends Block> DeferredBlock<B> register(

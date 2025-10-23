@@ -3,7 +3,6 @@ package com.github.unreference.splice.data.models;
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.util.SpliceBlockUtil;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -36,16 +35,17 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
   }
 
   private void createCopperBars(DeferredBlock<? extends Block> block) {
-    if (!(block.get() instanceof IronBarsBlock ironBarsBlock)) {
-      throw new IllegalArgumentException("Expected IronBarsBlock: " + block.get());
+    final Block b = block.get();
+    if (!(b instanceof IronBarsBlock bars)) {
+      throw new IllegalArgumentException("Expected IronBarsBlock, got: " + b);
     }
 
-    final String name = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
+    final String name = SpliceBlockUtil.getId(b).getPath();
     final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
-    final ResourceLocation paneTexture = modLoc("block/" + textureName);
+    final ResourceLocation blockTex = modLoc("block/" + textureName);
 
-    this.paneBlockWithRenderType(ironBarsBlock, paneTexture, paneTexture, mcLoc("cutout_mipped"));
-    itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", paneTexture);
+    this.paneBlockWithRenderType(bars, blockTex, blockTex, mcLoc("cutout_mipped"));
+    itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", blockTex);
   }
 
   private void createCopperChain(
@@ -55,25 +55,25 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
   }
 
   private void createCopperChain(DeferredBlock<? extends Block> block) {
-    if (!(block.get() instanceof ChainBlock chainBlock)) {
-      throw new IllegalArgumentException("Expected ChainBlock: " + block.get());
+    final Block id = block.get();
+    if (!(id instanceof ChainBlock chain)) {
+      throw new IllegalArgumentException("Expected ChainBlock, got: " + id);
     }
 
-    final String name = BuiltInRegistries.BLOCK.getKey(block.get()).getPath();
+    final String name = SpliceBlockUtil.getId(id).getPath();
     final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
 
-    final ResourceLocation copperChainBlockTexture = modLoc("block/" + textureName);
-    final ResourceLocation copperChainItemTexture = modLoc("item/" + textureName);
-    final ModelFile copperChainModel =
+    final ResourceLocation blockTex = modLoc("block/" + textureName);
+    final ResourceLocation itemTex = modLoc("item/" + textureName);
+
+    final ModelFile model =
         models()
             .withExistingParent(name, mcLoc("block/chain"))
             .renderType("minecraft:cutout")
-            .texture("all", copperChainBlockTexture);
+            .texture("all", blockTex);
 
-    this.axisBlock(chainBlock, copperChainModel, copperChainModel);
-    itemModels()
-        .withExistingParent(name, mcLoc("item/generated"))
-        .texture("layer0", copperChainItemTexture);
+    this.axisBlock(chain, model, model);
+    itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", itemTex);
   }
 
   private void createCopperChests() {
@@ -95,6 +95,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         models()
             .withExistingParent(name, mcLoc("block/chest"))
             .texture("particle", SpliceBlockUtil.getTexture(particle));
+
     simpleBlock(id, model);
     itemModels().withExistingParent(name, mcLoc("item/chest"));
   }

@@ -3,8 +3,6 @@ package com.github.unreference.splice.client.renderer.entity.blockentity;
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.world.level.block.SpliceCopperChestBlock;
 import com.github.unreference.splice.world.level.block.entity.SpliceCopperChestBlockEntity;
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
@@ -14,8 +12,11 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import org.jetbrains.annotations.NotNull;
 
 public final class SpliceCopperChestRenderer extends ChestRenderer<SpliceCopperChestBlockEntity> {
-  private static final Map<String, ChestMaterials> CACHE = new HashMap<>();
 
+  private static final ChestMaterials MAT_COPPER = getMaterials("copper");
+  private static final ChestMaterials MAT_COPPER_EXPOSED = getMaterials("copper_exposed");
+  private static final ChestMaterials MAT_COPPER_WEATHERED = getMaterials("copper_weathered");
+  private static final ChestMaterials MAT_COPPER_OXIDIZED = getMaterials("copper_oxidized");
   public SpliceCopperChestRenderer(BlockEntityRendererProvider.Context context) {
     super(context);
   }
@@ -26,35 +27,32 @@ public final class SpliceCopperChestRenderer extends ChestRenderer<SpliceCopperC
         ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, "entity/chest/" + key));
   }
 
-  private static ChestMaterials getMaterials(String key) {
-    return CACHE.computeIfAbsent(
-        key,
-        k ->
-            new ChestMaterials(
-                getMaterial(k), getMaterial(k + "_left"), getMaterial(k + "_right")));
+  private static ChestMaterials getMaterials(String base) {
+    return new ChestMaterials(
+        getMaterial(base), getMaterial(base + "_left"), getMaterial(base + "_right"));
   }
 
-  private static String getVariantKey(SpliceCopperChestBlockEntity blockEntity) {
-    if (blockEntity.getBlockState().getBlock() instanceof SpliceCopperChestBlock chest) {
+  private static ChestMaterials getMaterialsFor(SpliceCopperChestBlockEntity be) {
+    if (be.getBlockState().getBlock() instanceof SpliceCopperChestBlock chest) {
       return switch (chest.getState()) {
-        case UNAFFECTED -> "copper";
-        case EXPOSED -> "copper_exposed";
-        case WEATHERED -> "copper_weathered";
-        case OXIDIZED -> "copper_oxidized";
+        case UNAFFECTED -> MAT_COPPER;
+        case EXPOSED -> MAT_COPPER_EXPOSED;
+        case WEATHERED -> MAT_COPPER_WEATHERED;
+        case OXIDIZED -> MAT_COPPER_OXIDIZED;
       };
     }
 
-    return "copper";
+    return MAT_COPPER;
   }
 
   @Override
   protected @NotNull Material getMaterial(
       @NotNull SpliceCopperChestBlockEntity blockEntity, ChestType chestType) {
-    ChestMaterials material = getMaterials(getVariantKey(blockEntity));
+    ChestMaterials material = getMaterialsFor(blockEntity);
     return switch (chestType) {
       case LEFT -> material.left();
       case RIGHT -> material.right();
-      default -> material.single();
+      case SINGLE -> material.single();
     };
   }
 

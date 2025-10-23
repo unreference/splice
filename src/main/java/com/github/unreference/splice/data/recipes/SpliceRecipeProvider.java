@@ -12,14 +12,22 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
 public final class SpliceRecipeProvider extends RecipeProvider {
+  private static final float XP_NUGGET = 0.1f;
+  private static final int TIME_SMELTING = 200;
+  private static final int TIME_BLASTING = 100;
   public SpliceRecipeProvider(
       PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
     super(output, registries);
+  }
+
+  private static ResourceLocation getResourceLocation(String path) {
+    return ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, path);
   }
 
   private static void buildBannerPatternRecipes(RecipeOutput recipeOutput) {
@@ -63,19 +71,13 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .pattern("III")
         .pattern("III")
         .unlockedBy(getHasName(nugget), has(nugget))
-        .save(
-            recipeOutput,
-            ResourceLocation.fromNamespaceAndPath(
-                SpliceMain.MOD_ID, getConversionRecipeName(ingot, nugget)));
+        .save(recipeOutput, getResourceLocation(getConversionRecipeName(ingot, nugget)));
 
     // Nugget
     ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, nugget, 9)
         .requires(ingot)
         .unlockedBy(getHasName(ingot), has(ingot))
-        .save(
-            recipeOutput,
-            ResourceLocation.fromNamespaceAndPath(
-                SpliceMain.MOD_ID, getConversionRecipeName(nugget, ingot)));
+        .save(recipeOutput, getResourceLocation(getConversionRecipeName(nugget, ingot)));
 
     // Chain
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_CHAIN.unaffected())
@@ -106,10 +108,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .requires(Items.HONEYCOMB)
         .group(getItemName(to))
         .unlockedBy(getHasName(from), has(from))
-        .save(
-            recipeOutput,
-            ResourceLocation.fromNamespaceAndPath(
-                SpliceMain.MOD_ID, getConversionRecipeName(to, Items.HONEYCOMB)));
+        .save(recipeOutput, getResourceLocation(getConversionRecipeName(to, Items.HONEYCOMB)));
   }
 
   private static void buildCopperEquipmentRecipes(RecipeOutput recipeOutput) {
@@ -194,61 +193,41 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   }
 
   private static void buildCopperFurnaceRecipes(RecipeOutput recipeOutput) {
-    final ShovelItem shovel = SpliceItems.COPPER_SHOVEL.get();
-    final PickaxeItem pickaxe = SpliceItems.COPPER_PICKAXE.get();
-    final AxeItem axe = SpliceItems.COPPER_AXE.get();
-    final HoeItem hoe = SpliceItems.COPPER_HOE.get();
-    final SwordItem sword = SpliceItems.COPPER_SWORD.get();
-    final ArmorItem helmet = SpliceItems.COPPER_HELMET.get();
-    final ArmorItem chestplate = SpliceItems.COPPER_CHESTPLATE.get();
-    final ArmorItem leggings = SpliceItems.COPPER_LEGGINGS.get();
-    final ArmorItem boots = SpliceItems.COPPER_BOOTS.get();
-    final AnimalArmorItem horseArmor = SpliceItems.COPPER_HORSE_ARMOR.get();
     final Item nugget = SpliceItems.COPPER_NUGGET.get();
 
-    SimpleCookingRecipeBuilder.smelting(
-            Ingredient.of(
-                shovel, pickaxe, axe, hoe, sword, helmet, chestplate, leggings, boots, horseArmor),
-            RecipeCategory.MISC,
-            nugget,
-            0.1f,
-            200)
-        .unlockedBy(getHasName(shovel), has(shovel))
-        .unlockedBy(getHasName(pickaxe), has(pickaxe))
-        .unlockedBy(getHasName(axe), has(axe))
-        .unlockedBy(getHasName(hoe), has(hoe))
-        .unlockedBy(getHasName(sword), has(sword))
-        .unlockedBy(getHasName(helmet), has(helmet))
-        .unlockedBy(getHasName(chestplate), has(chestplate))
-        .unlockedBy(getHasName(leggings), has(leggings))
-        .unlockedBy(getHasName(boots), has(boots))
-        .unlockedBy(getHasName(horseArmor), has(horseArmor))
-        .save(
-            recipeOutput,
-            ResourceLocation.fromNamespaceAndPath(
-                SpliceMain.MOD_ID, getSmeltingRecipeName(nugget)));
+    final ItemLike[] meltable = {
+      SpliceItems.COPPER_SHOVEL.get(),
+      SpliceItems.COPPER_PICKAXE.get(),
+      SpliceItems.COPPER_AXE.get(),
+      SpliceItems.COPPER_HOE,
+      SpliceItems.COPPER_SWORD.get(),
+      SpliceItems.COPPER_HELMET.get(),
+      SpliceItems.COPPER_CHESTPLATE.get(),
+      SpliceItems.COPPER_LEGGINGS.get(),
+      SpliceItems.COPPER_BOOTS.get(),
+      SpliceItems.COPPER_HORSE_ARMOR.get(),
+    };
 
-    SimpleCookingRecipeBuilder.blasting(
-            Ingredient.of(
-                shovel, pickaxe, axe, hoe, sword, helmet, chestplate, leggings, boots, horseArmor),
-            RecipeCategory.MISC,
-            nugget,
-            0.1f,
-            100)
-        .unlockedBy(getHasName(shovel), has(shovel))
-        .unlockedBy(getHasName(pickaxe), has(pickaxe))
-        .unlockedBy(getHasName(axe), has(axe))
-        .unlockedBy(getHasName(hoe), has(hoe))
-        .unlockedBy(getHasName(sword), has(sword))
-        .unlockedBy(getHasName(helmet), has(helmet))
-        .unlockedBy(getHasName(chestplate), has(chestplate))
-        .unlockedBy(getHasName(leggings), has(leggings))
-        .unlockedBy(getHasName(boots), has(boots))
-        .unlockedBy(getHasName(horseArmor), has(horseArmor))
-        .save(
-            recipeOutput,
-            ResourceLocation.fromNamespaceAndPath(
-                SpliceMain.MOD_ID, getBlastingRecipeName(nugget)));
+    final Ingredient inputs = Ingredient.of(meltable);
+    final SimpleCookingRecipeBuilder smelt =
+        SimpleCookingRecipeBuilder.smelting(
+            inputs, RecipeCategory.MISC, nugget, XP_NUGGET, TIME_SMELTING);
+
+    for (ItemLike i : meltable) {
+      smelt.unlockedBy(getHasName(i), has(i));
+    }
+
+    smelt.save(recipeOutput, getResourceLocation(getSmeltingRecipeName(nugget)));
+
+    final SimpleCookingRecipeBuilder blasting =
+        SimpleCookingRecipeBuilder.blasting(
+            inputs, RecipeCategory.MISC, nugget, XP_NUGGET, TIME_BLASTING);
+
+    for (ItemLike i : meltable) {
+      blasting.unlockedBy(getHasName(i), has(i));
+    }
+
+    blasting.save(recipeOutput, getResourceLocation(getBlastingRecipeName(nugget)));
   }
 
   private static void buildWaxableRecipes(RecipeOutput output) {

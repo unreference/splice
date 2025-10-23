@@ -22,41 +22,37 @@ public record SpliceWeatheringCopperItems(
   public static SpliceWeatheringCopperItems create(
       SpliceWeatheringCopperBlocks blocks,
       Function<DeferredBlock<? extends Block>, DeferredItem<BlockItem>> weathering) {
-    final DeferredItem<BlockItem> UNAFFECTED = weathering.apply(blocks.unaffected());
-    final DeferredItem<BlockItem> EXPOSED = weathering.apply(blocks.exposed());
-    final DeferredItem<BlockItem> WEATHERED = weathering.apply(blocks.weathered());
-    final DeferredItem<BlockItem> OXIDIZED = weathering.apply(blocks.oxidized());
+    final DeferredItem<BlockItem> unaffected = weathering.apply(blocks.unaffected());
+    final DeferredItem<BlockItem> exposed = weathering.apply(blocks.exposed());
+    final DeferredItem<BlockItem> weathered = weathering.apply(blocks.weathered());
+    final DeferredItem<BlockItem> oxidized = weathering.apply(blocks.oxidized());
 
-    final DeferredItem<BlockItem> WAXED = weathering.apply(blocks.waxed());
-    final DeferredItem<BlockItem> WAXED_EXPOSED = weathering.apply(blocks.waxedExposed());
-    final DeferredItem<BlockItem> WAXED_WEATHERED = weathering.apply(blocks.waxedWeathered());
-    final DeferredItem<BlockItem> WAXED_OXIDIZED = weathering.apply(blocks.waxedOxidized());
+    final DeferredItem<BlockItem> waxed = weathering.apply(blocks.waxed());
+    final DeferredItem<BlockItem> waxedExposed = weathering.apply(blocks.waxedExposed());
+    final DeferredItem<BlockItem> waxedWeathered = weathering.apply(blocks.waxedWeathered());
+    final DeferredItem<BlockItem> waxedOxidized = weathering.apply(blocks.waxedOxidized());
 
-    final ImmutableBiMap<DeferredItem<BlockItem>, DeferredItem<BlockItem>> MAP =
+    final ImmutableBiMap<DeferredItem<BlockItem>, DeferredItem<BlockItem>> map =
         ImmutableBiMap.of(
-            UNAFFECTED,
-            WAXED,
-            EXPOSED,
-            WAXED_EXPOSED,
-            WEATHERED,
-            WAXED_WEATHERED,
-            OXIDIZED,
-            WAXED_OXIDIZED);
+            unaffected,
+            waxed,
+            exposed,
+            waxedExposed,
+            weathered,
+            waxedWeathered,
+            oxidized,
+            waxedOxidized);
 
     return new SpliceWeatheringCopperItems(
-        UNAFFECTED,
-        EXPOSED,
-        WEATHERED,
-        OXIDIZED,
-        WAXED,
-        WAXED_EXPOSED,
-        WAXED_WEATHERED,
-        WAXED_OXIDIZED,
-        MAP);
-  }
-
-  public ImmutableBiMap<DeferredItem<BlockItem>, DeferredItem<BlockItem>> waxedMapping() {
-    return waxedMap;
+        unaffected,
+        exposed,
+        weathered,
+        oxidized,
+        waxed,
+        waxedExposed,
+        waxedWeathered,
+        waxedOxidized,
+        map);
   }
 
   public void forEach(Consumer<DeferredItem<BlockItem>> consumer) {

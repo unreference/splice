@@ -7,12 +7,6 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 public final class SpliceCreativeModeTabs {
   @SubscribeEvent
   public static void onBuildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
-    if (event.getTabKey().equals(CreativeModeTabs.INGREDIENTS)) {
-      event.accept(SpliceItems.FIELD_MASONED_BANNER_PATTERN);
-      event.accept(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN);
-      event.accept(SpliceItems.COPPER_NUGGET);
-    }
-
     if (event.getTabKey().equals(CreativeModeTabs.BUILDING_BLOCKS)) {
       SpliceItems.COPPER_BARS.forEach(event::accept);
       SpliceItems.COPPER_CHAIN.forEach(event::accept);
@@ -45,6 +39,12 @@ public final class SpliceCreativeModeTabs {
       event.accept(SpliceItems.COPPER_LEGGINGS);
       event.accept(SpliceItems.COPPER_BOOTS);
       event.accept(SpliceItems.COPPER_HORSE_ARMOR);
+    }
+
+    if (event.getTabKey().equals(CreativeModeTabs.INGREDIENTS)) {
+      event.accept(SpliceItems.FIELD_MASONED_BANNER_PATTERN);
+      event.accept(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN);
+      event.accept(SpliceItems.COPPER_NUGGET);
     }
   }
 }
