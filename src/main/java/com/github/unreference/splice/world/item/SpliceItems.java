@@ -77,7 +77,6 @@ public final class SpliceItems {
                   SpliceTiers.COPPER,
                   props.attributes(SwordItem.createAttributes(SpliceTiers.COPPER, 3.0f, -2.4f))));
 
-  // TODO: Add to possible mob equipment spawns
   public static final DeferredItem<ArmorItem> COPPER_HELMET =
       ITEMS.registerItem(
           "copper_helmet",
@@ -87,7 +86,6 @@ public final class SpliceItems {
                   ArmorItem.Type.HELMET,
                   props.durability(ArmorItem.Type.HELMET.getDurability(11))));
 
-  // TODO: Add to possible mob equipment spawns
   public static final DeferredItem<ArmorItem> COPPER_CHESTPLATE =
       ITEMS.registerItem(
           "copper_chestplate",
@@ -97,7 +95,6 @@ public final class SpliceItems {
                   ArmorItem.Type.CHESTPLATE,
                   props.durability(ArmorItem.Type.CHESTPLATE.getDurability(11))));
 
-  // TODO: Add to possible mob equipment spawns
   public static final DeferredItem<ArmorItem> COPPER_LEGGINGS =
       ITEMS.registerItem(
           "copper_leggings",
@@ -107,7 +104,6 @@ public final class SpliceItems {
                   ArmorItem.Type.LEGGINGS,
                   props.durability(ArmorItem.Type.LEGGINGS.getDurability(11))));
 
-  // TODO: Add to possible mob equipment spawns
   public static final DeferredItem<ArmorItem> COPPER_BOOTS =
       ITEMS.registerItem(
           "copper_boots",

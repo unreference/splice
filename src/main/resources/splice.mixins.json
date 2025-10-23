@@ -16,5 +16,8 @@
   },
   "overwrites": {
     "requireAnnotations": true
-  }
+  },
+  "mixins": [
+    "net.minecraft.world.entity.SpliceMixinMob"
+  ]
 }
