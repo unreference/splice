@@ -1,13 +1,13 @@
 package com.github.unreference.splice.world.level.block;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.core.particles.SpliceParticleTypes;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.function.Function;
 import net.minecraft.core.Holder;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -72,7 +72,7 @@ public final class SpliceBlocks {
   public static final DeferredBlock<Block> COPPER_TORCH =
       register(
           "copper_torch",
-          props -> new TorchBlock(ParticleTypes.SOUL_FIRE_FLAME, props),
+          props -> new SpliceDeferredTorchBlock(SpliceParticleTypes.COPPER_FIRE_FLAME, props),
           BlockBehaviour.Properties.of()
               .noCollission()
               .instabreak()
@@ -82,7 +82,7 @@ public final class SpliceBlocks {
   public static final DeferredBlock<Block> COPPER_WALL_TORCH =
       register(
           "copper_wall_torch",
-          props -> new WallTorchBlock(ParticleTypes.SOUL_FIRE_FLAME, props),
+          props -> new SpliceDeferredWallTorchBlock(SpliceParticleTypes.COPPER_FIRE_FLAME, props),
           BlockBehaviour.Properties.of()
               .noCollission()
               .instabreak()

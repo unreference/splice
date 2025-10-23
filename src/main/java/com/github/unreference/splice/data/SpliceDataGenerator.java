@@ -1,5 +1,6 @@
 package com.github.unreference.splice.data;
 
+import com.github.unreference.splice.client.particle.SpliceParticleDescriptionProvider;
 import com.github.unreference.splice.data.models.SpliceBlockStateProvider;
 import com.github.unreference.splice.data.models.SpliceItemModelProvider;
 import com.github.unreference.splice.data.recipes.SpliceRecipeProvider;
@@ -26,6 +27,10 @@ public final class SpliceDataGenerator {
 
     final SpliceBlockStateProvider blockState = new SpliceBlockStateProvider(output, helper);
     generator.addProvider(event.includeClient(), blockState);
+
+    final SpliceParticleDescriptionProvider particle =
+        new SpliceParticleDescriptionProvider(output, helper);
+    generator.addProvider(event.includeClient(), particle);
 
     // Server
     final SpliceRecipeProvider recipe = new SpliceRecipeProvider(output, provider);

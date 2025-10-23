@@ -1,6 +1,7 @@
 package com.github.unreference.splice;
 
 import com.github.unreference.splice.client.SpliceClientMain;
+import com.github.unreference.splice.core.particles.SpliceParticleTypes;
 import com.github.unreference.splice.data.SpliceDataGenerator;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import com.github.unreference.splice.world.item.SpliceCreativeModeTabs;
@@ -25,10 +26,12 @@ public final class SpliceMain {
     SpliceBlockEntityType.register(modEventBus);
     SpliceBlockTypes.register(modEventBus);
     SpliceItems.register(modEventBus);
+    SpliceParticleTypes.register(modEventBus);
     SpliceSoundEvents.register(modEventBus);
 
     modEventBus.addListener(SpliceCreativeModeTabs::onBuildCreativeModeTabContents);
     modEventBus.addListener(SpliceClientMain::onEntityRenderersEvent);
     modEventBus.addListener(SpliceClientMain::onRegisterClientExtensions);
+    modEventBus.addListener(SpliceClientMain::onRegisterParticleProviders);
   }
 }
