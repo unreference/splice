@@ -1,16 +1,21 @@
 package com.github.unreference.splice.data;
 
 import com.github.unreference.splice.client.particle.SpliceParticleDescriptionProvider;
+import com.github.unreference.splice.data.loot.packs.SpliceBlockLootProvider;
 import com.github.unreference.splice.data.models.SpliceBlockStateProvider;
 import com.github.unreference.splice.data.models.SpliceItemModelProvider;
 import com.github.unreference.splice.data.recipes.SpliceRecipeProvider;
 import com.github.unreference.splice.data.tags.SpliceBannerPatternTagsProvider;
 import com.github.unreference.splice.data.tags.SpliceBlockTagsProvider;
 import com.github.unreference.splice.data.tags.SpliceItemTagsProvider;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
@@ -49,5 +54,16 @@ public final class SpliceDataGenerator {
 
     final SpliceDataMapsProvider dataMaps = new SpliceDataMapsProvider(output, provider);
     generator.addProvider(event.includeServer(), dataMaps);
+
+    final LootTableProvider blockLoot =
+        new LootTableProvider(
+            output,
+            Collections.emptySet(),
+            List.of(
+                new LootTableProvider.SubProviderEntry(
+                    SpliceBlockLootProvider::new, LootContextParamSets.BLOCK)),
+            provider);
+
+    generator.addProvider(event.includeServer(), blockLoot);
   }
 }

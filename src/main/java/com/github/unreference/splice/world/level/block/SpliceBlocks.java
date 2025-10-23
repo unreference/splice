@@ -48,7 +48,6 @@ public final class SpliceBlocks {
                   .sound(SoundType.CHAIN)
                   .noOcclusion());
 
-  // TODO: Add to block loot
   public static final DeferredBlock<Block> COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.UNAFFECTED, false);
 
@@ -60,6 +59,7 @@ public final class SpliceBlocks {
 
   public static final DeferredBlock<Block> OXIDIZED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.OXIDIZED, false);
+
   private static final ImmutableBiMap<
           DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
       CHEST_WEATHERING_CHAIN =
@@ -68,7 +68,7 @@ public final class SpliceBlocks {
               .put(EXPOSED_COPPER_CHEST, WEATHERED_COPPER_CHEST)
               .put(WEATHERED_COPPER_CHEST, OXIDIZED_COPPER_CHEST)
               .build();
-  // TODO: Add to block loot
+
   public static final DeferredBlock<Block> COPPER_TORCH =
       register(
           "copper_torch",
@@ -79,6 +79,7 @@ public final class SpliceBlocks {
               .lightLevel(emission -> 14)
               .sound(SoundType.WOOD)
               .pushReaction(PushReaction.DESTROY));
+
   public static final DeferredBlock<Block> COPPER_WALL_TORCH =
       register(
           "copper_wall_torch",
@@ -90,6 +91,7 @@ public final class SpliceBlocks {
               .sound(SoundType.WOOD)
               .lootFrom(COPPER_TORCH)
               .pushReaction(PushReaction.DESTROY));
+
   public static final DeferredBlock<Block> WAXED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.UNAFFECTED, true);
   public static final DeferredBlock<Block> WAXED_EXPOSED_COPPER_CHEST =
@@ -192,6 +194,10 @@ public final class SpliceBlocks {
 
   public static List<SpliceWeatheringCopperBlocks> getCopperFamily() {
     return COPPER_FAMILY;
+  }
+
+  public static DeferredRegister.Blocks getBlocks() {
+    return BLOCKS;
   }
 
   public static void register(IEventBus bus) {
