@@ -2,6 +2,8 @@ package com.github.unreference.splice.data;
 
 import com.github.unreference.splice.client.particle.SpliceParticleDescriptionProvider;
 import com.github.unreference.splice.data.loot.packs.SpliceBlockLootProvider;
+import com.github.unreference.splice.data.loot.packs.SpliceChestLootProvider;
+import com.github.unreference.splice.data.loot.packs.SpliceLootModifierProvider;
 import com.github.unreference.splice.data.models.SpliceBlockStateProvider;
 import com.github.unreference.splice.data.models.SpliceItemModelProvider;
 import com.github.unreference.splice.data.recipes.SpliceRecipeProvider;
@@ -55,15 +57,21 @@ public final class SpliceDataGenerator {
     final SpliceDataMapsProvider dataMaps = new SpliceDataMapsProvider(output, provider);
     generator.addProvider(event.includeServer(), dataMaps);
 
-    final LootTableProvider blockLoot =
-        new LootTableProvider(
-            output,
-            Collections.emptySet(),
-            List.of(
-                new LootTableProvider.SubProviderEntry(
-                    SpliceBlockLootProvider::new, LootContextParamSets.BLOCK)),
-            provider);
+    final LootTableProvider.SubProviderEntry blockLoot =
+        new LootTableProvider.SubProviderEntry(
+            SpliceBlockLootProvider::new, LootContextParamSets.BLOCK);
 
-    generator.addProvider(event.includeServer(), blockLoot);
+    final LootTableProvider.SubProviderEntry chestLoot =
+        new LootTableProvider.SubProviderEntry(
+            SpliceChestLootProvider::new, LootContextParamSets.CHEST);
+
+    final LootTableProvider loot =
+        new LootTableProvider(
+            output, Collections.emptySet(), List.of(blockLoot, chestLoot), provider);
+    generator.addProvider(event.includeServer(), loot);
+
+    final SpliceLootModifierProvider lootModifier =
+        new SpliceLootModifierProvider(output, provider);
+    generator.addProvider(event.includeServer(), lootModifier);
   }
 }
