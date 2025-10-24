@@ -7,6 +7,7 @@ import com.github.unreference.splice.data.loot.packs.SpliceChestLootProvider;
 import com.github.unreference.splice.data.models.SpliceBlockStateProvider;
 import com.github.unreference.splice.data.models.SpliceItemModelProvider;
 import com.github.unreference.splice.data.recipes.SpliceRecipeProvider;
+import com.github.unreference.splice.data.sounds.SpliceSoundDefinitionProvider;
 import com.github.unreference.splice.data.tags.SpliceBannerPatternTagsProvider;
 import com.github.unreference.splice.data.tags.SpliceBlockTagsProvider;
 import com.github.unreference.splice.data.tags.SpliceItemTagsProvider;
@@ -38,6 +39,9 @@ public final class SpliceDataGenerator {
     final SpliceParticleDescriptionProvider particle =
         new SpliceParticleDescriptionProvider(output, helper);
     generator.addProvider(event.includeClient(), particle);
+
+    final SpliceSoundDefinitionProvider sound = new SpliceSoundDefinitionProvider(output, helper);
+    generator.addProvider(event.includeClient(), sound);
 
     // Server
     final SpliceRecipeProvider recipe = new SpliceRecipeProvider(output, provider);
