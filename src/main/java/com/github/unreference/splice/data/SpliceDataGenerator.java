@@ -1,9 +1,9 @@
 package com.github.unreference.splice.data;
 
 import com.github.unreference.splice.client.particle.SpliceParticleDescriptionProvider;
+import com.github.unreference.splice.data.loot.SpliceLootModifierProvider;
 import com.github.unreference.splice.data.loot.packs.SpliceBlockLootProvider;
 import com.github.unreference.splice.data.loot.packs.SpliceChestLootProvider;
-import com.github.unreference.splice.data.loot.packs.SpliceLootModifierProvider;
 import com.github.unreference.splice.data.models.SpliceBlockStateProvider;
 import com.github.unreference.splice.data.models.SpliceItemModelProvider;
 import com.github.unreference.splice.data.recipes.SpliceRecipeProvider;

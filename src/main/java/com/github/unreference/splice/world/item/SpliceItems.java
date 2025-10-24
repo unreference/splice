@@ -158,6 +158,10 @@ public final class SpliceItems {
                   new Item.Properties(),
                   Direction.DOWN));
 
+  public static final SpliceWeatheringCopperItems COPPER_LANTERN =
+      SpliceWeatheringCopperItems.create(
+          SpliceBlocks.COPPER_LANTERN, ITEMS::registerSimpleBlockItem);
+
   public static void register(IEventBus bus) {
     ITEMS.register(bus);
   }

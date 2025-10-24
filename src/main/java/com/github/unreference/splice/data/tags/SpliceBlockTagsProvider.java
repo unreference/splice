@@ -30,11 +30,14 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
     SpliceBlocks.COPPER_CHAIN.forEach(block -> this.tag(SpliceBlockTags.CHAINS).add(block.get()));
     SpliceBlocks.COPPER_CHESTS.forEach(
         block -> this.tag(SpliceBlockTags.COPPER_CHESTS).add(block.get()));
+    SpliceBlocks.COPPER_LANTERN.forEach(
+        block -> this.tag(SpliceBlockTags.LANTERNS).add(block.get()));
 
     this.tag(BlockTags.GUARDED_BY_PIGLINS).addTag(SpliceBlockTags.COPPER_CHESTS);
     this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
         .addTag(SpliceBlockTags.BARS)
         .addTag(SpliceBlockTags.CHAINS)
+        .addTag(SpliceBlockTags.LANTERNS)
         .addTag(SpliceBlockTags.COPPER_CHESTS);
     this.tag(BlockTags.NEEDS_STONE_TOOL).addTag(SpliceBlockTags.COPPER_CHESTS);
 

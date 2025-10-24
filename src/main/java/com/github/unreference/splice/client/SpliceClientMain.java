@@ -32,7 +32,7 @@ public final class SpliceClientMain {
               SpliceItemRenderer.create(
                   (Block block) ->
                       new SpliceCopperChestBlockEntity(BlockPos.ZERO, block.defaultBlockState()),
-                  (be, stack) -> {},
+                  (entity, stack) -> {},
                   8);
 
           @Override

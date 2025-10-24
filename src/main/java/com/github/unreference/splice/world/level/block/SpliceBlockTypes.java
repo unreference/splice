@@ -26,6 +26,9 @@ public final class SpliceBlockTypes {
       WEATHERING_COPPER_CHEST =
           CODEC.register("weathering_copper_chest", () -> SpliceWeatheringCopperChestBlock.CODEC);
 
+  private static final Supplier<MapCodec<SpliceWeatheringLanternBlock>> WEATHERING_LANTERN =
+      CODEC.register("weathering_lantern", () -> SpliceWeatheringLanternBlock.CODEC);
+
   public static void register(IEventBus bus) {
     CODEC.register(bus);
   }

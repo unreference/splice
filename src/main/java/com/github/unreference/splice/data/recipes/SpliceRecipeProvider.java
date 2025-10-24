@@ -112,6 +112,16 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .pattern("S")
         .unlockedBy(getHasName(nugget), has(nugget))
         .save(recipeOutput);
+
+    // Lantern
+    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_LANTERN.unaffected())
+        .define('N', nugget)
+        .define('T', SpliceItems.COPPER_TORCH)
+        .pattern("NNN")
+        .pattern("NTN")
+        .pattern("NNN")
+        .unlockedBy(getHasName(SpliceItems.COPPER_TORCH), has(SpliceItems.COPPER_TORCH))
+        .save(recipeOutput);
   }
 
   private static void waxable(RecipeOutput recipeOutput, Block from, Block to) {

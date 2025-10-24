@@ -13,6 +13,7 @@ public final class SpliceCreativeModeTabs {
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS)) {
+      SpliceItems.COPPER_LANTERN.forEach(event::accept);
       SpliceItems.COPPER_CHAIN.forEach(event::accept);
       event.accept(SpliceItems.COPPER_TORCH);
       event.accept(SpliceItems.COPPER_CHEST);

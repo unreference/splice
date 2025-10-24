@@ -6,10 +6,7 @@ import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ChainBlock;
-import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -22,11 +19,54 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
   @Override
   protected void registerStatesAndModels() {
-    createTorch(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
     SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::createCopperBars);
     SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::createCopperChain);
+    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::createCopperLantern);
 
+    createTorch(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
     createCopperChests();
+  }
+
+  private void createCopperLantern(
+      DeferredBlock<? extends Block> base, DeferredBlock<? extends Block> waxed) {
+    createCopperLantern(base);
+    createCopperLantern(waxed);
+  }
+
+  private void createCopperLantern(DeferredBlock<? extends Block> block) {
+    final Block b = block.get();
+    if (!(b instanceof LanternBlock)) {
+      throw new IllegalArgumentException("Expected LanternBlock, got: " + b);
+    }
+
+    final String name = SpliceBlockUtil.getId(b).getPath();
+    final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
+    final ResourceLocation blockTex = modLoc("block/" + textureName);
+    final ResourceLocation itemTex = modLoc("item/" + textureName);
+
+    final ModelFile standingModel =
+        models()
+            .withExistingParent(name, mcLoc("block/template_lantern"))
+            .renderType("minecraft:cutout")
+            .texture("lantern", blockTex);
+
+    final ModelFile hangingModel =
+        models()
+            .withExistingParent(name + "_hanging", mcLoc("block/template_hanging_lantern"))
+            .renderType("minecraft:cutout")
+            .texture("lantern", blockTex);
+
+    final VariantBlockStateBuilder state = getVariantBuilder(b);
+    state
+        .partialState()
+        .with(BlockStateProperties.HANGING, false)
+        .addModels(new ConfiguredModel(standingModel));
+    state
+        .partialState()
+        .with(BlockStateProperties.HANGING, true)
+        .addModels(new ConfiguredModel(hangingModel));
+
+    itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", itemTex);
   }
 
   private void createTorch(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
@@ -45,7 +85,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
     simpleBlock(standingBlock, standingModel);
 
-    VariantBlockStateBuilder state = getVariantBuilder(wallBlock);
+    final VariantBlockStateBuilder state = getVariantBuilder(wallBlock);
     state
         .partialState()
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)

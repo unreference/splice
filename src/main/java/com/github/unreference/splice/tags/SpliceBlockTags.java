@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 public final class SpliceBlockTags {
   public static final TagKey<Block> BARS = create("bars");
   public static final TagKey<Block> CHAINS = create("chains");
+  public static final TagKey<Block> LANTERNS = create("lanterns");
   public static final TagKey<Block> COPPER_CHESTS = create("copper_chests");
   public static final TagKey<Block> INCORRECT_FOR_COPPER_TOOL = create("incorrect_for_copper_tool");
 

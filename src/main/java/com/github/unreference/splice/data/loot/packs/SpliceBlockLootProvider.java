@@ -20,6 +20,9 @@ public class SpliceBlockLootProvider extends BlockLootSubProvider {
     SpliceBlocks.COPPER_CHAIN.forEach(block -> this.dropSelf(block.get()));
     SpliceBlocks.COPPER_CHESTS.forEach(
         block -> this.add(block.get(), this.createNameableBlockEntityTable(block.get())));
+    SpliceBlocks.COPPER_LANTERN.forEach(
+        block -> this.add(block.get(), this::createSingleItemTable));
+
     this.dropSelf(SpliceBlocks.COPPER_TORCH.get());
   }
 

@@ -24,7 +24,7 @@ public final class SpliceBlocks {
   public static final SpliceWeatheringCopperBlocks COPPER_BARS =
       SpliceWeatheringCopperBlocks.create(
           "copper_bars",
-          SpliceBlocks::register,
+          BLOCKS::registerBlock,
           IronBarsBlock::new,
           SpliceWeatheringCopperBarsBlock::new,
           weatherState ->
@@ -37,7 +37,7 @@ public final class SpliceBlocks {
   public static final SpliceWeatheringCopperBlocks COPPER_CHAIN =
       SpliceWeatheringCopperBlocks.create(
           "copper_chain",
-          SpliceBlocks::register,
+          BLOCKS::registerBlock,
           ChainBlock::new,
           SpliceWeatheringCopperChainBlock::new,
           weatherState ->
@@ -70,7 +70,7 @@ public final class SpliceBlocks {
               .build();
 
   public static final DeferredBlock<Block> COPPER_TORCH =
-      register(
+      BLOCKS.registerBlock(
           "copper_torch",
           props -> new SpliceDeferredTorchBlock(SpliceParticleTypes.COPPER_FIRE_FLAME, props),
           BlockBehaviour.Properties.of()
@@ -81,7 +81,7 @@ public final class SpliceBlocks {
               .pushReaction(PushReaction.DESTROY));
 
   public static final DeferredBlock<Block> COPPER_WALL_TORCH =
-      register(
+      BLOCKS.registerBlock(
           "copper_wall_torch",
           props -> new SpliceDeferredWallTorchBlock(SpliceParticleTypes.COPPER_FIRE_FLAME, props),
           BlockBehaviour.Properties.of()
@@ -91,6 +91,22 @@ public final class SpliceBlocks {
               .sound(SoundType.WOOD)
               .lootFrom(COPPER_TORCH)
               .pushReaction(PushReaction.DESTROY));
+
+  public static final SpliceWeatheringCopperBlocks COPPER_LANTERN =
+      SpliceWeatheringCopperBlocks.create(
+          "copper_lantern",
+          BLOCKS::registerBlock,
+          LanternBlock::new,
+          SpliceWeatheringLanternBlock::new,
+          weatherState ->
+              BlockBehaviour.Properties.of()
+                  .mapColor(MapColor.METAL)
+                  .forceSolidOn()
+                  .strength(3.5f)
+                  .sound(SoundType.LANTERN)
+                  .lightLevel(emission -> 15)
+                  .noOcclusion()
+                  .pushReaction(PushReaction.DESTROY));
 
   public static final DeferredBlock<Block> WAXED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.UNAFFECTED, true);
@@ -133,7 +149,7 @@ public final class SpliceBlocks {
           ALL_CHEST_VARIANTS);
 
   private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
-      List.of(COPPER_BARS, COPPER_CHAIN, COPPER_CHESTS);
+      List.of(COPPER_BARS, COPPER_CHAIN, COPPER_LANTERN, COPPER_CHESTS);
 
   private static DeferredBlock<Block> registerChest(
       WeatheringCopper.WeatherState state, boolean isWaxed) {
@@ -166,7 +182,7 @@ public final class SpliceBlocks {
             ? (p) -> new SpliceCopperChestBlock(state, openSound, closeSound, p)
             : (p) -> new SpliceWeatheringCopperChestBlock(state, openSound, closeSound, p);
 
-    return register(id, ctor, props);
+    return BLOCKS.registerBlock(id, ctor, props);
   }
 
   private static BlockBehaviour.Properties getChestProps(WeatheringCopper.WeatherState state) {
@@ -183,13 +199,6 @@ public final class SpliceBlocks {
         .strength(3.0f, 6.0f)
         .sound(SoundType.COPPER)
         .requiresCorrectToolForDrops();
-  }
-
-  private static <B extends Block> DeferredBlock<B> register(
-      String key,
-      Function<BlockBehaviour.Properties, ? extends B> ctor,
-      BlockBehaviour.Properties properties) {
-    return BLOCKS.registerBlock(key, ctor, properties);
   }
 
   public static List<SpliceWeatheringCopperBlocks> getCopperFamily() {

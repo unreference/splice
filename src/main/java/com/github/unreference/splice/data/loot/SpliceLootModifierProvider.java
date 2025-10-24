@@ -1,6 +1,7 @@
-package com.github.unreference.splice.data.loot.packs;
+package com.github.unreference.splice.data.loot;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.data.loot.packs.SpliceChestLootProvider;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
