@@ -17,32 +17,39 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     super(output, SpliceMain.MOD_ID, exFileHelper);
   }
 
+  private static String getNameOf(Block block) {
+    return SpliceBlockUtil.getId(block).getPath();
+  }
+
+  private static String stripWaxedPrefix(String name) {
+    return name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
+  }
+
   @Override
   protected void registerStatesAndModels() {
     SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::createCopperBars);
     SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::createCopperChain);
-    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::createCopperLantern);
+    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::createLantern);
 
     createTorch(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
     createCopperChests();
   }
 
-  private void createCopperLantern(
+  private void createLantern(
       DeferredBlock<? extends Block> base, DeferredBlock<? extends Block> waxed) {
-    createCopperLantern(base);
-    createCopperLantern(waxed);
+    createLantern(base);
+    createLantern(waxed);
   }
 
-  private void createCopperLantern(DeferredBlock<? extends Block> block) {
-    final Block b = block.get();
-    if (!(b instanceof LanternBlock)) {
-      throw new IllegalArgumentException("Expected LanternBlock, got: " + b);
+  private void createLantern(DeferredBlock<? extends Block> block) {
+    final Block id = block.get();
+    if (!(id instanceof LanternBlock)) {
+      throw new IllegalArgumentException("Expected LanternBlock, got: " + id);
     }
 
-    final String name = SpliceBlockUtil.getId(b).getPath();
-    final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
+    final String name = getNameOf(id);
+    final String textureName = stripWaxedPrefix(name);
     final ResourceLocation blockTex = modLoc("block/" + textureName);
-    final ResourceLocation itemTex = modLoc("item/" + textureName);
 
     final ModelFile standingModel =
         models()
@@ -56,7 +63,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
             .renderType("minecraft:cutout")
             .texture("lantern", blockTex);
 
-    final VariantBlockStateBuilder state = getVariantBuilder(b);
+    final VariantBlockStateBuilder state = getVariantBuilder(id);
     state
         .partialState()
         .with(BlockStateProperties.HANGING, false)
@@ -65,17 +72,14 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         .partialState()
         .with(BlockStateProperties.HANGING, true)
         .addModels(new ConfiguredModel(hangingModel));
-
-    itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", itemTex);
   }
 
   private void createTorch(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
-    final Block standingBlock = standing.get();
-    final Block wallBlock = wall.get();
+    final Block standingId = standing.get();
+    final Block wallId = wall.get();
 
-    final String standingName = SpliceBlockUtil.getId(standingBlock).getPath();
-    final String wallName = SpliceBlockUtil.getId(wallBlock).getPath();
-
+    final String standingName = getNameOf(standingId);
+    final String wallName = getNameOf(wallId);
     final ResourceLocation torchTex = modLoc("block/" + standingName);
 
     final ModelFile standingModel =
@@ -83,9 +87,9 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     final ModelFile wallModel =
         models().torchWall(wallName, torchTex).renderType("minecraft:cutout");
 
-    simpleBlock(standingBlock, standingModel);
+    simpleBlock(standingId, standingModel);
 
-    final VariantBlockStateBuilder state = getVariantBuilder(wallBlock);
+    final VariantBlockStateBuilder state = getVariantBuilder(wallId);
     state
         .partialState()
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
@@ -102,49 +106,43 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         .partialState()
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
         .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(270).build());
-
-    itemModels()
-        .withExistingParent(standingName, mcLoc("item/generated"))
-        .texture("layer0", modLoc("block/" + standingName));
   }
 
   private void createCopperBars(
       DeferredBlock<? extends Block> base, DeferredBlock<? extends Block> waxed) {
-    createCopperBars(base);
-    createCopperBars(waxed);
+    createBars(base);
+    createBars(waxed);
   }
 
-  private void createCopperBars(DeferredBlock<? extends Block> block) {
-    final Block b = block.get();
-    if (!(b instanceof IronBarsBlock bars)) {
-      throw new IllegalArgumentException("Expected IronBarsBlock, got: " + b);
+  private void createBars(DeferredBlock<? extends Block> block) {
+    final Block id = block.get();
+    if (!(id instanceof IronBarsBlock bars)) {
+      throw new IllegalArgumentException("Expected IronBarsBlock, got: " + id);
     }
 
-    final String name = SpliceBlockUtil.getId(b).getPath();
-    final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
+    final String name = getNameOf(id);
+    final String textureName = stripWaxedPrefix(name);
     final ResourceLocation barTex = modLoc("block/" + textureName);
 
     this.paneBlockWithRenderType(bars, barTex, barTex, mcLoc("cutout_mipped"));
-    itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", barTex);
   }
 
   private void createCopperChain(
       DeferredBlock<? extends Block> base, DeferredBlock<? extends Block> waxed) {
-    createCopperChain(base);
-    createCopperChain(waxed);
+    createChain(base);
+    createChain(waxed);
   }
 
-  private void createCopperChain(DeferredBlock<? extends Block> block) {
+  private void createChain(DeferredBlock<? extends Block> block) {
     final Block id = block.get();
     if (!(id instanceof ChainBlock chain)) {
       throw new IllegalArgumentException("Expected ChainBlock, got: " + id);
     }
 
-    final String name = SpliceBlockUtil.getId(id).getPath();
-    final String textureName = name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
+    final String name = getNameOf(id);
+    final String textureName = stripWaxedPrefix(name);
 
     final ResourceLocation blockTex = modLoc("block/" + textureName);
-    final ResourceLocation itemTex = modLoc("item/" + textureName);
 
     final ModelFile model =
         models()
@@ -153,7 +151,6 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
             .texture("all", blockTex);
 
     this.axisBlock(chain, model, model);
-    itemModels().withExistingParent(name, mcLoc("item/generated")).texture("layer0", itemTex);
   }
 
   private void createCopperChests() {
@@ -169,7 +166,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
   private void createChest(DeferredBlock<? extends Block> block, Block particle) {
     final Block id = block.get();
-    final String name = SpliceBlockUtil.getId(id).getPath();
+    final String name = getNameOf(id);
 
     final BlockModelBuilder model =
         models()
@@ -177,19 +174,16 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
             .texture("particle", SpliceBlockUtil.getTexture(particle));
 
     simpleBlock(id, model);
-    itemModels().withExistingParent(name, mcLoc("item/chest"));
   }
 
   private void copyModel(DeferredBlock<? extends Block> from, DeferredBlock<? extends Block> to) {
-    final Block fromBlock = from.get();
-    final Block toBlock = to.get();
+    final Block fromId = from.get();
+    final Block toId = to.get();
 
-    final String fromName = SpliceBlockUtil.getId(fromBlock).getPath();
-    final String toName = SpliceBlockUtil.getId(toBlock).getPath();
+    final String fromName = getNameOf(fromId);
+    final String toName = getNameOf(toId);
 
     final ModelFile toModel = models().withExistingParent(toName, modLoc("block/" + fromName));
-
-    simpleBlock(toBlock, toModel);
-    itemModels().withExistingParent(toName, modLoc("item/" + fromName));
+    simpleBlock(toId, toModel);
   }
 }
