@@ -1,16 +1,17 @@
 package com.github.unreference.splice.data;
 
 import com.github.unreference.splice.client.particle.SpliceParticleDescriptionProvider;
+import com.github.unreference.splice.client.renderer.block.model.SpliceBlockModelProvider;
+import com.github.unreference.splice.client.renderer.block.model.SpliceItemModelProvider;
 import com.github.unreference.splice.data.loot.SpliceLootModifierProvider;
 import com.github.unreference.splice.data.loot.packs.SpliceBlockLootProvider;
 import com.github.unreference.splice.data.loot.packs.SpliceChestLootProvider;
-import com.github.unreference.splice.data.models.SpliceBlockStateProvider;
-import com.github.unreference.splice.data.models.SpliceItemModelProvider;
 import com.github.unreference.splice.data.recipes.SpliceRecipeProvider;
 import com.github.unreference.splice.data.sounds.SpliceSoundDefinitionProvider;
 import com.github.unreference.splice.data.tags.SpliceBannerPatternTagsProvider;
 import com.github.unreference.splice.data.tags.SpliceBlockTagsProvider;
 import com.github.unreference.splice.data.tags.SpliceItemTagsProvider;
+import com.github.unreference.splice.world.level.levelgen.feature.stateproviders.SpliceBlockStateProvider;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -26,56 +27,53 @@ public final class SpliceDataGenerator {
   public static void onGatherData(GatherDataEvent event) {
     final DataGenerator generator = event.getGenerator();
     final PackOutput output = generator.getPackOutput();
+    final CompletableFuture<HolderLookup.Provider> lookup = event.getLookupProvider();
     final ExistingFileHelper helper = event.getExistingFileHelper();
-    final CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
 
-    // Client
-    final SpliceItemModelProvider itemModel = new SpliceItemModelProvider(output, helper);
-    generator.addProvider(event.includeClient(), itemModel);
+    if (event.includeClient()) {
+      addClientProviders(generator, output, helper);
+    }
 
-    final SpliceBlockStateProvider blockState = new SpliceBlockStateProvider(output, helper);
-    generator.addProvider(event.includeClient(), blockState);
+    if (event.includeServer()) {
+      addServerProviders(generator, output, lookup, helper);
+    }
+  }
 
-    final SpliceParticleDescriptionProvider particle =
-        new SpliceParticleDescriptionProvider(output, helper);
-    generator.addProvider(event.includeClient(), particle);
+  private static void addClientProviders(
+      DataGenerator generator, PackOutput output, ExistingFileHelper helper) {
+    generator.addProvider(true, new SpliceItemModelProvider(output, helper));
+    generator.addProvider(true, new SpliceBlockModelProvider(output, helper));
+    generator.addProvider(true, new SpliceBlockStateProvider(output, helper));
+    generator.addProvider(true, new SpliceParticleDescriptionProvider(output, helper));
+    generator.addProvider(true, new SpliceSoundDefinitionProvider(output, helper));
+  }
 
-    final SpliceSoundDefinitionProvider sound = new SpliceSoundDefinitionProvider(output, helper);
-    generator.addProvider(event.includeClient(), sound);
+  private static void addServerProviders(
+      DataGenerator generator,
+      PackOutput output,
+      CompletableFuture<HolderLookup.Provider> lookup,
+      ExistingFileHelper helper) {
+    generator.addProvider(true, new SpliceRecipeProvider(output, lookup));
 
-    // Server
-    final SpliceRecipeProvider recipe = new SpliceRecipeProvider(output, provider);
-    generator.addProvider(event.includeServer(), recipe);
+    final SpliceBlockTagsProvider blockTags = new SpliceBlockTagsProvider(output, lookup, helper);
 
-    final SpliceBlockTagsProvider blockTags = new SpliceBlockTagsProvider(output, provider, helper);
-    generator.addProvider(event.includeServer(), blockTags);
-
-    final SpliceItemTagsProvider itemTags =
-        new SpliceItemTagsProvider(output, provider, blockTags.contentsGetter(), helper);
-    generator.addProvider(event.includeServer(), itemTags);
-
-    final SpliceBannerPatternTagsProvider bannerPattern =
-        new SpliceBannerPatternTagsProvider(output, provider, helper);
-    generator.addProvider(event.includeServer(), bannerPattern);
-
-    final SpliceDataMapsProvider dataMaps = new SpliceDataMapsProvider(output, provider);
-    generator.addProvider(event.includeServer(), dataMaps);
+    generator.addProvider(true, blockTags);
+    generator.addProvider(
+        true, new SpliceItemTagsProvider(output, lookup, blockTags.contentsGetter(), helper));
+    generator.addProvider(true, new SpliceBannerPatternTagsProvider(output, lookup, helper));
+    generator.addProvider(true, new SpliceDataMapsProvider(output, lookup));
 
     final LootTableProvider.SubProviderEntry blockLoot =
         new LootTableProvider.SubProviderEntry(
             SpliceBlockLootProvider::new, LootContextParamSets.BLOCK);
-
     final LootTableProvider.SubProviderEntry chestLoot =
         new LootTableProvider.SubProviderEntry(
             SpliceChestLootProvider::new, LootContextParamSets.CHEST);
 
-    final LootTableProvider loot =
+    generator.addProvider(
+        true,
         new LootTableProvider(
-            output, Collections.emptySet(), List.of(blockLoot, chestLoot), provider);
-    generator.addProvider(event.includeServer(), loot);
-
-    final SpliceLootModifierProvider lootModifier =
-        new SpliceLootModifierProvider(output, provider);
-    generator.addProvider(event.includeServer(), lootModifier);
+            output, Collections.emptySet(), List.of(blockLoot, chestLoot), lookup));
+    generator.addProvider(true, new SpliceLootModifierProvider(output, lookup));
   }
 }

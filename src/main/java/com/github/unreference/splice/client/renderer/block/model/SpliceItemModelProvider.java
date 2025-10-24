@@ -1,9 +1,7 @@
-package com.github.unreference.splice.data.models;
+package com.github.unreference.splice.client.renderer.block.model;
 
 import com.github.unreference.splice.SpliceMain;
-import com.github.unreference.splice.util.SpliceBlockUtil;
 import com.github.unreference.splice.world.item.SpliceItems;
-import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.*;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
@@ -12,12 +10,10 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.item.armortrim.TrimMaterials;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 public final class SpliceItemModelProvider extends ItemModelProvider {
@@ -44,14 +40,6 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     return (idx + 1) * TRIM_STEP;
   }
 
-  private static String getNameOf(Block block) {
-    return SpliceBlockUtil.getId(block).getPath();
-  }
-
-  private static String stripWaxedPrefix(String name) {
-    return name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
-  }
-
   @Override
   protected void registerModels() {
     this.basicItem(SpliceItems.FIELD_MASONED_BANNER_PATTERN.get());
@@ -71,60 +59,6 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.trimmableArmor(SpliceItems.COPPER_LEGGINGS);
     this.trimmableArmor(SpliceItems.COPPER_BOOTS);
     this.basicItem(SpliceItems.COPPER_HORSE_ARMOR.get());
-    SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::copperBars);
-    SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::copperChain);
-    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::copperLantern);
-    this.torchItem(SpliceBlocks.COPPER_TORCH);
-    SpliceBlocks.COPPER_CHESTS.forEach(this::chestItem);
-  }
-
-  private void chestItem(DeferredBlock<? extends Block> block) {
-    final String name = getNameOf(block.get());
-    this.withExistingParent(name, mcLoc("item/chest"));
-  }
-
-  private void torchItem(DeferredBlock<Block> block) {
-    final String name = getNameOf(block.get());
-    this.withExistingParent(name, mcLoc("item/generated"))
-        .texture("layer0", modLoc("block/" + name));
-  }
-
-  private void copperLantern(
-      DeferredBlock<? extends Block> base, DeferredBlock<? extends Block> waxed) {
-    this.lantern(base);
-    this.lantern(waxed);
-  }
-
-  private void lantern(DeferredBlock<? extends Block> block) {
-    final String name = getNameOf(block.get());
-    final String texture = stripWaxedPrefix(name);
-    this.withExistingParent(name, mcLoc("item/generated"))
-        .texture("layer0", modLoc("item/" + texture));
-  }
-
-  private void copperChain(
-      DeferredBlock<? extends Block> base, DeferredBlock<? extends Block> waxed) {
-    this.chain(base);
-    this.chain(waxed);
-  }
-
-  private void chain(DeferredBlock<? extends Block> block) {
-    final String name = getNameOf(block.get());
-    final String texture = stripWaxedPrefix(name);
-    this.withExistingParent(name, mcLoc("item/generated")).texture("layer0", "item/" + texture);
-  }
-
-  private void copperBars(
-      DeferredBlock<? extends Block> base, DeferredBlock<? extends Block> waxed) {
-    this.bars(base);
-    this.bars(waxed);
-  }
-
-  private void bars(DeferredBlock<? extends Block> block) {
-    final String name = getNameOf(block.get());
-    final String texture = stripWaxedPrefix(name);
-    this.withExistingParent(name, mcLoc("item/generated"))
-        .texture("layer0", modLoc("block/" + texture));
   }
 
   private void trimmableArmor(DeferredItem<? extends ArmorItem> item) {
