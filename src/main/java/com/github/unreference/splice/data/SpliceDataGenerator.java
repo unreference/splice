@@ -6,6 +6,7 @@ import com.github.unreference.splice.client.renderer.block.model.SpliceItemModel
 import com.github.unreference.splice.data.loot.SpliceLootModifierProvider;
 import com.github.unreference.splice.data.loot.packs.SpliceBlockLootProvider;
 import com.github.unreference.splice.data.loot.packs.SpliceChestLootProvider;
+import com.github.unreference.splice.data.loot.packs.SpliceEntityLootProvider;
 import com.github.unreference.splice.data.recipes.SpliceRecipeProvider;
 import com.github.unreference.splice.data.sounds.SpliceSoundDefinitionProvider;
 import com.github.unreference.splice.data.tags.SpliceBannerPatternTagsProvider;
@@ -69,11 +70,16 @@ public final class SpliceDataGenerator {
     final LootTableProvider.SubProviderEntry chestLoot =
         new LootTableProvider.SubProviderEntry(
             SpliceChestLootProvider::new, LootContextParamSets.CHEST);
+    final LootTableProvider.SubProviderEntry entityLoot =
+        new LootTableProvider.SubProviderEntry(
+            SpliceEntityLootProvider::new, LootContextParamSets.ENTITY);
 
     generator.addProvider(
         true,
         new LootTableProvider(
-            output, Collections.emptySet(), List.of(blockLoot, chestLoot), lookup));
+            output, Collections.emptySet(), List.of(blockLoot, chestLoot, entityLoot), lookup));
     generator.addProvider(true, new SpliceLootModifierProvider(output, lookup));
+
+    generator.addProvider(true, new SpliceDatapackEntries(output, lookup));
   }
 }

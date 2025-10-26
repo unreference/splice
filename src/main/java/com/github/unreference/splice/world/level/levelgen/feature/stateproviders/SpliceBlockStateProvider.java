@@ -76,22 +76,21 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
     final ModelFile standingModel = models().getExistingFile(modLoc("block/" + standingName));
     final ModelFile wallModel = models().getExistingFile(modLoc("block/" + wallName));
-
     this.simpleBlock(standingId, standingModel);
 
     final VariantBlockStateBuilder s = getVariantBuilder(wallId);
     s.partialState()
-        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
-        .addModels(ConfiguredModel.builder().modelFile(wallModel).build());
+        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
+        .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(270).build());
     s.partialState()
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
         .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(90).build());
     s.partialState()
+        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
+        .addModels(ConfiguredModel.builder().modelFile(wallModel).build());
+    s.partialState()
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
         .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(180).build());
-    s.partialState()
-        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
-        .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(270).build());
 
     final ResourceLocation texture = modLoc("block/" + standingName);
     this.createItemModel(standingName, texture);

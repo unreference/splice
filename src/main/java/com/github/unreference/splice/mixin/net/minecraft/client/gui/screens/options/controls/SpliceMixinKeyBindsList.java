@@ -189,7 +189,8 @@ public abstract class SpliceMixinKeyBindsList {
       }
 
       if (keyBindsScreen != null) {
-        var list = ((SpliceMixinKeyBindsScreenAccessors) keyBindsScreen).splice$getKeyBindsList();
+        KeyBindsList list =
+            ((SpliceMixinKeyBindsScreenAccessors) keyBindsScreen).splice$getKeyBindsList();
         list.resetMappingAndUpdateButtons();
       }
     }
@@ -201,7 +202,7 @@ public abstract class SpliceMixinKeyBindsList {
 
     @Unique
     private int splice$computeUnbindWidth() {
-      final var LANG = Language.getInstance();
+      final Language LANG = Language.getInstance();
       if (this.splice$unbindCachedWidth < 0 || LANG != this.splice$lastLang) {
         this.splice$lastLang = LANG;
 

@@ -113,7 +113,6 @@ public final class SpliceItems {
                   ArmorItem.Type.BOOTS,
                   props.durability(ArmorItem.Type.BOOTS.getDurability(11))));
 
-  // TODO: Add to chest loot and trade rebalance chest loot
   public static final DeferredItem<AnimalArmorItem> COPPER_HORSE_ARMOR =
       ITEMS.registerItem(
           "copper_horse_armor",
@@ -161,6 +160,14 @@ public final class SpliceItems {
   public static final SpliceWeatheringCopperItems COPPER_LANTERN =
       SpliceWeatheringCopperItems.create(
           SpliceBlocks.COPPER_LANTERN, ITEMS::registerSimpleBlockItem);
+
+  public static final DeferredItem<Item> MUSIC_DISC_LAVA_CHICKEN =
+      ITEMS.registerSimpleItem(
+          "music_disc_lava_chicken",
+          new Item.Properties()
+              .stacksTo(1)
+              .rarity(Rarity.RARE)
+              .jukeboxPlayable(SpliceJukeboxSongs.LAVA_CHICKEN));
 
   public static void register(IEventBus bus) {
     ITEMS.register(bus);

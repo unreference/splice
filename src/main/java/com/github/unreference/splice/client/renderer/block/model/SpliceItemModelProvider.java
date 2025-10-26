@@ -59,6 +59,7 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.trimmableArmor(SpliceItems.COPPER_LEGGINGS);
     this.trimmableArmor(SpliceItems.COPPER_BOOTS);
     this.basicItem(SpliceItems.COPPER_HORSE_ARMOR.get());
+    this.basicItem(SpliceItems.MUSIC_DISC_LAVA_CHICKEN.get());
   }
 
   private void trimmableArmor(DeferredItem<? extends ArmorItem> item) {
@@ -69,7 +70,7 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
         withExistingParent(armorItem, mcLoc("item/generated"))
             .texture("layer0", modLoc("item/" + armorItem));
 
-    for (int i = 0; i < TRIM_ORDER.size(); ++i) {
+    for (int i = 0; i < TRIM_ORDER.size(); i++) {
       final ResourceKey<TrimMaterial> key = TRIM_ORDER.get(i);
       final String materialName = key.location().getPath();
 

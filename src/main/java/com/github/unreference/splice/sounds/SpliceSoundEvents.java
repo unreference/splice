@@ -28,6 +28,9 @@ public final class SpliceSoundEvents {
   public static final DeferredHolder<SoundEvent, SoundEvent> COPPER_CHEST_OXIDIZED_CLOSE =
       register("block.copper_chest.oxidized_close");
 
+  public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_LAVA_CHICKEN =
+      register("music_disc.lava_chicken");
+
   private static DeferredHolder<SoundEvent, SoundEvent> register(String key) {
     final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, key);
     return SOUND_EVENTS.register(key, () -> SoundEvent.createVariableRangeEvent(ID));

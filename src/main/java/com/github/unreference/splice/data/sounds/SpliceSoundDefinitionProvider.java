@@ -84,5 +84,10 @@ public final class SpliceSoundDefinitionProvider extends SoundDefinitionsProvide
                 sound(getResourceLocation("block/copper_chest/copper_chest_oxidized_close2")),
                 sound(getResourceLocation("block/copper_chest/copper_chest_oxidized_close3")))
             .subtitle("subtitles.block.chest.close"));
+
+    this.add(
+        SpliceSoundEvents.MUSIC_DISC_LAVA_CHICKEN,
+        SoundDefinition.definition()
+            .with(sound(getResourceLocation("records/lava_chicken")).stream()));
   }
 }
