@@ -28,6 +28,9 @@ public final class SpliceSoundEvents {
   public static final DeferredHolder<SoundEvent, SoundEvent> COPPER_CHEST_OXIDIZED_CLOSE =
       register("block.copper_chest.oxidized_close");
 
+  public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_TEARS =
+      register("music_disc.tears");
+
   public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_LAVA_CHICKEN =
       register("music_disc.lava_chicken");
 

@@ -86,6 +86,10 @@ public final class SpliceSoundDefinitionProvider extends SoundDefinitionsProvide
             .subtitle("subtitles.block.chest.close"));
 
     this.add(
+        SpliceSoundEvents.MUSIC_DISC_TEARS,
+        SoundDefinition.definition().with(sound(getResourceLocation("records/tears")).stream()));
+
+    this.add(
         SpliceSoundEvents.MUSIC_DISC_LAVA_CHICKEN,
         SoundDefinition.definition()
             .with(sound(getResourceLocation("records/lava_chicken")).stream()));

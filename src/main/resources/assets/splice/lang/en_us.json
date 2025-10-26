@@ -51,6 +51,9 @@
   "item.splice.field_masoned_banner_pattern.desc": "Field Masoned",
   "item.splice.music_disc_lava_chicken": "Music Disc",
   "item.splice.music_disc_lava_chicken.desc": "Hyper Potions - Lava Chicken",
+  "item.splice.music_disc_tears": "Music Disc",
+  "item.splice.music_disc_tears.desc": "Amos Roddy - Tears",
   "jukebox_song.splice.lava_chicken": "Hyper Potions - Lava Chicken",
+  "jukebox_song.splice.tears": "Amos Roddy - Tears",
   "subtitles.splice.item.armor.equip_copper": "Copper armor clonks"
 }

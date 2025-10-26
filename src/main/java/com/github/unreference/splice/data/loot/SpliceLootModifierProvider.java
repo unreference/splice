@@ -105,6 +105,13 @@ public final class SpliceLootModifierProvider extends GlobalLootModifierProvider
               .build()
         };
 
+    final LootItemCondition[] ghast =
+        new LootItemCondition[] {
+          new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/ghast"))
+              .build()
+        };
+
     this.add("zombie_modifier", new AddTableLootModifier(zombie, SpliceEntityLootProvider.ZOMBIE));
+    this.add("ghast_modifier", new AddTableLootModifier(ghast, SpliceEntityLootProvider.GHAST));
   }
 }

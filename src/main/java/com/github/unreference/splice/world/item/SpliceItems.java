@@ -161,6 +161,14 @@ public final class SpliceItems {
       SpliceWeatheringCopperItems.create(
           SpliceBlocks.COPPER_LANTERN, ITEMS::registerSimpleBlockItem);
 
+  public static final DeferredItem<Item> MUSIC_DISC_TEARS =
+      ITEMS.registerSimpleItem(
+          "music_disc_tears",
+          new Item.Properties()
+              .stacksTo(1)
+              .rarity(Rarity.UNCOMMON)
+              .jukeboxPlayable(SpliceJukeboxSongs.TEARS));
+
   public static final DeferredItem<Item> MUSIC_DISC_LAVA_CHICKEN =
       ITEMS.registerSimpleItem(
           "music_disc_lava_chicken",

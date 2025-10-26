@@ -31,6 +31,7 @@ public final class SpliceCreativeModeTabs {
       event.accept(SpliceItems.COPPER_PICKAXE);
       event.accept(SpliceItems.COPPER_AXE);
       event.accept(SpliceItems.COPPER_HOE);
+      event.accept(SpliceItems.MUSIC_DISC_TEARS);
       event.accept(SpliceItems.MUSIC_DISC_LAVA_CHICKEN);
     }
 

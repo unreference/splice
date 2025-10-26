@@ -59,6 +59,7 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.trimmableArmor(SpliceItems.COPPER_LEGGINGS);
     this.trimmableArmor(SpliceItems.COPPER_BOOTS);
     this.basicItem(SpliceItems.COPPER_HORSE_ARMOR.get());
+    this.basicItem(SpliceItems.MUSIC_DISC_TEARS.get());
     this.basicItem(SpliceItems.MUSIC_DISC_LAVA_CHICKEN.get());
   }
 

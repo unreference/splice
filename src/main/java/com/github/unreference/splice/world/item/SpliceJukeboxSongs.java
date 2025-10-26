@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.JukeboxSong;
 
 public final class SpliceJukeboxSongs {
+  public static ResourceKey<JukeboxSong> TEARS = create("tears");
   public static ResourceKey<JukeboxSong> LAVA_CHICKEN = create("lava_chicken");
 
   private static ResourceKey<JukeboxSong> create(String path) {
@@ -36,6 +37,7 @@ public final class SpliceJukeboxSongs {
   }
 
   public static void bootstrap(BootstrapContext<JukeboxSong> context) {
+    register(context, TEARS, SpliceSoundEvents.MUSIC_DISC_TEARS, 175, 10);
     register(context, LAVA_CHICKEN, SpliceSoundEvents.MUSIC_DISC_LAVA_CHICKEN, 134, 9);
   }
 }
