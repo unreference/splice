@@ -16,9 +16,9 @@ public final class SpliceJukeboxSongs {
   public static ResourceKey<JukeboxSong> TEARS = create("tears");
   public static ResourceKey<JukeboxSong> LAVA_CHICKEN = create("lava_chicken");
 
-  private static ResourceKey<JukeboxSong> create(String path) {
+  private static ResourceKey<JukeboxSong> create(String key) {
     return ResourceKey.create(
-        Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, path));
+        Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, key));
   }
 
   private static void register(

@@ -166,7 +166,7 @@ public final class SpliceItems {
           "music_disc_tears",
           new Item.Properties()
               .stacksTo(1)
-              .rarity(Rarity.UNCOMMON)
+              .rarity(Rarity.RARE)
               .jukeboxPlayable(SpliceJukeboxSongs.TEARS));
 
   public static final DeferredItem<Item> MUSIC_DISC_LAVA_CHICKEN =
