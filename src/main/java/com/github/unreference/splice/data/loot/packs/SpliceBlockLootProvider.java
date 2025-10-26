@@ -9,7 +9,7 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-public class SpliceBlockLootProvider extends BlockLootSubProvider {
+public final class SpliceBlockLootProvider extends BlockLootSubProvider {
   public SpliceBlockLootProvider(HolderLookup.Provider registries) {
     super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
   }

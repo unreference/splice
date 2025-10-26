@@ -19,8 +19,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class SpliceRecipeProvider extends RecipeProvider {
   private static final float XP_NUGGET = 0.1f;
-  private static final int TIME_SMELTING = 200;
-  private static final int TIME_BLASTING = 100;
+  private static final int TIME_SMELTING_COPPER = 200;
+  private static final int TIME_BLASTING_COPPER = 100;
 
   public SpliceRecipeProvider(
       PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
@@ -233,7 +233,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     final Ingredient inputs = Ingredient.of(meltable);
     final SimpleCookingRecipeBuilder smelt =
         SimpleCookingRecipeBuilder.smelting(
-            inputs, RecipeCategory.MISC, nugget, XP_NUGGET, TIME_SMELTING);
+            inputs, RecipeCategory.MISC, nugget, XP_NUGGET, TIME_SMELTING_COPPER);
 
     for (ItemLike i : meltable) {
       smelt.unlockedBy(getHasName(i), has(i));
@@ -243,7 +243,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
 
     final SimpleCookingRecipeBuilder blasting =
         SimpleCookingRecipeBuilder.blasting(
-            inputs, RecipeCategory.MISC, nugget, XP_NUGGET, TIME_BLASTING);
+            inputs, RecipeCategory.MISC, nugget, XP_NUGGET, TIME_BLASTING_COPPER);
 
     for (ItemLike i : meltable) {
       blasting.unlockedBy(getHasName(i), has(i));
@@ -265,9 +265,31 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     buildWaxableRecipes(recipeOutput);
   }
 
+  private static void buildSaddleRecipe(@NotNull RecipeOutput recipeOutput) {
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, Items.SADDLE)
+        .define('L', Items.LEATHER)
+        .define('I', Items.IRON_INGOT)
+        .pattern(" L ")
+        .pattern("LIL")
+        .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
+        .save(recipeOutput);
+  }
+
+  private static void buildLeadRecipe(@NotNull RecipeOutput recipeOutput) {
+    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Items.LEAD, 2)
+        .define('S', Items.STRING)
+        .pattern("SS ")
+        .pattern("SS ")
+        .pattern("  S")
+        .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
+        .save(recipeOutput);
+  }
+
   @Override
   protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
     buildBannerPatternRecipes(recipeOutput);
     buildCopperRecipes(recipeOutput);
+    buildSaddleRecipe(recipeOutput);
+    buildLeadRecipe(recipeOutput);
   }
 }
