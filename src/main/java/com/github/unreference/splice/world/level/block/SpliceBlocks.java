@@ -3,6 +3,7 @@ package com.github.unreference.splice.world.level.block;
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.core.particles.SpliceParticleTypes;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
+import com.github.unreference.splice.sounds.SpliceSoundType;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
@@ -11,6 +12,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
@@ -116,7 +118,6 @@ public final class SpliceBlocks {
       registerChest(WeatheringCopper.WeatherState.WEATHERED, true);
   public static final DeferredBlock<Block> WAXED_OXIDIZED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.OXIDIZED, true);
-
   private static final ImmutableBiMap<
           DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
       CHEST_WAXED_MAP =
@@ -126,14 +127,12 @@ public final class SpliceBlocks {
               .put(WEATHERED_COPPER_CHEST, WAXED_WEATHERED_COPPER_CHEST)
               .put(OXIDIZED_COPPER_CHEST, WAXED_OXIDIZED_COPPER_CHEST)
               .build();
-
   private static final ImmutableList<DeferredBlock<? extends Block>> ALL_CHEST_VARIANTS =
       ImmutableList.of(
           COPPER_CHEST, WAXED_COPPER_CHEST,
           EXPOSED_COPPER_CHEST, WAXED_EXPOSED_COPPER_CHEST,
           WEATHERED_COPPER_CHEST, WAXED_WEATHERED_COPPER_CHEST,
           OXIDIZED_COPPER_CHEST, WAXED_OXIDIZED_COPPER_CHEST);
-
   public static final SpliceWeatheringCopperBlocks COPPER_CHESTS =
       new SpliceWeatheringCopperBlocks(
           COPPER_CHEST,
@@ -147,9 +146,28 @@ public final class SpliceBlocks {
           CHEST_WEATHERING_CHAIN,
           CHEST_WAXED_MAP,
           ALL_CHEST_VARIANTS);
-
   private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
       List.of(COPPER_BARS, COPPER_CHAIN, COPPER_LANTERN, COPPER_CHESTS);
+
+  public static final DeferredBlock<Block> RESIN_BLOCK =
+      BLOCKS.registerSimpleBlock(
+          "resin_block",
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.TERRACOTTA_ORANGE)
+              .instrument(NoteBlockInstrument.BASEDRUM)
+              .sound(SpliceSoundType.RESIN));
+
+  public static final DeferredBlock<Block> RESIN_CLUMP =
+      BLOCKS.registerBlock(
+          "resin_clump",
+          SpliceResinClumpBlock::new,
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.TERRACOTTA_ORANGE)
+              .replaceable()
+              .noCollission()
+              .sound(SpliceSoundType.RESIN)
+              .ignitedByLava()
+              .pushReaction(PushReaction.DESTROY));
 
   private static DeferredBlock<Block> registerChest(
       WeatheringCopper.WeatherState state, boolean isWaxed) {

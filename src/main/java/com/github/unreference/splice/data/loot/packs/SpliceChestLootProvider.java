@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +53,11 @@ public final class SpliceChestLootProvider implements LootTableSubProvider {
       ResourceKey.create(
           Registries.LOOT_TABLE,
           ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, "chests/desert_pyramid"));
+
+  public static final ResourceKey<LootTable> WOODLAND_MANSION =
+      ResourceKey.create(
+          Registries.LOOT_TABLE,
+          ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, "chests/woodland_mansion"));
 
   public SpliceChestLootProvider(HolderLookup.Provider ignoredProvider) {}
 
@@ -99,6 +105,15 @@ public final class SpliceChestLootProvider implements LootTableSubProvider {
             .add(EmptyLootItem.emptyItem().setWeight(232))
             .add(LootItem.lootTableItem(SpliceItems.COPPER_HORSE_ARMOR).setWeight(15));
 
+    final LootPool.Builder woodlandMansion =
+        LootPool.lootPool()
+            .setRolls(UniformGenerator.between(1.0f, 4.0f))
+            .add(EmptyLootItem.emptyItem().setWeight(125))
+            .add(
+                LootItem.lootTableItem(SpliceItems.RESIN_CLUMP)
+                    .setWeight(50)
+                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0f, 4.0f))));
+
     output.accept(
         SIMPLE_DUNGEON,
         LootTable.lootTable().withPool(simpleDungeon).setParamSet(LootContextParamSets.CHEST));
@@ -126,5 +141,9 @@ public final class SpliceChestLootProvider implements LootTableSubProvider {
     output.accept(
         DESERT_PYRAMID,
         LootTable.lootTable().withPool(desertPyramid).setParamSet(LootContextParamSets.CHEST));
+
+    output.accept(
+        WOODLAND_MANSION,
+        LootTable.lootTable().withPool(woodlandMansion).setParamSet(LootContextParamSets.CHEST));
   }
 }

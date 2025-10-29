@@ -86,6 +86,44 @@ public final class SpliceSoundDefinitionProvider extends SoundDefinitionsProvide
             .subtitle("subtitles.block.chest.close"));
 
     this.add(
+        SpliceSoundEvents.RESIN_BREAK,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/resin/resin_break1")),
+                sound(getResourceLocation("block/resin/resin_break2")),
+                sound(getResourceLocation("block/resin/resin_break3")),
+                sound(getResourceLocation("block/resin/resin_break4")),
+                sound(getResourceLocation("block/resin/resin_break5")))
+            .subtitle("subtitles.block.generic.break"));
+
+    this.add(
+        SpliceSoundEvents.RESIN_STEP,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/resin/resin_step1")),
+                sound(getResourceLocation("block/resin/resin_step2")),
+                sound(getResourceLocation("block/resin/resin_step3")),
+                sound(getResourceLocation("block/resin/resin_step4")),
+                sound(getResourceLocation("block/resin/resin_step5")))
+            .subtitle("subtitles.block.generic.footsteps"));
+
+    this.add(
+        SpliceSoundEvents.RESIN_PLACE,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/resin/resin_place1")),
+                sound(getResourceLocation("block/resin/resin_place2")),
+                sound(getResourceLocation("block/resin/resin_place3")),
+                sound(getResourceLocation("block/resin/resin_place4")))
+            .subtitle("subtitles.block.generic.place"));
+
+    this.add(
+        SpliceSoundEvents.RESIN_FALL,
+        SoundDefinition.definition()
+            .with(sound(getResourceLocation("block/resin/resin_fall")))
+            .subtitle("subtitles.block.generic.fall"));
+
+    this.add(
         SpliceSoundEvents.MUSIC_DISC_TEARS,
         SoundDefinition.definition().with(sound(getResourceLocation("records/tears")).stream()));
 

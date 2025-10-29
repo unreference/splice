@@ -161,6 +161,12 @@ public final class SpliceItems {
       SpliceWeatheringCopperItems.create(
           SpliceBlocks.COPPER_LANTERN, ITEMS::registerSimpleBlockItem);
 
+  public static final DeferredItem<BlockItem> RESIN_BLOCK =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.RESIN_BLOCK);
+
+  public static final DeferredItem<BlockItem> RESIN_CLUMP =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.RESIN_CLUMP);
+
   public static final DeferredItem<Item> MUSIC_DISC_TEARS =
       ITEMS.registerSimpleItem(
           "music_disc_tears",

@@ -27,16 +27,23 @@ public final class SpliceSoundEvents {
       register("block.copper_chest.oxidized_open");
   public static final DeferredHolder<SoundEvent, SoundEvent> COPPER_CHEST_OXIDIZED_CLOSE =
       register("block.copper_chest.oxidized_close");
+  public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_BREAK =
+      register("block.resin.break");
+  public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_STEP =
+      register("block.resin.step");
+  public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_PLACE =
+      register("block.resin.place");
+  public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_FALL =
+      register("block.resin.fall");
 
   public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_TEARS =
       register("music_disc.tears");
-
   public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_LAVA_CHICKEN =
       register("music_disc.lava_chicken");
 
   private static DeferredHolder<SoundEvent, SoundEvent> register(String key) {
-    final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, key);
-    return SOUND_EVENTS.register(key, () -> SoundEvent.createVariableRangeEvent(ID));
+    final ResourceLocation id = ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, key);
+    return SOUND_EVENTS.register(key, () -> SoundEvent.createVariableRangeEvent(id));
   }
 
   public static void register(IEventBus bus) {

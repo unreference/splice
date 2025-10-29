@@ -40,7 +40,7 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
         .addTag(SpliceBlockTags.LANTERNS)
         .addTag(SpliceBlockTags.COPPER_CHESTS);
     this.tag(BlockTags.NEEDS_STONE_TOOL).addTag(SpliceBlockTags.COPPER_CHESTS);
-
     this.tag(BlockTags.WALL_POST_OVERRIDE).add(SpliceBlocks.COPPER_TORCH.get());
+    this.tag(BlockTags.COMBINATION_STEP_SOUND_BLOCKS).add(SpliceBlocks.RESIN_CLUMP.get());
   }
 }

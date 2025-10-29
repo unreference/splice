@@ -2,11 +2,20 @@ package com.github.unreference.splice.data.loot.packs;
 
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.Set;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.MultifaceBlock;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import org.jetbrains.annotations.NotNull;
 
 public final class SpliceBlockLootProvider extends BlockLootSubProvider {
@@ -22,12 +31,39 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
         block -> this.add(block.get(), this.createNameableBlockEntityTable(block.get())));
     SpliceBlocks.COPPER_LANTERN.forEach(
         block -> this.add(block.get(), this::createSingleItemTable));
-
     this.dropSelf(SpliceBlocks.COPPER_TORCH.get());
+    this.dropSelf(SpliceBlocks.RESIN_BLOCK.get());
+    this.add(SpliceBlocks.RESIN_CLUMP.get(), this::createMultifaceBlockDrops);
   }
 
   @Override
   protected @NotNull Iterable<Block> getKnownBlocks() {
     return SpliceBlocks.getBlocks().getEntries().stream().map(Holder::value)::iterator;
+  }
+
+  private LootTable.Builder createMultifaceBlockDrops(Block block) {
+    return LootTable.lootTable()
+        .withPool(
+            LootPool.lootPool()
+                .add(
+                    this.applyExplosionDecay(
+                        block,
+                        LootItem.lootTableItem(block)
+                            .apply(
+                                Direction.values(),
+                                p_382562_ ->
+                                    SetItemCountFunction.setCount(ConstantValue.exactly(1.0f), true)
+                                        .when(
+                                            LootItemBlockStatePropertyCondition
+                                                .hasBlockStateProperties(block)
+                                                .setProperties(
+                                                    StatePropertiesPredicate.Builder.properties()
+                                                        .hasProperty(
+                                                            MultifaceBlock.getFaceProperty(
+                                                                p_382562_),
+                                                            true))))
+                            .apply(
+                                SetItemCountFunction.setCount(
+                                    ConstantValue.exactly(-1.0f), true)))));
   }
 }

@@ -13,4 +13,8 @@ public final class SpliceBlockUtil {
     final ResourceLocation ID = getId(block);
     return ResourceLocation.fromNamespaceAndPath(ID.getNamespace(), "block/" + ID.getPath());
   }
+
+  public static String getNameOf(Block block) {
+    return getId(block).getPath();
+  }
 }

@@ -29,6 +29,9 @@ public final class SpliceBlockTypes {
   private static final Supplier<MapCodec<SpliceWeatheringLanternBlock>> WEATHERING_LANTERN =
       CODEC.register("weathering_lantern", () -> SpliceWeatheringLanternBlock.CODEC);
 
+  private static final Supplier<MapCodec<SpliceResinClumpBlock>> RESIN =
+      CODEC.register("resin", () -> SpliceResinClumpBlock.CODEC);
+
   public static void register(IEventBus bus) {
     CODEC.register(bus);
   }

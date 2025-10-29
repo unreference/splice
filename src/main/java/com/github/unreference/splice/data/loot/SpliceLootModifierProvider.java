@@ -70,6 +70,13 @@ public final class SpliceLootModifierProvider extends GlobalLootModifierProvider
               .build()
         };
 
+    final LootItemCondition[] woodlandMansion =
+        new LootItemCondition[] {
+          new LootTableIdCondition.Builder(
+                  ResourceLocation.withDefaultNamespace("chests/woodland_mansion"))
+              .build()
+        };
+
     this.add(
         "simple_dungeon_modifier",
         new AddTableLootModifier(simpleDungeon, SpliceChestLootProvider.SIMPLE_DUNGEON));
@@ -97,6 +104,10 @@ public final class SpliceLootModifierProvider extends GlobalLootModifierProvider
     this.add(
         "desert_pyramid_modifier",
         new AddTableLootModifier(desertPyramid, SpliceChestLootProvider.DESERT_PYRAMID));
+
+    this.add(
+        "woodland_mansion_modifier",
+        new AddTableLootModifier(woodlandMansion, SpliceChestLootProvider.WOODLAND_MANSION));
 
     // Entities
     final LootItemCondition[] zombie =

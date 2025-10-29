@@ -12,6 +12,10 @@ public final class SpliceCreativeModeTabs {
       SpliceItems.COPPER_CHAIN.forEach(event::accept);
     }
 
+    if (event.getTabKey().equals(CreativeModeTabs.NATURAL_BLOCKS)) {
+      event.accept(SpliceItems.RESIN_BLOCK);
+    }
+
     if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS)) {
       SpliceItems.COPPER_LANTERN.forEach(event::accept);
       SpliceItems.COPPER_CHAIN.forEach(event::accept);
@@ -49,6 +53,7 @@ public final class SpliceCreativeModeTabs {
       event.accept(SpliceItems.FIELD_MASONED_BANNER_PATTERN);
       event.accept(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN);
       event.accept(SpliceItems.COPPER_NUGGET);
+      event.accept(SpliceItems.RESIN_CLUMP);
     }
   }
 }
