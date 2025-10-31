@@ -55,14 +55,14 @@ public record SpliceWeatheringCopperItems(
         map);
   }
 
-  public void forEach(Consumer<DeferredItem<BlockItem>> consumer) {
-    consumer.accept(this.unaffected);
-    consumer.accept(this.exposed);
-    consumer.accept(this.weathered);
-    consumer.accept(this.oxidized);
-    consumer.accept(this.waxed);
-    consumer.accept(this.waxedExposed);
-    consumer.accept(this.waxedWeathered);
+  public void forEachInverse(Consumer<DeferredItem<BlockItem>> consumer) {
     consumer.accept(this.waxedOxidized);
+    consumer.accept(this.waxedWeathered);
+    consumer.accept(this.waxedExposed);
+    consumer.accept(this.waxed);
+    consumer.accept(this.oxidized);
+    consumer.accept(this.weathered);
+    consumer.accept(this.exposed);
+    consumer.accept(this.unaffected);
   }
 }
