@@ -10,6 +10,11 @@ public final class SpliceCreativeModeTabs {
     if (event.getTabKey().equals(CreativeModeTabs.BUILDING_BLOCKS)) {
       SpliceItems.COPPER_BARS.forEach(event::accept);
       SpliceItems.COPPER_CHAIN.forEach(event::accept);
+      event.accept(SpliceItems.RESIN_BRICKS);
+      event.accept(SpliceItems.RESIN_BRICK_STAIRS);
+      event.accept(SpliceItems.CHISELED_RESIN_BRICKS);
+      event.accept(SpliceItems.RESIN_BRICK_SLAB);
+      event.accept(SpliceItems.RESIN_BRICK_WALL);
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.NATURAL_BLOCKS)) {
@@ -37,6 +42,7 @@ public final class SpliceCreativeModeTabs {
       event.accept(SpliceItems.COPPER_HOE);
       event.accept(SpliceItems.MUSIC_DISC_TEARS);
       event.accept(SpliceItems.MUSIC_DISC_LAVA_CHICKEN);
+      event.accept(SpliceItems.MUSIC_DISC_COFFEE_MACHINE);
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.COMBAT)) {
@@ -54,6 +60,7 @@ public final class SpliceCreativeModeTabs {
       event.accept(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN);
       event.accept(SpliceItems.COPPER_NUGGET);
       event.accept(SpliceItems.RESIN_CLUMP);
+      event.accept(SpliceItems.RESIN_BRICK);
     }
   }
 }

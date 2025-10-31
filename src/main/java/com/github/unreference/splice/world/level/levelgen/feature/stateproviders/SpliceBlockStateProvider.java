@@ -1,10 +1,12 @@
 package com.github.unreference.splice.world.level.levelgen.feature.stateproviders;
 
 import com.github.unreference.splice.SpliceMain;
-import com.github.unreference.splice.util.SpliceBlockUtil;
+import com.github.unreference.splice.data.SpliceBlockFamilies;
+import com.github.unreference.splice.util.SpliceUtils;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import net.minecraft.core.Direction;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -26,6 +28,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
   @Override
   protected void registerStatesAndModels() {
+    this.createFamilies();
     SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::createCopperBars);
     SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::createCopperChain);
     SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::createCopperLantern);
@@ -35,17 +38,60 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.createMultiface(SpliceBlocks.RESIN_CLUMP, SpliceItems.RESIN_CLUMP);
   }
 
+  private void createFamilies() {
+    for (BlockFamily family : SpliceBlockFamilies.getBlockFamilies().values()) {
+      if (!family.shouldGenerateModel()) {
+        continue;
+      }
+
+      final Block baseBlock = family.getBaseBlock();
+      final ResourceLocation baseTexture = SpliceUtils.getLocation(baseBlock);
+
+      this.simpleBlockWithItem(
+          baseBlock, this.models().getExistingFile(SpliceUtils.getLocation(baseBlock)));
+
+      final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
+      this.simpleBlockWithItem(
+          chiseled, this.models().getExistingFile(SpliceUtils.getLocation(chiseled)));
+
+      final Block wall = family.get(BlockFamily.Variant.WALL);
+      this.createWall((WallBlock) wall, baseTexture);
+
+      final Block slab = family.get(BlockFamily.Variant.SLAB);
+      this.createSlab((SlabBlock) slab, baseTexture);
+
+      final Block stairs = family.get(BlockFamily.Variant.STAIRS);
+      this.createStairs((StairBlock) stairs, baseTexture);
+    }
+  }
+
+  private void createWall(WallBlock block, ResourceLocation texture) {
+    this.wallBlock(block, texture);
+    this.itemModels().wallInventory(SpliceUtils.getName(block), texture);
+  }
+
+  private void createStairs(StairBlock block, ResourceLocation texture) {
+    this.stairsBlock(block, texture);
+    this.itemModels()
+        .withExistingParent(SpliceUtils.getName(block), SpliceUtils.getLocation(block));
+  }
+
+  private void createSlab(SlabBlock block, ResourceLocation texture) {
+    this.slabBlock(block, texture, texture);
+    this.itemModels()
+        .withExistingParent(SpliceUtils.getName(block), SpliceUtils.getLocation(block));
+  }
+
   private void createMultiface(DeferredBlock<Block> block, DeferredItem<BlockItem> item) {
     this.itemModels().basicItem(item.get());
     this.createMultifaceBlockStates(block);
   }
 
   private void createMultifaceBlockStates(DeferredBlock<Block> block) {
-    final Block b = block.get();
-    final MultiPartBlockStateBuilder builder = this.getMultipartBuilder(b);
-    final String name = SpliceBlockUtil.getNameOf(b);
+    final Block id = block.get();
+    final MultiPartBlockStateBuilder builder = this.getMultipartBuilder(id);
 
-    final ModelFile model = this.models().getExistingFile(modLoc("block/" + name));
+    final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
     builder
         .part()
         .modelFile(model)
@@ -160,10 +206,9 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
   }
 
   private void createBlock(DeferredBlock<Block> block) {
-    final Block b = block.get();
-    final String name = SpliceBlockUtil.getNameOf(b);
-    final ModelFile model = this.models().getExistingFile(this.modLoc("block/" + name));
-    this.simpleBlockWithItem(b, model);
+    final Block id = block.get();
+    final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
+    this.simpleBlockWithItem(id, model);
   }
 
   private void createCopperLantern(
@@ -178,10 +223,11 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
       throw new IllegalArgumentException("Expected LanternBlock, got: " + id);
     }
 
-    final String name = SpliceBlockUtil.getNameOf(id);
-    final ModelFile standing = this.models().getExistingFile(this.modLoc("block/" + name));
+    final String name = SpliceUtils.getName(id);
+    final ModelFile standing = this.models().getExistingFile(SpliceUtils.getLocation(id));
     final ModelFile hanging =
-        this.models().getExistingFile(this.modLoc("block/" + name + "_hanging"));
+        this.models()
+            .getExistingFile(ResourceLocation.parse(SpliceUtils.getLocation(id) + "_hanging"));
 
     final VariantBlockStateBuilder s = this.getVariantBuilder(id);
     s.partialState()
@@ -204,12 +250,10 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
   private void createTorch(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
     final Block standingId = standing.get();
     final Block wallId = wall.get();
-    final String standingName = SpliceBlockUtil.getNameOf(standingId);
-    final String wallName = SpliceBlockUtil.getNameOf(wallId);
 
     final ModelFile standingModel =
-        this.models().getExistingFile(this.modLoc("block/" + standingName));
-    final ModelFile wallModel = this.models().getExistingFile(this.modLoc("block/" + wallName));
+        this.models().getExistingFile(SpliceUtils.getLocation(standingId));
+    final ModelFile wallModel = this.models().getExistingFile(SpliceUtils.getLocation(wallId));
     this.simpleBlock(standingId, standingModel);
 
     final VariantBlockStateBuilder s = this.getVariantBuilder(wallId);
@@ -226,8 +270,8 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
         .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(180).build());
 
-    final ResourceLocation texture = this.modLoc("block/" + standingName);
-    this.createItemModel(standingName, texture);
+    final ResourceLocation texture = SpliceUtils.getLocation(standingId);
+    this.createItemModel(SpliceUtils.getName(standingId), texture);
   }
 
   private void createCopperBars(
@@ -242,7 +286,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
       throw new IllegalArgumentException("Expected IronBarsBlock, got: " + id);
     }
 
-    final String name = SpliceBlockUtil.getNameOf(id);
+    final String name = SpliceUtils.getName(id);
     final ResourceLocation texture = this.modLoc("block/" + stripWaxedPrefix(name));
 
     this.paneBlockWithRenderType(bars, texture, texture, this.mcLoc("cutout_mipped"));
@@ -261,18 +305,16 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
       throw new IllegalArgumentException("Expected ChainBlock, got: " + id);
     }
 
-    final String name = SpliceBlockUtil.getNameOf(id);
-    final ModelFile model = this.models().getExistingFile(this.modLoc("block/" + name));
-
+    final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
     this.axisBlock(chain, model, model);
 
+    final String name = SpliceUtils.getName(id);
     final ResourceLocation texture = this.modLoc("item/" + stripWaxedPrefix(name));
     this.createItemModel(name, texture);
   }
 
   private void createChest(DeferredBlock<? extends Block> block) {
     final Block id = block.get();
-    final String name = SpliceBlockUtil.getNameOf(id);
-    this.simpleBlock(id, this.models().getExistingFile(this.modLoc("block/" + name)));
+    this.simpleBlockWithItem(id, this.models().getExistingFile(this.mcLoc("block/chest")));
   }
 }

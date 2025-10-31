@@ -1,13 +1,14 @@
 package com.github.unreference.splice.client.renderer.block.model;
 
 import com.github.unreference.splice.SpliceMain;
-import com.github.unreference.splice.util.SpliceBlockUtil;
+import com.github.unreference.splice.data.SpliceBlockFamilies;
+import com.github.unreference.splice.util.SpliceUtils;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import net.minecraft.core.Direction;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.*;
 import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -23,12 +24,29 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
   @Override
   protected void registerModels() {
+    this.createFamilies();
     SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::copperChainModel);
     SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::copperLanternModel);
     this.torchModel(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
     this.copperChestModels();
     this.cubeModel(SpliceBlocks.RESIN_BLOCK);
     this.resinClump();
+  }
+
+  private void createFamilies() {
+    for (BlockFamily family : SpliceBlockFamilies.getBlockFamilies().values()) {
+      if (!family.shouldGenerateModel()) {
+        continue;
+      }
+
+      final Block baseBlock = family.getBaseBlock();
+      final ResourceLocation baseTexture = SpliceUtils.getLocation(baseBlock);
+
+      this.cubeModel(baseBlock);
+
+      final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
+      this.cubeModel(chiseled);
+    }
   }
 
   private void resinClump() {
@@ -52,8 +70,14 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
   }
 
   private void cubeModel(DeferredBlock<Block> block) {
-    final String name = SpliceBlockUtil.getNameOf(block.get());
-    final ResourceLocation texture = modLoc("block/" + name);
+    final String name = SpliceUtils.getName(block.get());
+    final ResourceLocation texture = SpliceUtils.getLocation(block.get());
+    this.cubeAll(name, texture);
+  }
+
+  private void cubeModel(Block block) {
+    final String name = SpliceUtils.getName(block);
+    final ResourceLocation texture = SpliceUtils.getLocation(block);
     this.cubeAll(name, texture);
   }
 
@@ -69,20 +93,20 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
   }
 
   private void copyModel(DeferredBlock<Block> from, DeferredBlock<Block> to) {
-    final String fromName = SpliceBlockUtil.getNameOf(from.get());
-    final String toName = SpliceBlockUtil.getNameOf(to.get());
+    final String fromName = SpliceUtils.getName(from.get());
+    final String toName = SpliceUtils.getName(to.get());
     this.withExistingParent(toName, modLoc("block/" + fromName));
   }
 
   private void chestModel(DeferredBlock<Block> block, Block particle) {
-    final String name = SpliceBlockUtil.getNameOf(block.get());
+    final String name = SpliceUtils.getName(block.get());
     this.withExistingParent(name, mcLoc("block/chest"))
-        .texture("particle", SpliceBlockUtil.getTexture(particle));
+        .texture("particle", SpliceUtils.getLocation(particle));
   }
 
   private void torchModel(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
-    final String standingName = SpliceBlockUtil.getNameOf(standing.get());
-    final String wallName = SpliceBlockUtil.getNameOf(wall.get());
+    final String standingName = SpliceUtils.getName(standing.get());
+    final String wallName = SpliceUtils.getName(wall.get());
     final ResourceLocation texture = modLoc("block/" + standingName);
 
     this.torch(standingName, texture).renderType("minecraft:cutout");
@@ -97,7 +121,7 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
   private void lanternModel(DeferredBlock<? extends Block> block) {
     final Block id = block.get();
-    final String name = SpliceBlockUtil.getNameOf(id);
+    final String name = SpliceUtils.getName(id);
     final String textureName = stripWaxedPrefix(name);
     final ResourceLocation texture = modLoc("block/" + textureName);
 
@@ -118,7 +142,7 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
   private void chainModel(DeferredBlock<? extends Block> block) {
     final Block id = block.get();
-    final String name = SpliceBlockUtil.getNameOf(id);
+    final String name = SpliceUtils.getName(id);
     final String texture = stripWaxedPrefix(name);
 
     this.withExistingParent(name, mcLoc("block/chain"))

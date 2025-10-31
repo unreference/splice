@@ -34,6 +34,11 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
     this.dropSelf(SpliceBlocks.COPPER_TORCH.get());
     this.dropSelf(SpliceBlocks.RESIN_BLOCK.get());
     this.add(SpliceBlocks.RESIN_CLUMP.get(), this::createMultifaceBlockDrops);
+    this.dropSelf(SpliceBlocks.RESIN_BRICKS.get());
+    this.dropSelf(SpliceBlocks.RESIN_BRICK_STAIRS.get());
+    this.dropSelf(SpliceBlocks.CHISELED_RESIN_BRICKS.get());
+    this.dropSelf(SpliceBlocks.RESIN_BRICK_SLAB.get());
+    this.dropSelf(SpliceBlocks.RESIN_BRICK_WALL.get());
   }
 
   @Override
@@ -51,7 +56,7 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
                         LootItem.lootTableItem(block)
                             .apply(
                                 Direction.values(),
-                                p_382562_ ->
+                                direction ->
                                     SetItemCountFunction.setCount(ConstantValue.exactly(1.0f), true)
                                         .when(
                                             LootItemBlockStatePropertyCondition
@@ -60,7 +65,7 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
                                                     StatePropertiesPredicate.Builder.properties()
                                                         .hasProperty(
                                                             MultifaceBlock.getFaceProperty(
-                                                                p_382562_),
+                                                                direction),
                                                             true))))
                             .apply(
                                 SetItemCountFunction.setCount(

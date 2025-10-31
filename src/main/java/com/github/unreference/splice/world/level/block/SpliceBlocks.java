@@ -169,8 +169,36 @@ public final class SpliceBlocks {
               .ignitedByLava()
               .pushReaction(PushReaction.DESTROY));
 
+  public static final DeferredBlock<Block> RESIN_BRICKS =
+      BLOCKS.registerSimpleBlock("resin_bricks", getResinBricksProperties());
+
+  public static DeferredBlock<StairBlock> RESIN_BRICK_STAIRS =
+      BLOCKS.registerBlock(
+          "resin_brick_stairs",
+          props ->
+              new StairBlock(RESIN_BRICKS.get().defaultBlockState(), getResinBricksProperties()));
+
+  public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
+      BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
+
+  public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =
+      BLOCKS.registerBlock("resin_brick_slab", props -> new SlabBlock(getResinBricksProperties()));
+
+  public static DeferredBlock<WallBlock> RESIN_BRICK_WALL =
+      BLOCKS.registerBlock("resin_brick_wall", props -> new WallBlock(getResinBricksProperties()));
+
+  private static BlockBehaviour.Properties getResinBricksProperties() {
+    return BlockBehaviour.Properties.of()
+        .mapColor(MapColor.TERRACOTTA_ORANGE)
+        .instrument(NoteBlockInstrument.BASEDRUM)
+        .requiresCorrectToolForDrops()
+        .sound(SpliceSoundType.RESIN_BRICKS)
+        .strength(1.5f, 6.0f);
+  }
+
   private static DeferredBlock<Block> registerChest(
       WeatheringCopper.WeatherState state, boolean isWaxed) {
+
     final String id =
         (isWaxed ? "waxed_" : "")
             + switch (state) {

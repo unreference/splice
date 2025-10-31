@@ -167,6 +167,23 @@ public final class SpliceItems {
   public static final DeferredItem<BlockItem> RESIN_CLUMP =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.RESIN_CLUMP);
 
+  public static final DeferredItem<BlockItem> RESIN_BRICKS =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.RESIN_BRICKS);
+
+  public static final DeferredItem<Item> RESIN_BRICK = ITEMS.registerSimpleItem("resin_brick");
+
+  public static final DeferredItem<BlockItem> RESIN_BRICK_STAIRS =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.RESIN_BRICK_STAIRS);
+
+  public static final DeferredItem<BlockItem> CHISELED_RESIN_BRICKS =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.CHISELED_RESIN_BRICKS);
+
+  public static final DeferredItem<BlockItem> RESIN_BRICK_SLAB =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.RESIN_BRICK_SLAB);
+
+  public static final DeferredItem<BlockItem> RESIN_BRICK_WALL =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.RESIN_BRICK_WALL);
+
   public static final DeferredItem<Item> MUSIC_DISC_TEARS =
       ITEMS.registerSimpleItem(
           "music_disc_tears",
@@ -182,6 +199,14 @@ public final class SpliceItems {
               .stacksTo(1)
               .rarity(Rarity.RARE)
               .jukeboxPlayable(SpliceJukeboxSongs.LAVA_CHICKEN));
+
+  public static final DeferredItem<Item> MUSIC_DISC_COFFEE_MACHINE =
+      ITEMS.registerSimpleItem(
+          "music_disc_coffee_machine",
+          new Item.Properties()
+              .stacksTo(1)
+              .rarity(Rarity.EPIC)
+              .jukeboxPlayable(SpliceJukeboxSongs.COFFEE_MACHINE));
 
   public static void register(IEventBus bus) {
     ITEMS.register(bus);

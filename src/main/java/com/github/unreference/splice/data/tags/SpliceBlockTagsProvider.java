@@ -34,13 +34,20 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
         block -> this.tag(SpliceBlockTags.COPPER_CHESTS).add(block.get()));
 
     this.tag(BlockTags.GUARDED_BY_PIGLINS).addTag(SpliceBlockTags.COPPER_CHESTS);
+
     this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
         .addTag(SpliceBlockTags.BARS)
         .addTag(SpliceBlockTags.CHAINS)
         .addTag(SpliceBlockTags.LANTERNS)
-        .addTag(SpliceBlockTags.COPPER_CHESTS);
+        .addTag(SpliceBlockTags.COPPER_CHESTS)
+        .add(SpliceBlocks.RESIN_BRICKS.get())
+        .add(SpliceBlocks.CHISELED_RESIN_BRICKS.get());
+
     this.tag(BlockTags.NEEDS_STONE_TOOL).addTag(SpliceBlockTags.COPPER_CHESTS);
     this.tag(BlockTags.WALL_POST_OVERRIDE).add(SpliceBlocks.COPPER_TORCH.get());
     this.tag(BlockTags.COMBINATION_STEP_SOUND_BLOCKS).add(SpliceBlocks.RESIN_CLUMP.get());
+    this.tag(BlockTags.STAIRS).add(SpliceBlocks.RESIN_BRICK_STAIRS.get());
+    this.tag(BlockTags.SLABS).add(SpliceBlocks.RESIN_BRICK_SLAB.get());
+    this.tag(BlockTags.WALLS).add(SpliceBlocks.RESIN_BRICK_WALL.get());
   }
 }

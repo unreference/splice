@@ -121,7 +121,52 @@ public final class SpliceSoundDefinitionProvider extends SoundDefinitionsProvide
         SpliceSoundEvents.RESIN_FALL,
         SoundDefinition.definition()
             .with(sound(getResourceLocation("block/resin/resin_fall")))
-            .subtitle("subtitles.block.generic.fall"));
+            .subtitle("subtitles.splice.block.generic.fall"));
+
+    this.add(
+        SpliceSoundEvents.RESIN_BRICKS_BREAK,
+        SoundDefinition.definition()
+            .with(sound(getResourceLocation("block/resin_bricks/resin_brick_break")))
+            .subtitle("subtitles.block.generic.break"));
+
+    this.add(
+        SpliceSoundEvents.RESIN_BRICKS_STEP,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/resin_bricks/resin_brick_step1")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_step2")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_step3")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_step4")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_step5")))
+            .subtitle("subtitles.block.generic.footsteps"));
+
+    this.add(
+        SpliceSoundEvents.RESIN_BRICKS_PLACE,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/resin_bricks/resin_brick_place1")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_place2")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_place3")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_place4")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_place5")))
+            .subtitle("subtitles.block.generic.place"));
+
+    this.add(
+        SpliceSoundEvents.RESIN_BRICKS_HIT,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/resin_bricks/resin_brick_hit1")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_hit2")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_hit3")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_hit4")),
+                sound(getResourceLocation("block/resin_bricks/resin_brick_hit5")))
+            .subtitle("subtitles.block.generic.hit"));
+
+    this.add(
+        SpliceSoundEvents.RESIN_BRICKS_FALL,
+        SoundDefinition.definition()
+            .with(sound(getResourceLocation("block/resin_bricks/resin_brick_fall")))
+            .subtitle("subtitles.splice.block.generic.fall"));
 
     this.add(
         SpliceSoundEvents.MUSIC_DISC_TEARS,
@@ -131,5 +176,10 @@ public final class SpliceSoundDefinitionProvider extends SoundDefinitionsProvide
         SpliceSoundEvents.MUSIC_DISC_LAVA_CHICKEN,
         SoundDefinition.definition()
             .with(sound(getResourceLocation("records/lava_chicken")).stream()));
+
+    this.add(
+        SpliceSoundEvents.MUSIC_DISC_COFFEE_MACHINE,
+        SoundDefinition.definition()
+            .with(sound(getResourceLocation("records/coffee_machine")).stream()));
   }
 }

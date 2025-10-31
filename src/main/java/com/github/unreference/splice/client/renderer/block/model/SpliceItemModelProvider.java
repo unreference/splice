@@ -45,6 +45,10 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.basicItem(SpliceItems.FIELD_MASONED_BANNER_PATTERN.get());
     this.basicItem(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN.get());
     this.registerCopperModels();
+    this.basicItem(SpliceItems.MUSIC_DISC_TEARS.get());
+    this.basicItem(SpliceItems.MUSIC_DISC_LAVA_CHICKEN.get());
+    this.basicItem(SpliceItems.MUSIC_DISC_COFFEE_MACHINE.get());
+    this.basicItem(SpliceItems.RESIN_BRICK.get());
   }
 
   private void registerCopperModels() {
@@ -59,8 +63,6 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.trimmableArmor(SpliceItems.COPPER_LEGGINGS);
     this.trimmableArmor(SpliceItems.COPPER_BOOTS);
     this.basicItem(SpliceItems.COPPER_HORSE_ARMOR.get());
-    this.basicItem(SpliceItems.MUSIC_DISC_TEARS.get());
-    this.basicItem(SpliceItems.MUSIC_DISC_LAVA_CHICKEN.get());
   }
 
   private void trimmableArmor(DeferredItem<? extends ArmorItem> item) {
@@ -73,21 +75,22 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
 
     for (int i = 0; i < TRIM_ORDER.size(); i++) {
       final ResourceKey<TrimMaterial> key = TRIM_ORDER.get(i);
-      final String materialName = key.location().getPath();
+      final ResourceLocation materialLocation = key.location();
+      final String materialName = materialLocation.getPath();
+      final String texturePath = "trims/items/" + armorKind + "_trim_" + materialName;
+      final ResourceLocation trimTexture = this.mcLoc(texturePath);
 
-      final ResourceLocation trimTex = mcLoc("trims/items/" + armorKind + "_trim_" + materialName);
-      existingFileHelper.trackGenerated(trimTex, PackType.CLIENT_RESOURCES, ".png", "textures");
+      existingFileHelper.trackGenerated(trimTexture, PackType.CLIENT_RESOURCES, ".png", "textures");
 
       final String trimModelName = armorItem + '_' + materialName + "_trim";
-
-      getBuilder(trimModelName)
-          .parent(new ModelFile.UncheckedModelFile(mcLoc("item/generated")))
-          .texture("layer0", modLoc("item/" + armorItem))
-          .texture("layer1", trimTex);
+      this.getBuilder(trimModelName)
+          .parent(new ModelFile.UncheckedModelFile(this.mcLoc("item/generated")))
+          .texture("layer0", this.modLoc("item/" + armorItem))
+          .texture("layer1", trimTexture);
 
       base.override()
-          .predicate(mcLoc("trim_type"), getTrimIndex(i))
-          .model(new ModelFile.UncheckedModelFile(modLoc("item/" + trimModelName)))
+          .predicate(this.mcLoc("trim_type"), getTrimIndex(i))
+          .model(new ModelFile.UncheckedModelFile(this.modLoc("item/" + trimModelName)))
           .end();
     }
   }

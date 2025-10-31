@@ -35,11 +35,23 @@ public final class SpliceSoundEvents {
       register("block.resin.place");
   public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_FALL =
       register("block.resin.fall");
+  public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_BRICKS_BREAK =
+      register("block.resin_bricks.break");
+  public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_BRICKS_STEP =
+      register("block.resin_bricks.step");
+  public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_BRICKS_PLACE =
+      register("block.resin_bricks.place");
+  public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_BRICKS_HIT =
+      register("block.resin_bricks.hit");
+  public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_BRICKS_FALL =
+      register("block.resin_bricks.fall");
 
   public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_TEARS =
       register("music_disc.tears");
   public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_LAVA_CHICKEN =
       register("music_disc.lava_chicken");
+  public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_COFFEE_MACHINE =
+      register("music_disc.coffee_machine");
 
   private static DeferredHolder<SoundEvent, SoundEvent> register(String key) {
     final ResourceLocation id = ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, key);
