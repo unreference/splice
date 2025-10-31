@@ -27,4 +27,8 @@ public final class SpliceUtils {
   public static String getName(Block block) {
     return getId(block).getPath();
   }
+
+  public static String stripWaxedPrefix(String name) {
+    return name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
+  }
 }

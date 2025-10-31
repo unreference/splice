@@ -6,6 +6,7 @@ import com.github.unreference.splice.tags.SpliceItemTags;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.concurrent.CompletableFuture;
+import javax.annotation.Nullable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
@@ -33,7 +34,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     return ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, path);
   }
 
-  private static void buildBannerPatternRecipes(RecipeOutput recipeOutput) {
+  private static void bannerPatterns(RecipeOutput recipeOutput) {
     // Field masoned
     ShapelessRecipeBuilder.shapeless(
             RecipeCategory.MISC, SpliceItems.FIELD_MASONED_BANNER_PATTERN.get())
@@ -51,12 +52,22 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput);
   }
 
-  private static void buildCopperBlockRecipes(RecipeOutput recipeOutput) {
+  private static void copperBlocks(RecipeOutput recipeOutput) {
     final Item ingot = Items.COPPER_INGOT;
     final Item nugget = SpliceItems.COPPER_NUGGET.get();
 
     // Trapdoor
     twoByTwoPacker(recipeOutput, RecipeCategory.REDSTONE, Blocks.COPPER_TRAPDOOR, ingot);
+
+    // Ingot <-> nugget
+    nineBlockStorageRecipesWithCustomPacking(
+        recipeOutput,
+        RecipeCategory.MISC,
+        nugget,
+        RecipeCategory.MISC,
+        ingot,
+        getConversionRecipeName(ingot, nugget),
+        getItemName(ingot));
 
     // Bars
     ShapedRecipeBuilder.shaped(
@@ -66,21 +77,6 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .pattern("III")
         .unlockedBy(getHasName(ingot), has(ingot))
         .save(recipeOutput);
-
-    // Ingot
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ingot)
-        .define('I', nugget)
-        .pattern("III")
-        .pattern("III")
-        .pattern("III")
-        .unlockedBy(getHasName(nugget), has(nugget))
-        .save(recipeOutput, getResourceLocation(getConversionRecipeName(ingot, nugget)));
-
-    // Nugget
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, nugget, 9)
-        .requires(ingot)
-        .unlockedBy(getHasName(ingot), has(ingot))
-        .save(recipeOutput, getResourceLocation(getConversionRecipeName(nugget, ingot)));
 
     // Chain
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_CHAIN.unaffected())
@@ -135,7 +131,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput, getResourceLocation(getConversionRecipeName(to, Items.HONEYCOMB)));
   }
 
-  private static void buildCopperEquipmentRecipes(RecipeOutput recipeOutput) {
+  private static void copperEquipment(RecipeOutput recipeOutput) {
     final Item ingot = Items.COPPER_INGOT;
     final Item stick = Items.STICK;
     final TagKey<Item> copperMaterials = SpliceItemTags.COPPER_TOOL_MATERIALS;
@@ -216,7 +212,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput);
   }
 
-  private static void buildCopperFurnaceRecipes(RecipeOutput recipeOutput) {
+  private static void copperCooking(RecipeOutput recipeOutput) {
     final Item nugget = SpliceItems.COPPER_NUGGET.get();
 
     final ItemLike[] meltable = {
@@ -254,20 +250,20 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     blasting.save(recipeOutput, getResourceLocation(getBlastingRecipeName(nugget)));
   }
 
-  private static void buildWaxableRecipes(RecipeOutput output) {
+  private static void waxable(RecipeOutput output) {
     SpliceBlocks.getCopperFamily().stream()
         .flatMap(f -> f.waxedMapping().entrySet().stream())
         .forEach(entry -> waxable(output, entry.getKey().get(), entry.getValue().get()));
   }
 
-  private static void buildCopperRecipes(RecipeOutput recipeOutput) {
-    buildCopperBlockRecipes(recipeOutput);
-    buildCopperEquipmentRecipes(recipeOutput);
-    buildCopperFurnaceRecipes(recipeOutput);
-    buildWaxableRecipes(recipeOutput);
+  private static void copper(RecipeOutput recipeOutput) {
+    copperBlocks(recipeOutput);
+    copperEquipment(recipeOutput);
+    copperCooking(recipeOutput);
+    waxable(recipeOutput);
   }
 
-  private static void buildSaddleRecipe(@NotNull RecipeOutput recipeOutput) {
+  private static void saddle(@NotNull RecipeOutput recipeOutput) {
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, Items.SADDLE)
         .define('L', Items.LEATHER)
         .define('I', Items.IRON_INGOT)
@@ -277,7 +273,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput);
   }
 
-  private static void buildLeadRecipe(@NotNull RecipeOutput recipeOutput) {
+  private static void lead(@NotNull RecipeOutput recipeOutput) {
     ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Items.LEAD, 2)
         .define('S', Items.STRING)
         .pattern("SS ")
@@ -287,7 +283,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput);
   }
 
-  private static void buildBlockFamilyRecipes(@NotNull RecipeOutput recipeOutput) {
+  private static void blockFamily(@NotNull RecipeOutput recipeOutput) {
     for (BlockFamily family : SpliceBlockFamilies.getBlockFamilies().values()) {
       if (!family.shouldGenerateRecipe()) {
         continue;
@@ -296,45 +292,42 @@ public final class SpliceRecipeProvider extends RecipeProvider {
       final Block base = family.getBaseBlock();
 
       final Block slab = family.get(BlockFamily.Variant.SLAB);
-      buildSlabRecipe(recipeOutput, slab, base);
-      buildStonecutterRecipe(recipeOutput, slab, base, 2);
+      slab(recipeOutput, slab, base);
+      stonecutter(recipeOutput, slab, base, 2);
 
       final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
-      buildChiseledRecipe(recipeOutput, chiseled, slab);
-      buildStonecutterRecipe(recipeOutput, chiseled, base);
+      chiseled(recipeOutput, chiseled, slab);
+      stonecutter(recipeOutput, chiseled, base);
 
       final Block stairs = family.get(BlockFamily.Variant.STAIRS);
-      buildStairsRecipe(recipeOutput, stairs, base);
-      buildStonecutterRecipe(recipeOutput, stairs, base);
+      stairs(recipeOutput, stairs, base);
+      stonecutter(recipeOutput, stairs, base);
 
       final Block wall = family.get(BlockFamily.Variant.WALL);
-      buildWallRecipe(recipeOutput, wall, base);
-      buildStonecutterRecipe(recipeOutput, wall, base);
+      wall(recipeOutput, wall, base);
+      stonecutter(recipeOutput, wall, base);
     }
   }
 
-  private static void buildChiseledRecipe(
-      RecipeOutput recipeOutput, ItemLike chiseled, ItemLike material) {
+  private static void chiseled(RecipeOutput recipeOutput, ItemLike chiseled, ItemLike material) {
     chiseledBuilder(RecipeCategory.BUILDING_BLOCKS, chiseled, Ingredient.of(material))
         .unlockedBy(getHasName(material), has(material))
         .save(recipeOutput);
   }
 
-  private static void buildSlabRecipe(RecipeOutput recipeOutput, ItemLike slab, ItemLike material) {
+  private static void slab(RecipeOutput recipeOutput, ItemLike slab, ItemLike material) {
     slabBuilder(RecipeCategory.BUILDING_BLOCKS, slab, Ingredient.of(material))
         .unlockedBy(getHasName(material), has(material))
         .save(recipeOutput);
   }
 
-  private static void buildStairsRecipe(
-      RecipeOutput recipeOutput, ItemLike stairs, ItemLike material) {
+  private static void stairs(RecipeOutput recipeOutput, ItemLike stairs, ItemLike material) {
     stairBuilder(stairs, Ingredient.of(material))
         .unlockedBy(getHasName(material), has(material))
         .save(recipeOutput);
   }
 
-  private static void buildStonecutterRecipe(
-      RecipeOutput recipeOutput, ItemLike result, ItemLike material) {
+  private static void stonecutter(RecipeOutput recipeOutput, ItemLike result, ItemLike material) {
     SingleItemRecipeBuilder.stonecutting(
             Ingredient.of(material), RecipeCategory.BUILDING_BLOCKS, result)
         .unlockedBy(getHasName(material), has(material))
@@ -343,7 +336,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
             getResourceLocation(getConversionRecipeName(result, material) + "_stonecutting"));
   }
 
-  private static void buildStonecutterRecipe(
+  private static void stonecutter(
       @NotNull RecipeOutput recipeOutput, Block result, Block material, int amount) {
     SingleItemRecipeBuilder.stonecutting(
             Ingredient.of(material), RecipeCategory.BUILDING_BLOCKS, result, amount)
@@ -353,32 +346,21 @@ public final class SpliceRecipeProvider extends RecipeProvider {
             getResourceLocation(getConversionRecipeName(result, material) + "_stonecutting"));
   }
 
-  private static void buildWallRecipe(RecipeOutput recipeOutput, ItemLike wall, ItemLike material) {
+  private static void wall(RecipeOutput recipeOutput, ItemLike wall, ItemLike material) {
     wallBuilder(RecipeCategory.DECORATIONS, wall, Ingredient.of(material))
         .unlockedBy(getHasName(material), has(material))
         .save(recipeOutput);
   }
 
-  private static void buildResinRecipes(@NotNull RecipeOutput recipeOutput) {
+  private static void resin(@NotNull RecipeOutput recipeOutput) {
     final Item block = SpliceItems.RESIN_BLOCK.get();
     final Item clump = SpliceItems.RESIN_CLUMP.get();
     final Item brick = SpliceItems.RESIN_BRICK.get();
     final Block bricks = SpliceBlocks.RESIN_BRICKS.get();
 
-    // Block
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, block)
-        .define('R', clump)
-        .pattern("RRR")
-        .pattern("RRR")
-        .pattern("RRR")
-        .unlockedBy(getHasName(block), has(block))
-        .save(recipeOutput, getResourceLocation(getConversionRecipeName(block, clump)));
-
-    // Clump
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, clump, 9)
-        .requires(block)
-        .unlockedBy(getHasName(block), has(block))
-        .save(recipeOutput, getResourceLocation(getConversionRecipeName(clump, block)));
+    // Block <-> clump
+    nineBlockStorageRecipes(
+        recipeOutput, RecipeCategory.MISC, clump, RecipeCategory.BUILDING_BLOCKS, block);
 
     // Bricks
     ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, bricks)
@@ -395,13 +377,76 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput);
   }
 
+  protected static void nineBlockStorageRecipesWithCustomPacking(
+      @NotNull RecipeOutput recipeOutput,
+      @NotNull RecipeCategory unpackedCategory,
+      ItemLike unpacked,
+      @NotNull RecipeCategory packedCategory,
+      ItemLike packed,
+      String packedName,
+      @NotNull String packedGroup) {
+    nineBlockStorageRecipes(
+        recipeOutput,
+        unpackedCategory,
+        unpacked,
+        packedCategory,
+        packed,
+        packedName,
+        packedGroup,
+        getSimpleRecipeName(unpacked),
+        null);
+  }
+
+  protected static void nineBlockStorageRecipes(
+      @NotNull RecipeOutput recipeOutput,
+      @NotNull RecipeCategory unpackedCategory,
+      ItemLike unpacked,
+      @NotNull RecipeCategory packedCategory,
+      ItemLike packed) {
+    nineBlockStorageRecipes(
+        recipeOutput,
+        unpackedCategory,
+        unpacked,
+        packedCategory,
+        packed,
+        getSimpleRecipeName(packed),
+        null,
+        getSimpleRecipeName(unpacked),
+        null);
+  }
+
+  protected static void nineBlockStorageRecipes(
+      @NotNull RecipeOutput recipeOutput,
+      @NotNull RecipeCategory unpackedCategory,
+      ItemLike unpacked,
+      @NotNull RecipeCategory packedCategory,
+      ItemLike packed,
+      String packedName,
+      @Nullable String packedGroup,
+      String unpackedName,
+      @Nullable String unpackedGroup) {
+    ShapelessRecipeBuilder.shapeless(unpackedCategory, unpacked, 9)
+        .requires(packed)
+        .group(unpackedGroup)
+        .unlockedBy(getHasName(packed), has(packed))
+        .save(recipeOutput, getResourceLocation(unpackedName));
+    ShapedRecipeBuilder.shaped(packedCategory, packed)
+        .define('U', unpacked)
+        .pattern("UUU")
+        .pattern("UUU")
+        .pattern("UUU")
+        .group(packedGroup)
+        .unlockedBy(getHasName(unpacked), has(unpacked))
+        .save(recipeOutput, getResourceLocation(packedName));
+  }
+
   @Override
   protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
-    buildBlockFamilyRecipes(recipeOutput);
-    buildBannerPatternRecipes(recipeOutput);
-    buildCopperRecipes(recipeOutput);
-    buildSaddleRecipe(recipeOutput);
-    buildLeadRecipe(recipeOutput);
-    buildResinRecipes(recipeOutput);
+    blockFamily(recipeOutput);
+    bannerPatterns(recipeOutput);
+    copper(recipeOutput);
+    saddle(recipeOutput);
+    lead(recipeOutput);
+    resin(recipeOutput);
   }
 }

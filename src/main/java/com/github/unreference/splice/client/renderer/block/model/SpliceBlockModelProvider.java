@@ -24,28 +24,34 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
   @Override
   protected void registerModels() {
-    this.createFamilies();
-    SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::copperChainModel);
-    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::copperLanternModel);
-    this.torchModel(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
-    this.copperChestModels();
-    this.cubeModel(SpliceBlocks.RESIN_BLOCK);
+    this.blockFamily();
+    this.copper();
+    this.resin();
+  }
+
+  private void resin() {
+    this.cube(SpliceBlocks.RESIN_BLOCK);
     this.resinClump();
   }
 
-  private void createFamilies() {
+  private void copper() {
+    SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::copperChain);
+    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::copperLantern);
+    this.torch(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
+    this.copperChest();
+  }
+
+  private void blockFamily() {
     for (BlockFamily family : SpliceBlockFamilies.getBlockFamilies().values()) {
       if (!family.shouldGenerateModel()) {
         continue;
       }
 
       final Block baseBlock = family.getBaseBlock();
-      final ResourceLocation baseTexture = SpliceUtils.getLocation(baseBlock);
-
-      this.cubeModel(baseBlock);
+      this.cube(baseBlock);
 
       final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
-      this.cubeModel(chiseled);
+      this.cube(chiseled);
     }
   }
 
@@ -69,42 +75,42 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
         .end();
   }
 
-  private void cubeModel(DeferredBlock<Block> block) {
+  private void cube(DeferredBlock<Block> block) {
     final String name = SpliceUtils.getName(block.get());
     final ResourceLocation texture = SpliceUtils.getLocation(block.get());
     this.cubeAll(name, texture);
   }
 
-  private void cubeModel(Block block) {
+  private void cube(Block block) {
     final String name = SpliceUtils.getName(block);
     final ResourceLocation texture = SpliceUtils.getLocation(block);
     this.cubeAll(name, texture);
   }
 
-  private void copperChestModels() {
-    this.chestModel(SpliceBlocks.COPPER_CHEST, Blocks.COPPER_BLOCK);
-    this.chestModel(SpliceBlocks.EXPOSED_COPPER_CHEST, Blocks.EXPOSED_COPPER);
-    this.chestModel(SpliceBlocks.WEATHERED_COPPER_CHEST, Blocks.WEATHERED_COPPER);
-    this.chestModel(SpliceBlocks.OXIDIZED_COPPER_CHEST, Blocks.OXIDIZED_COPPER);
-    this.copyModel(SpliceBlocks.COPPER_CHEST, SpliceBlocks.WAXED_COPPER_CHEST);
-    this.copyModel(SpliceBlocks.EXPOSED_COPPER_CHEST, SpliceBlocks.WAXED_EXPOSED_COPPER_CHEST);
-    this.copyModel(SpliceBlocks.WEATHERED_COPPER_CHEST, SpliceBlocks.WAXED_WEATHERED_COPPER_CHEST);
-    this.copyModel(SpliceBlocks.OXIDIZED_COPPER_CHEST, SpliceBlocks.WAXED_OXIDIZED_COPPER_CHEST);
+  private void copperChest() {
+    this.chest(SpliceBlocks.COPPER_CHEST, Blocks.COPPER_BLOCK);
+    this.chest(SpliceBlocks.EXPOSED_COPPER_CHEST, Blocks.EXPOSED_COPPER);
+    this.chest(SpliceBlocks.WEATHERED_COPPER_CHEST, Blocks.WEATHERED_COPPER);
+    this.chest(SpliceBlocks.OXIDIZED_COPPER_CHEST, Blocks.OXIDIZED_COPPER);
+    this.copy(SpliceBlocks.COPPER_CHEST, SpliceBlocks.WAXED_COPPER_CHEST);
+    this.copy(SpliceBlocks.EXPOSED_COPPER_CHEST, SpliceBlocks.WAXED_EXPOSED_COPPER_CHEST);
+    this.copy(SpliceBlocks.WEATHERED_COPPER_CHEST, SpliceBlocks.WAXED_WEATHERED_COPPER_CHEST);
+    this.copy(SpliceBlocks.OXIDIZED_COPPER_CHEST, SpliceBlocks.WAXED_OXIDIZED_COPPER_CHEST);
   }
 
-  private void copyModel(DeferredBlock<Block> from, DeferredBlock<Block> to) {
+  private void copy(DeferredBlock<Block> from, DeferredBlock<Block> to) {
     final String fromName = SpliceUtils.getName(from.get());
     final String toName = SpliceUtils.getName(to.get());
     this.withExistingParent(toName, modLoc("block/" + fromName));
   }
 
-  private void chestModel(DeferredBlock<Block> block, Block particle) {
+  private void chest(DeferredBlock<Block> block, Block particle) {
     final String name = SpliceUtils.getName(block.get());
     this.withExistingParent(name, mcLoc("block/chest"))
         .texture("particle", SpliceUtils.getLocation(particle));
   }
 
-  private void torchModel(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
+  private void torch(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
     final String standingName = SpliceUtils.getName(standing.get());
     final String wallName = SpliceUtils.getName(wall.get());
     final ResourceLocation texture = modLoc("block/" + standingName);
@@ -113,13 +119,13 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     this.torchWall(wallName, texture).renderType("minecraft:cutout");
   }
 
-  private void copperLanternModel(
+  private void copperLantern(
       DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.lanternModel(unaffected);
-    this.lanternModel(waxed);
+    this.lantern(unaffected);
+    this.lantern(waxed);
   }
 
-  private void lanternModel(DeferredBlock<? extends Block> block) {
+  private void lantern(DeferredBlock<? extends Block> block) {
     final Block id = block.get();
     final String name = SpliceUtils.getName(id);
     final String textureName = stripWaxedPrefix(name);
@@ -134,13 +140,13 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
         .renderType("minecraft:cutout");
   }
 
-  private void copperChainModel(
+  private void copperChain(
       DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.chainModel(unaffected);
-    this.chainModel(waxed);
+    this.chain(unaffected);
+    this.chain(waxed);
   }
 
-  private void chainModel(DeferredBlock<? extends Block> block) {
+  private void chain(DeferredBlock<? extends Block> block) {
     final Block id = block.get();
     final String name = SpliceUtils.getName(id);
     final String texture = stripWaxedPrefix(name);

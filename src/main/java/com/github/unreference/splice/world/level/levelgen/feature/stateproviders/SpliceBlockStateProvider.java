@@ -3,42 +3,35 @@ package com.github.unreference.splice.world.level.levelgen.feature.stateprovider
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.data.SpliceBlockFamilies;
 import com.github.unreference.splice.util.SpliceUtils;
-import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredItem;
 
 public final class SpliceBlockStateProvider extends BlockStateProvider {
   public SpliceBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
     super(output, SpliceMain.MOD_ID, exFileHelper);
   }
 
-  private static String stripWaxedPrefix(String name) {
-    return name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
-  }
-
   @Override
   protected void registerStatesAndModels() {
-    this.createFamilies();
-    SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::createCopperBars);
-    SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::createCopperChain);
-    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::createCopperLantern);
-    SpliceBlocks.COPPER_CHESTS.forEach(this::createChest);
-    this.createTorch(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
-    this.createBlock(SpliceBlocks.RESIN_BLOCK);
-    this.createMultiface(SpliceBlocks.RESIN_CLUMP, SpliceItems.RESIN_CLUMP);
+    this.blockFamilyBlocks();
+    this.copperBlocks();
+    this.resinBlocks();
   }
 
-  private void createFamilies() {
+  private void resinBlocks() {
+    this.block(SpliceBlocks.RESIN_BLOCK);
+    this.multiface(SpliceBlocks.RESIN_CLUMP);
+  }
+
+  private void blockFamilyBlocks() {
     for (BlockFamily family : SpliceBlockFamilies.getBlockFamilies().values()) {
       if (!family.shouldGenerateModel()) {
         continue;
@@ -47,47 +40,46 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
       final Block baseBlock = family.getBaseBlock();
       final ResourceLocation baseTexture = SpliceUtils.getLocation(baseBlock);
 
-      this.simpleBlockWithItem(
-          baseBlock, this.models().getExistingFile(SpliceUtils.getLocation(baseBlock)));
+      this.simpleBlock(baseBlock);
 
       final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
-      this.simpleBlockWithItem(
-          chiseled, this.models().getExistingFile(SpliceUtils.getLocation(chiseled)));
+      this.simpleBlock(chiseled);
 
       final Block wall = family.get(BlockFamily.Variant.WALL);
-      this.createWall((WallBlock) wall, baseTexture);
+      this.wall((WallBlock) wall, baseTexture);
 
       final Block slab = family.get(BlockFamily.Variant.SLAB);
-      this.createSlab((SlabBlock) slab, baseTexture);
+      this.slab((SlabBlock) slab, baseTexture);
 
       final Block stairs = family.get(BlockFamily.Variant.STAIRS);
-      this.createStairs((StairBlock) stairs, baseTexture);
+      this.stairs((StairBlock) stairs, baseTexture);
     }
   }
 
-  private void createWall(WallBlock block, ResourceLocation texture) {
+  private void copperBlocks() {
+    SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::copperBars);
+    SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::copperChain);
+    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::copperLantern);
+    SpliceBlocks.COPPER_CHESTS.forEach(
+        block ->
+            this.simpleBlock(
+                block.get(), this.models().getExistingFile(SpliceUtils.getLocation(block.get()))));
+    this.torch(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
+  }
+
+  private void wall(WallBlock block, ResourceLocation texture) {
     this.wallBlock(block, texture);
-    this.itemModels().wallInventory(SpliceUtils.getName(block), texture);
   }
 
-  private void createStairs(StairBlock block, ResourceLocation texture) {
+  private void stairs(StairBlock block, ResourceLocation texture) {
     this.stairsBlock(block, texture);
-    this.itemModels()
-        .withExistingParent(SpliceUtils.getName(block), SpliceUtils.getLocation(block));
   }
 
-  private void createSlab(SlabBlock block, ResourceLocation texture) {
+  private void slab(SlabBlock block, ResourceLocation texture) {
     this.slabBlock(block, texture, texture);
-    this.itemModels()
-        .withExistingParent(SpliceUtils.getName(block), SpliceUtils.getLocation(block));
   }
 
-  private void createMultiface(DeferredBlock<Block> block, DeferredItem<BlockItem> item) {
-    this.itemModels().basicItem(item.get());
-    this.createMultifaceBlockStates(block);
-  }
-
-  private void createMultifaceBlockStates(DeferredBlock<Block> block) {
+  private void multiface(DeferredBlock<Block> block) {
     final Block id = block.get();
     final MultiPartBlockStateBuilder builder = this.getMultipartBuilder(id);
 
@@ -205,25 +197,24 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         .end();
   }
 
-  private void createBlock(DeferredBlock<Block> block) {
+  private void block(DeferredBlock<Block> block) {
     final Block id = block.get();
     final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
-    this.simpleBlockWithItem(id, model);
+    this.simpleBlock(id, model);
   }
 
-  private void createCopperLantern(
+  private void copperLantern(
       DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.createLantern(unaffected);
-    this.createLantern(waxed);
+    this.lantern(unaffected);
+    this.lantern(waxed);
   }
 
-  private void createLantern(DeferredBlock<? extends Block> block) {
+  private void lantern(DeferredBlock<? extends Block> block) {
     final Block id = block.get();
     if (!(id instanceof LanternBlock)) {
       throw new IllegalArgumentException("Expected LanternBlock, got: " + id);
     }
 
-    final String name = SpliceUtils.getName(id);
     final ModelFile standing = this.models().getExistingFile(SpliceUtils.getLocation(id));
     final ModelFile hanging =
         this.models()
@@ -236,18 +227,9 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     s.partialState()
         .with(BlockStateProperties.HANGING, true)
         .addModels(new ConfiguredModel(hanging));
-
-    final ResourceLocation texture = this.modLoc("item/" + stripWaxedPrefix(name));
-    this.createItemModel(name, texture);
   }
 
-  private void createItemModel(String modelName, ResourceLocation texture) {
-    this.itemModels()
-        .withExistingParent(modelName, this.mcLoc("item/generated"))
-        .texture("layer0", texture);
-  }
-
-  private void createTorch(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
+  private void torch(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
     final Block standingId = standing.get();
     final Block wallId = wall.get();
 
@@ -269,37 +251,33 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     s.partialState()
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
         .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(180).build());
-
-    final ResourceLocation texture = SpliceUtils.getLocation(standingId);
-    this.createItemModel(SpliceUtils.getName(standingId), texture);
   }
 
-  private void createCopperBars(
+  private void copperBars(
       DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.createBars(unaffected);
-    this.createBars(waxed);
+    this.bars(unaffected);
+    this.bars(waxed);
   }
 
-  private void createBars(DeferredBlock<? extends Block> block) {
+  private void bars(DeferredBlock<? extends Block> block) {
     final Block id = block.get();
     if (!(id instanceof IronBarsBlock bars)) {
       throw new IllegalArgumentException("Expected IronBarsBlock, got: " + id);
     }
 
     final String name = SpliceUtils.getName(id);
-    final ResourceLocation texture = this.modLoc("block/" + stripWaxedPrefix(name));
+    final ResourceLocation texture = this.modLoc("block/" + SpliceUtils.stripWaxedPrefix(name));
 
     this.paneBlockWithRenderType(bars, texture, texture, this.mcLoc("cutout_mipped"));
-    this.createItemModel(name, texture);
   }
 
-  private void createCopperChain(
+  private void copperChain(
       DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.createChain(unaffected);
-    this.createChain(waxed);
+    this.chain(unaffected);
+    this.chain(waxed);
   }
 
-  private void createChain(DeferredBlock<? extends Block> block) {
+  private void chain(DeferredBlock<? extends Block> block) {
     final Block id = block.get();
     if (!(id instanceof ChainBlock chain)) {
       throw new IllegalArgumentException("Expected ChainBlock, got: " + id);
@@ -307,14 +285,5 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
     final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
     this.axisBlock(chain, model, model);
-
-    final String name = SpliceUtils.getName(id);
-    final ResourceLocation texture = this.modLoc("item/" + stripWaxedPrefix(name));
-    this.createItemModel(name, texture);
-  }
-
-  private void createChest(DeferredBlock<? extends Block> block) {
-    final Block id = block.get();
-    this.simpleBlockWithItem(id, this.models().getExistingFile(this.mcLoc("block/chest")));
   }
 }

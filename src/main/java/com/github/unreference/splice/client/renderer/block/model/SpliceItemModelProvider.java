@@ -1,8 +1,12 @@
 package com.github.unreference.splice.client.renderer.block.model;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.data.SpliceBlockFamilies;
+import com.github.unreference.splice.util.SpliceUtils;
 import com.github.unreference.splice.world.item.SpliceItems;
+import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.*;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -10,10 +14,12 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.item.armortrim.TrimMaterials;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 public final class SpliceItemModelProvider extends ItemModelProvider {
@@ -36,36 +42,116 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     super(output, SpliceMain.MOD_ID, existingFileHelper);
   }
 
-  private static float getTrimIndex(int idx) {
-    return (idx + 1) * TRIM_STEP;
+  private static float getTrimIndex(int index) {
+    return (index + 1) * TRIM_STEP;
   }
 
   @Override
   protected void registerModels() {
-    this.basicItem(SpliceItems.FIELD_MASONED_BANNER_PATTERN.get());
-    this.basicItem(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN.get());
-    this.registerCopperModels();
-    this.basicItem(SpliceItems.MUSIC_DISC_TEARS.get());
-    this.basicItem(SpliceItems.MUSIC_DISC_LAVA_CHICKEN.get());
-    this.basicItem(SpliceItems.MUSIC_DISC_COFFEE_MACHINE.get());
+    this.blockFamilyItems();
+    this.bannerPatternItems();
+    this.copperItems();
+    this.musicDiscItems();
+    this.resinItems();
+  }
+
+  private void resinItems() {
+    this.simpleBlockItem(SpliceBlocks.RESIN_BLOCK.get());
+    this.basicItem(SpliceItems.RESIN_CLUMP.get());
     this.basicItem(SpliceItems.RESIN_BRICK.get());
   }
 
-  private void registerCopperModels() {
+  private void bannerPatternItems() {
+    this.basicItem(SpliceItems.FIELD_MASONED_BANNER_PATTERN.get());
+    this.basicItem(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN.get());
+  }
+
+  private void musicDiscItems() {
+    this.basicItem(SpliceItems.MUSIC_DISC_TEARS.get());
+    this.basicItem(SpliceItems.MUSIC_DISC_LAVA_CHICKEN.get());
+    this.basicItem(SpliceItems.MUSIC_DISC_COFFEE_MACHINE.get());
+  }
+
+  private void blockFamilyItems() {
+    for (BlockFamily family : SpliceBlockFamilies.getBlockFamilies().values()) {
+      if (!family.shouldGenerateModel()) {
+        continue;
+      }
+
+      final Block baseBlock = family.getBaseBlock();
+      final ResourceLocation baseTexture = SpliceUtils.getLocation(baseBlock);
+
+      this.simpleBlockItem(baseBlock);
+
+      final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
+      this.simpleBlockItem(chiseled);
+
+      final Block wall = family.get(BlockFamily.Variant.WALL);
+      this.wallInventory(SpliceUtils.getName(wall), baseTexture);
+
+      final Block slab = family.get(BlockFamily.Variant.SLAB);
+      this.simpleBlockItem(slab);
+
+      final Block stairs = family.get(BlockFamily.Variant.STAIRS);
+      this.simpleBlockItem(stairs);
+    }
+  }
+
+  private void copperItems() {
+    SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::copperBarsItem);
+    SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::copperChainItem);
+    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::copperLanternItem);
+    SpliceBlocks.COPPER_CHESTS.forEach(this::copperChestItem);
+
+    this.simpleBlockItem(SpliceBlocks.COPPER_TORCH.get());
     this.basicItem(SpliceItems.COPPER_NUGGET.get());
     this.handheldItem(SpliceItems.COPPER_SHOVEL.get());
     this.handheldItem(SpliceItems.COPPER_PICKAXE.get());
     this.handheldItem(SpliceItems.COPPER_AXE.get());
     this.handheldItem(SpliceItems.COPPER_HOE.get());
     this.handheldItem(SpliceItems.COPPER_SWORD.get());
-    this.trimmableArmor(SpliceItems.COPPER_HELMET);
-    this.trimmableArmor(SpliceItems.COPPER_CHESTPLATE);
-    this.trimmableArmor(SpliceItems.COPPER_LEGGINGS);
-    this.trimmableArmor(SpliceItems.COPPER_BOOTS);
+    this.trimmableArmorItem(SpliceItems.COPPER_HELMET);
+    this.trimmableArmorItem(SpliceItems.COPPER_CHESTPLATE);
+    this.trimmableArmorItem(SpliceItems.COPPER_LEGGINGS);
+    this.trimmableArmorItem(SpliceItems.COPPER_BOOTS);
     this.basicItem(SpliceItems.COPPER_HORSE_ARMOR.get());
   }
 
-  private void trimmableArmor(DeferredItem<? extends ArmorItem> item) {
+  private void copperChestItem(DeferredBlock<? extends Block> block) {
+    this.withExistingParent(SpliceUtils.getName(block.get()), this.mcLoc("item/chest"));
+  }
+
+  private void copperLanternItem(
+      DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
+    this.inventoryItem(unaffected);
+    this.inventoryItem(waxed);
+  }
+
+  private void copperChainItem(
+      DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
+    this.inventoryItem(unaffected);
+    this.inventoryItem(waxed);
+  }
+
+  private void copperBarsItem(
+      DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
+    this.inventoryBlockItem(unaffected);
+    this.inventoryBlockItem(waxed);
+  }
+
+  private void inventoryItem(DeferredBlock<? extends Block> block) {
+    final String name = SpliceUtils.getName(block.get());
+    final ResourceLocation texture = this.modLoc("item/" + SpliceUtils.stripWaxedPrefix(name));
+    this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
+  }
+
+  private void inventoryBlockItem(DeferredBlock<? extends Block> block) {
+    final String name = SpliceUtils.getName(block.get());
+    final ResourceLocation texture = this.modLoc("block/" + SpliceUtils.stripWaxedPrefix(name));
+    this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
+  }
+
+  private void trimmableArmorItem(DeferredItem<? extends ArmorItem> item) {
     final String armorItem = item.getId().getPath();
     final String armorKind = item.get().getType().getName();
 
