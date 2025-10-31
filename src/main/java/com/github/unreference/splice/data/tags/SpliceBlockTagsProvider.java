@@ -49,5 +49,15 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
     this.tag(BlockTags.STAIRS).add(SpliceBlocks.RESIN_BRICK_STAIRS.get());
     this.tag(BlockTags.SLABS).add(SpliceBlocks.RESIN_BRICK_SLAB.get());
     this.tag(BlockTags.WALLS).add(SpliceBlocks.RESIN_BRICK_WALL.get());
+
+    this.tag(SpliceBlockTags.PALE_OAK_LOGS)
+        .add(
+            SpliceBlocks.PALE_OAK_LOG.get(),
+            SpliceBlocks.PALE_OAK_WOOD.get(),
+            SpliceBlocks.STRIPPED_PALE_OAK_LOG.get(),
+            SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get());
+    this.tag(BlockTags.LOGS).addTag(SpliceBlockTags.PALE_OAK_LOGS);
+    this.tag(BlockTags.LOGS_THAT_BURN).addTag(SpliceBlockTags.PALE_OAK_LOGS);
+    this.tag(BlockTags.OVERWORLD_NATURAL_LOGS).add(SpliceBlocks.PALE_OAK_LOG.get());
   }
 }

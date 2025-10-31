@@ -39,6 +39,10 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
     this.dropSelf(SpliceBlocks.CHISELED_RESIN_BRICKS.get());
     this.dropSelf(SpliceBlocks.RESIN_BRICK_SLAB.get());
     this.dropSelf(SpliceBlocks.RESIN_BRICK_WALL.get());
+    this.dropSelf(SpliceBlocks.PALE_OAK_WOOD.get());
+    this.dropSelf(SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get());
+    this.dropSelf(SpliceBlocks.PALE_OAK_LOG.get());
+    this.dropSelf(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get());
   }
 
   @Override

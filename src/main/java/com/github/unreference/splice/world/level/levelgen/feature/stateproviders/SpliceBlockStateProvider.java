@@ -24,6 +24,46 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.blockFamilyBlocks();
     this.copperBlocks();
     this.resinBlocks();
+    this.paleOakBlocks();
+  }
+
+  private void paleOakBlocks() {
+    this.log(SpliceBlocks.PALE_OAK_LOG);
+    this.log(SpliceBlocks.STRIPPED_PALE_OAK_LOG);
+    this.wood(SpliceBlocks.PALE_OAK_WOOD, SpliceUtils.getLocation(SpliceBlocks.PALE_OAK_LOG.get()));
+    this.wood(
+        SpliceBlocks.STRIPPED_PALE_OAK_WOOD,
+        SpliceUtils.getLocation(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get()));
+  }
+
+  private void log(DeferredBlock<RotatedPillarBlock> block) {
+    this.logBlock(block.get());
+  }
+
+  private void wood(DeferredBlock<RotatedPillarBlock> block, ResourceLocation texture) {
+    final Block id = block.get();
+    final String name = SpliceUtils.getName(id);
+
+    final ModelFile model = this.models().cubeColumn(name, texture, texture);
+    this.getVariantBuilder(id)
+        .partialState()
+        .with(RotatedPillarBlock.AXIS, Direction.Axis.Y)
+        .modelForState()
+        .modelFile(model)
+        .addModel()
+        .partialState()
+        .with(RotatedPillarBlock.AXIS, Direction.Axis.X)
+        .modelForState()
+        .modelFile(model)
+        .rotationX(90)
+        .rotationY(90)
+        .addModel()
+        .partialState()
+        .with(RotatedPillarBlock.AXIS, Direction.Axis.Z)
+        .modelForState()
+        .modelFile(model)
+        .rotationX(90)
+        .addModel();
   }
 
   private void resinBlocks() {
@@ -197,7 +237,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         .end();
   }
 
-  private void block(DeferredBlock<Block> block) {
+  private void block(DeferredBlock<?> block) {
     final Block id = block.get();
     final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
     this.simpleBlock(id, model);

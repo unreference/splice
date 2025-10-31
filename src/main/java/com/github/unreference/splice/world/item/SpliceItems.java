@@ -184,6 +184,18 @@ public final class SpliceItems {
   public static final DeferredItem<BlockItem> RESIN_BRICK_WALL =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.RESIN_BRICK_WALL);
 
+  public static final DeferredItem<BlockItem> PALE_OAK_WOOD =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_WOOD);
+
+  public static final DeferredItem<BlockItem> STRIPPED_PALE_OAK_WOOD =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_WOOD);
+
+  public static final DeferredItem<BlockItem> PALE_OAK_LOG =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_LOG);
+
+  public static final DeferredItem<BlockItem> STRIPPED_OAK_LOG =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_LOG);
+
   public static final DeferredItem<Item> MUSIC_DISC_TEARS =
       ITEMS.registerSimpleItem(
           "music_disc_tears",

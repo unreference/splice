@@ -9,6 +9,7 @@ public final class SpliceCreativeModeTabs {
   @SubscribeEvent
   public static void onBuildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
     if (event.getTabKey().equals(CreativeModeTabs.BUILDING_BLOCKS)) {
+      paleOakBuildingBlocks(event);
       copperBarsBuildingBlocks(event);
       copperChainBuildingBlocks(event);
       resinBuildingBlocks(event);
@@ -52,6 +53,13 @@ public final class SpliceCreativeModeTabs {
     // if (event.getTabKey().equals(CreativeModeTabs.OP_BLOCKS)) {}
 
     // if (event.getTabKey().equals(CreativeModeTabs.INVENTORY)) {}
+  }
+
+  private static void paleOakBuildingBlocks(BuildCreativeModeTabContentsEvent event) {
+    insert(event, SpliceItems.PALE_OAK_LOG, Items.CHERRY_BUTTON);
+    insert(event, SpliceItems.PALE_OAK_WOOD, SpliceItems.PALE_OAK_LOG);
+    insert(event, SpliceItems.STRIPPED_OAK_LOG, SpliceItems.PALE_OAK_LOG);
+    insert(event, SpliceItems.STRIPPED_PALE_OAK_WOOD, SpliceItems.STRIPPED_OAK_LOG);
   }
 
   private static void copperIngredients(BuildCreativeModeTabContentsEvent event) {

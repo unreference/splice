@@ -440,6 +440,12 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput, getResourceLocation(packedName));
   }
 
+  private static void paleOak(@NotNull RecipeOutput recipeOutput) {
+    woodFromLogs(recipeOutput, SpliceBlocks.PALE_OAK_WOOD, SpliceBlocks.PALE_OAK_LOG);
+    woodFromLogs(
+        recipeOutput, SpliceBlocks.STRIPPED_PALE_OAK_WOOD, SpliceBlocks.STRIPPED_PALE_OAK_LOG);
+  }
+
   @Override
   protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
     blockFamily(recipeOutput);
@@ -448,5 +454,6 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     saddle(recipeOutput);
     lead(recipeOutput);
     resin(recipeOutput);
+    paleOak(recipeOutput);
   }
 }

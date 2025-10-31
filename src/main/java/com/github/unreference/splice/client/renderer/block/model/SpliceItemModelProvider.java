@@ -53,6 +53,14 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.copperItems();
     this.musicDiscItems();
     this.resinItems();
+    this.paleOakItems();
+  }
+
+  private void paleOakItems() {
+    this.simpleBlockItem(SpliceBlocks.PALE_OAK_LOG.get());
+    this.simpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get());
+    this.simpleBlockItem(SpliceBlocks.PALE_OAK_WOOD.get());
+    this.simpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get());
   }
 
   private void resinItems() {

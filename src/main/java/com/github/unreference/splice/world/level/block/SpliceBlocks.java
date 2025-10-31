@@ -178,23 +178,34 @@ public final class SpliceBlocks {
           props ->
               new StairBlock(RESIN_BRICKS.get().defaultBlockState(), getResinBricksProperties()));
 
+  public static final DeferredBlock<RotatedPillarBlock> STRIPPED_PALE_OAK_LOG =
+      BLOCKS.registerBlock(
+          "stripped_pale_oak_log",
+          props -> new RotatedPillarBlock(getLogProperties().mapColor(MapColor.QUARTZ)));
+
+  public static final DeferredBlock<RotatedPillarBlock> PALE_OAK_LOG =
+      BLOCKS.register(
+          "pale_oak_log",
+          () -> new SpliceStrippableLogBlock(STRIPPED_PALE_OAK_LOG, getLogProperties()));
+
+  public static final DeferredBlock<RotatedPillarBlock> STRIPPED_PALE_OAK_WOOD =
+      BLOCKS.registerBlock(
+          "stripped_pale_oak_wood",
+          props -> new RotatedPillarBlock(getLogProperties().mapColor(MapColor.QUARTZ)));
+
+  public static final DeferredBlock<RotatedPillarBlock> PALE_OAK_WOOD =
+      BLOCKS.register(
+          "pale_oak_wood",
+          () -> new SpliceStrippableLogBlock(STRIPPED_PALE_OAK_WOOD, getLogProperties()));
+
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
-
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =
       BLOCKS.registerBlock("resin_brick_slab", props -> new SlabBlock(getResinBricksProperties()));
-
   public static DeferredBlock<WallBlock> RESIN_BRICK_WALL =
       BLOCKS.registerBlock("resin_brick_wall", props -> new WallBlock(getResinBricksProperties()));
 
-  private static BlockBehaviour.Properties getResinBricksProperties() {
-    return BlockBehaviour.Properties.of()
-        .mapColor(MapColor.TERRACOTTA_ORANGE)
-        .instrument(NoteBlockInstrument.BASEDRUM)
-        .requiresCorrectToolForDrops()
-        .sound(SpliceSoundType.RESIN_BRICKS)
-        .strength(1.5f, 6.0f);
-  }
+  // ---- Helpers
 
   private static DeferredBlock<Block> registerChest(
       WeatheringCopper.WeatherState state, boolean isWaxed) {
@@ -245,6 +256,23 @@ public final class SpliceBlocks {
         .strength(3.0f, 6.0f)
         .sound(SoundType.COPPER)
         .requiresCorrectToolForDrops();
+  }
+
+  private static BlockBehaviour.Properties getResinBricksProperties() {
+    return BlockBehaviour.Properties.of()
+        .mapColor(MapColor.TERRACOTTA_ORANGE)
+        .instrument(NoteBlockInstrument.BASEDRUM)
+        .requiresCorrectToolForDrops()
+        .sound(SpliceSoundType.RESIN_BRICKS)
+        .strength(1.5f, 6.0f);
+  }
+
+  private static BlockBehaviour.Properties getLogProperties() {
+    return BlockBehaviour.Properties.of()
+        .mapColor(MapColor.WOOD)
+        .instrument(NoteBlockInstrument.BASS)
+        .strength(2.0f)
+        .sound(SoundType.WOOD);
   }
 
   public static List<SpliceWeatheringCopperBlocks> getCopperFamily() {
