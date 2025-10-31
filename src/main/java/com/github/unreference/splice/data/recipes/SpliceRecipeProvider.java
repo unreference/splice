@@ -309,6 +309,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
 
       final Block wall = family.get(BlockFamily.Variant.WALL);
       buildWallRecipe(recipeOutput, wall, base);
+      buildStonecutterRecipe(recipeOutput, wall, base);
     }
   }
 
