@@ -22,6 +22,27 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
 
   @Override
   protected void addTags(HolderLookup.@NotNull Provider provider) {
+    this.tag(BlockTags.PLANKS).add(SpliceBlocks.PALE_OAK_PLANKS.get());
+    this.tag(BlockTags.WOODEN_BUTTONS);
+    this.tag(BlockTags.WOODEN_DOORS);
+    this.tag(BlockTags.WOODEN_STAIRS);
+    this.tag(BlockTags.WOODEN_SLABS);
+    this.tag(BlockTags.WOODEN_FENCES);
+    this.tag(BlockTags.SAPLINGS);
+    this.tag(SpliceBlockTags.PALE_OAK_LOGS)
+        .add(
+            SpliceBlocks.PALE_OAK_LOG.get(),
+            SpliceBlocks.PALE_OAK_WOOD.get(),
+            SpliceBlocks.STRIPPED_PALE_OAK_LOG.get(),
+            SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get());
+    this.tag(BlockTags.LOGS_THAT_BURN).addTag(SpliceBlockTags.PALE_OAK_LOGS);
+    this.tag(BlockTags.OVERWORLD_NATURAL_LOGS).add(SpliceBlocks.PALE_OAK_LOG.get());
+    this.tag(BlockTags.WOODEN_PRESSURE_PLATES);
+    this.tag(BlockTags.WOODEN_TRAPDOORS);
+    this.tag(BlockTags.STANDING_SIGNS);
+    this.tag(BlockTags.WALL_SIGNS);
+    this.tag(BlockTags.CEILING_HANGING_SIGNS);
+    this.tag(BlockTags.WALL_HANGING_SIGNS);
     this.tag(SpliceBlockTags.INCORRECT_FOR_COPPER_TOOL)
         .addTag(BlockTags.NEEDS_DIAMOND_TOOL)
         .addTag(BlockTags.NEEDS_IRON_TOOL);
@@ -34,7 +55,6 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
         block -> this.tag(SpliceBlockTags.COPPER_CHESTS).add(block.get()));
 
     this.tag(BlockTags.GUARDED_BY_PIGLINS).addTag(SpliceBlockTags.COPPER_CHESTS);
-
     this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
         .addTag(SpliceBlockTags.BARS)
         .addTag(SpliceBlockTags.CHAINS)
@@ -42,22 +62,11 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
         .addTag(SpliceBlockTags.COPPER_CHESTS)
         .add(SpliceBlocks.RESIN_BRICKS.get())
         .add(SpliceBlocks.CHISELED_RESIN_BRICKS.get());
-
     this.tag(BlockTags.NEEDS_STONE_TOOL).addTag(SpliceBlockTags.COPPER_CHESTS);
     this.tag(BlockTags.WALL_POST_OVERRIDE).add(SpliceBlocks.COPPER_TORCH.get());
     this.tag(BlockTags.COMBINATION_STEP_SOUND_BLOCKS).add(SpliceBlocks.RESIN_CLUMP.get());
     this.tag(BlockTags.STAIRS).add(SpliceBlocks.RESIN_BRICK_STAIRS.get());
     this.tag(BlockTags.SLABS).add(SpliceBlocks.RESIN_BRICK_SLAB.get());
     this.tag(BlockTags.WALLS).add(SpliceBlocks.RESIN_BRICK_WALL.get());
-
-    this.tag(SpliceBlockTags.PALE_OAK_LOGS)
-        .add(
-            SpliceBlocks.PALE_OAK_LOG.get(),
-            SpliceBlocks.PALE_OAK_WOOD.get(),
-            SpliceBlocks.STRIPPED_PALE_OAK_LOG.get(),
-            SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get());
-    this.tag(BlockTags.LOGS).addTag(SpliceBlockTags.PALE_OAK_LOGS);
-    this.tag(BlockTags.LOGS_THAT_BURN).addTag(SpliceBlockTags.PALE_OAK_LOGS);
-    this.tag(BlockTags.OVERWORLD_NATURAL_LOGS).add(SpliceBlocks.PALE_OAK_LOG.get());
   }
 }

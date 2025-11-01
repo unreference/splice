@@ -34,6 +34,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.wood(
         SpliceBlocks.STRIPPED_PALE_OAK_WOOD,
         SpliceUtils.getLocation(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get()));
+    this.block(SpliceBlocks.PALE_OAK_PLANKS);
   }
 
   private void log(DeferredBlock<RotatedPillarBlock> block) {

@@ -42,6 +42,7 @@ public final class SpliceMain {
   private void onFmlCommonSetup(FMLCommonSetupEvent event) {
     final FireBlock fireBlock = (FireBlock) Blocks.FIRE;
     // Planks
+    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_PLANKS.get(), 5, 20);
     // Slab
     // Fence gate
     // Fence

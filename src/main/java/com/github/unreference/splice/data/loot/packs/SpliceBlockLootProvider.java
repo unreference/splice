@@ -43,6 +43,7 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
     this.dropSelf(SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get());
     this.dropSelf(SpliceBlocks.PALE_OAK_LOG.get());
     this.dropSelf(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get());
+    this.dropSelf(SpliceBlocks.PALE_OAK_PLANKS.get());
   }
 
   @Override

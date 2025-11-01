@@ -1,6 +1,7 @@
 package com.github.unreference.splice.data.tags;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.tags.SpliceBlockTags;
 import com.github.unreference.splice.tags.SpliceItemTags;
 import com.github.unreference.splice.world.item.SpliceItems;
 import java.util.concurrent.CompletableFuture;
@@ -25,6 +26,12 @@ public final class SpliceItemTagsProvider extends ItemTagsProvider {
 
   @Override
   protected void addTags(HolderLookup.@NotNull Provider provider) {
+    this.copy(SpliceBlockTags.COPPER_CHESTS, SpliceItemTags.COPPER_CHESTS);
+    this.copy(SpliceBlockTags.BARS, SpliceItemTags.BARS);
+    this.copy(SpliceBlockTags.CHAINS, SpliceItemTags.CHAINS);
+    this.copy(SpliceBlockTags.LANTERNS, SpliceItemTags.LANTERNS);
+    this.copy(SpliceBlockTags.PALE_OAK_LOGS, SpliceItemTags.PALE_OAK_LOGS);
+
     this.tag(SpliceItemTags.COPPER_TOOL_MATERIALS).add(Items.COPPER_INGOT);
     this.tag(ItemTags.SHOVELS).add(SpliceItems.COPPER_SHOVEL.get());
     this.tag(ItemTags.PICKAXES).add(SpliceItems.COPPER_PICKAXE.get());
@@ -36,5 +43,6 @@ public final class SpliceItemTagsProvider extends ItemTagsProvider {
     this.tag(ItemTags.CHEST_ARMOR).add(SpliceItems.COPPER_CHESTPLATE.get());
     this.tag(ItemTags.LEG_ARMOR).add(SpliceItems.COPPER_LEGGINGS.get());
     this.tag(ItemTags.FOOT_ARMOR).add(SpliceItems.COPPER_BOOTS.get());
+    this.tag(ItemTags.BOATS);
   }
 }

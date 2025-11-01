@@ -27,6 +27,11 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     this.blockFamily();
     this.copper();
     this.resin();
+    this.paleOak();
+  }
+
+  private void paleOak() {
+    this.cube(SpliceBlocks.PALE_OAK_PLANKS);
   }
 
   private void resin() {

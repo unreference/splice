@@ -198,6 +198,9 @@ public final class SpliceBlocks {
           "pale_oak_wood",
           () -> new SpliceStrippableLogBlock(STRIPPED_PALE_OAK_WOOD, getLogProperties()));
 
+  public static final DeferredBlock<Block> PALE_OAK_PLANKS =
+      BLOCKS.registerSimpleBlock("pale_oak_planks", getLogProperties().mapColor(MapColor.QUARTZ));
+
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =

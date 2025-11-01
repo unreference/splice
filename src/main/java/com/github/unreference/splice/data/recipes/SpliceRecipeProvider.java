@@ -441,6 +441,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   }
 
   private static void paleOak(@NotNull RecipeOutput recipeOutput) {
+    planksFromLog(recipeOutput, SpliceBlocks.PALE_OAK_PLANKS, SpliceItemTags.PALE_OAK_LOGS, 4);
     woodFromLogs(recipeOutput, SpliceBlocks.PALE_OAK_WOOD, SpliceBlocks.PALE_OAK_LOG);
     woodFromLogs(
         recipeOutput, SpliceBlocks.STRIPPED_PALE_OAK_WOOD, SpliceBlocks.STRIPPED_PALE_OAK_LOG);
