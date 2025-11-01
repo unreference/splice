@@ -147,7 +147,7 @@ public final class SpliceItems {
   public static final DeferredItem<BlockItem> WAXED_OXIDIZED_COPPER_CHEST =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.WAXED_OXIDIZED_COPPER_CHEST);
 
-  public static final DeferredItem<Item> COPPER_TORCH =
+  public static final DeferredItem<StandingAndWallBlockItem> COPPER_TORCH =
       ITEMS.register(
           "copper_torch",
           () ->
@@ -210,6 +210,14 @@ public final class SpliceItems {
 
   public static final DeferredItem<BlockItem> PALE_OAK_PRESSURE_PLATE =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_PRESSURE_PLATE);
+
+  public static final DeferredItem<SignItem> PALE_OAK_SIGN =
+      ITEMS.registerItem(
+          "pale_oak_sign",
+          props ->
+              new SignItem(
+                  props, SpliceBlocks.PALE_OAK_SIGN.get(), SpliceBlocks.PALE_OAK_WALL_SIGN.get()),
+          new Item.Properties().stacksTo(16));
 
   public static final DeferredItem<Item> MUSIC_DISC_TEARS =
       ITEMS.registerSimpleItem(

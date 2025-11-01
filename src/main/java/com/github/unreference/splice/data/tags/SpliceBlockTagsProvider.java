@@ -40,8 +40,8 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
     this.tag(BlockTags.OVERWORLD_NATURAL_LOGS).add(SpliceBlocks.PALE_OAK_LOG.get());
     this.tag(BlockTags.WOODEN_PRESSURE_PLATES).add(SpliceBlocks.PALE_OAK_PRESSURE_PLATE.get());
     this.tag(BlockTags.WOODEN_TRAPDOORS);
-    this.tag(BlockTags.STANDING_SIGNS);
-    this.tag(BlockTags.WALL_SIGNS);
+    this.tag(BlockTags.STANDING_SIGNS).add(SpliceBlocks.PALE_OAK_SIGN.get());
+    this.tag(BlockTags.WALL_SIGNS).add(SpliceBlocks.PALE_OAK_WALL_SIGN.get());
     this.tag(BlockTags.CEILING_HANGING_SIGNS);
     this.tag(BlockTags.WALL_HANGING_SIGNS);
     this.tag(SpliceBlockTags.INCORRECT_FOR_COPPER_TOOL)

@@ -31,4 +31,14 @@ public final class SpliceBlockEntityType {
                       SpliceBlocks.WAXED_WEATHERED_COPPER_CHEST.get(),
                       SpliceBlocks.WAXED_OXIDIZED_COPPER_CHEST.get())
                   .build(null));
+
+  public static final Supplier<BlockEntityType<SpliceSignBlockEntity>> SIGN =
+      BLOCK_ENTITY_TYPES.register(
+          "sign",
+          () ->
+              BlockEntityType.Builder.of(
+                      SpliceSignBlockEntity::new,
+                      SpliceBlocks.PALE_OAK_SIGN.get(),
+                      SpliceBlocks.PALE_OAK_WALL_SIGN.get())
+                  .build(null));
 }

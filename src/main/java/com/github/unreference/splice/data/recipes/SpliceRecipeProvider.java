@@ -296,6 +296,22 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         button(recipeOutput, button, base);
       }
 
+      final Block fence = family.get(BlockFamily.Variant.FENCE);
+      if (fence != null) {
+        fence(recipeOutput, fence, base);
+      }
+
+      final Block fenceGate = family.get(BlockFamily.Variant.FENCE_GATE);
+      if (fenceGate != null) {
+        fenceGate(recipeOutput, fenceGate, base);
+      }
+
+      final Block sign = family.get(BlockFamily.Variant.SIGN);
+      final Block wallSign = family.get(BlockFamily.Variant.WALL_SIGN);
+      if (sign != null && wallSign != null) {
+        sign(recipeOutput, sign, base);
+      }
+
       final Block slab = family.get(BlockFamily.Variant.SLAB);
       if (slab != null) {
         slab(recipeOutput, slab, base);
@@ -308,25 +324,15 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         }
       }
 
-      final Block fence = family.get(BlockFamily.Variant.FENCE);
-      if (fence != null) {
-        fence(recipeOutput, fence, base);
-      }
-
-      final Block fenceGate = family.get(BlockFamily.Variant.FENCE_GATE);
-      if (fenceGate != null) {
-        fenceGate(recipeOutput, fenceGate, base);
+      final Block stairs = family.get(BlockFamily.Variant.STAIRS);
+      if (stairs != null) {
+        stairs(recipeOutput, stairs, base);
+        stonecutter(recipeOutput, stairs, base);
       }
 
       final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
       if (pressurePlate != null) {
         pressurePlate(recipeOutput, pressurePlate, base);
-      }
-
-      final Block stairs = family.get(BlockFamily.Variant.STAIRS);
-      if (stairs != null) {
-        stairs(recipeOutput, stairs, base);
-        stonecutter(recipeOutput, stairs, base);
       }
 
       final Block wall = family.get(BlockFamily.Variant.WALL);
@@ -335,6 +341,12 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         stonecutter(recipeOutput, wall, base);
       }
     }
+  }
+
+  private static void sign(@NotNull RecipeOutput recipeOutput, Block sign, Block material) {
+    signBuilder(sign, Ingredient.of(material))
+        .unlockedBy(getHasName(material), has(material))
+        .save(recipeOutput);
   }
 
   private static void fence(@NotNull RecipeOutput recipeOutput, Block fence, Block material) {

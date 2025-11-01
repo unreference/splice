@@ -22,6 +22,7 @@ public final class SpliceCreativeModeTabs {
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS)) {
+      paleOakFunctionalBlocks(event);
       copperFunctionalBlocks(event);
     }
 
@@ -53,6 +54,10 @@ public final class SpliceCreativeModeTabs {
     // if (event.getTabKey().equals(CreativeModeTabs.OP_BLOCKS)) {}
 
     // if (event.getTabKey().equals(CreativeModeTabs.INVENTORY)) {}
+  }
+
+  private static void paleOakFunctionalBlocks(BuildCreativeModeTabContentsEvent event) {
+    insert(event, SpliceItems.PALE_OAK_SIGN, Items.CHERRY_HANGING_SIGN);
   }
 
   private static void paleOakBuildingBlocks(BuildCreativeModeTabContentsEvent event) {

@@ -114,14 +114,10 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
         this.simpleBlockItem(fenceGate);
       }
 
-      final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
-      if (pressurePlate != null) {
-        this.simpleBlockItem(pressurePlate);
-      }
-
-      final Block wall = family.get(BlockFamily.Variant.WALL);
-      if (wall != null) {
-        this.wallInventory(SpliceUtils.getName(wall), texture);
+      final Block sign = family.get(BlockFamily.Variant.SIGN);
+      final Block wallSign = family.get(BlockFamily.Variant.WALL_SIGN);
+      if (sign != null && wallSign != null) {
+        this.basicItem(SpliceItems.PALE_OAK_SIGN.get());
       }
 
       final Block slab = family.get(BlockFamily.Variant.SLAB);
@@ -132,6 +128,16 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
       final Block stairs = family.get(BlockFamily.Variant.STAIRS);
       if (stairs != null) {
         this.simpleBlockItem(stairs);
+      }
+
+      final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
+      if (pressurePlate != null) {
+        this.simpleBlockItem(pressurePlate);
+      }
+
+      final Block wall = family.get(BlockFamily.Variant.WALL);
+      if (wall != null) {
+        this.wallInventory(SpliceUtils.getName(wall), texture);
       }
     }
   }

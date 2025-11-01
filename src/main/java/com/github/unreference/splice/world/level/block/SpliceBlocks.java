@@ -228,6 +228,22 @@ public final class SpliceBlocks {
           props -> new PressurePlateBlock(SpliceBlockSetType.PALE_OAK, props),
           getPaleOakProperties().mapColor(MapColor.QUARTZ).forceSolidOn());
 
+  public static final DeferredBlock<SpliceStandingSignBlock> PALE_OAK_SIGN =
+      BLOCKS.registerBlock(
+          "pale_oak_sign",
+          props -> new SpliceStandingSignBlock(SpliceWoodType.PALE_OAK, props),
+          getPaleOakProperties().mapColor(MapColor.QUARTZ).forceSolidOn().strength(1.0f));
+
+  public static final DeferredBlock<SpliceWallSignBlock> PALE_OAK_WALL_SIGN =
+      BLOCKS.registerBlock(
+          "pale_oak_wall_sign",
+          props -> new SpliceWallSignBlock(SpliceWoodType.PALE_OAK, props),
+          getPaleOakProperties()
+              .lootFrom(PALE_OAK_SIGN)
+              .mapColor(MapColor.QUARTZ)
+              .forceSolidOn()
+              .strength(1.0f));
+
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =

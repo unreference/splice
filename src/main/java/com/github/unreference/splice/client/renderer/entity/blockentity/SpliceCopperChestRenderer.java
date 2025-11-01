@@ -12,11 +12,10 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import org.jetbrains.annotations.NotNull;
 
 public final class SpliceCopperChestRenderer extends ChestRenderer<SpliceCopperChestBlockEntity> {
-
-  private static final ChestMaterials MAT_COPPER = getMaterials("copper");
-  private static final ChestMaterials MAT_COPPER_EXPOSED = getMaterials("copper_exposed");
-  private static final ChestMaterials MAT_COPPER_WEATHERED = getMaterials("copper_weathered");
-  private static final ChestMaterials MAT_COPPER_OXIDIZED = getMaterials("copper_oxidized");
+  private static final ChestMaterials COPPER = getMaterials("copper");
+  private static final ChestMaterials COPPER_EXPOSED = getMaterials("copper_exposed");
+  private static final ChestMaterials COPPER_WEATHERED = getMaterials("copper_weathered");
+  private static final ChestMaterials COPPER_OXIDIZED = getMaterials("copper_oxidized");
 
   public SpliceCopperChestRenderer(BlockEntityRendererProvider.Context context) {
     super(context);
@@ -36,14 +35,14 @@ public final class SpliceCopperChestRenderer extends ChestRenderer<SpliceCopperC
   private static ChestMaterials getMaterialsFor(SpliceCopperChestBlockEntity be) {
     if (be.getBlockState().getBlock() instanceof SpliceCopperChestBlock chest) {
       return switch (chest.getState()) {
-        case UNAFFECTED -> MAT_COPPER;
-        case EXPOSED -> MAT_COPPER_EXPOSED;
-        case WEATHERED -> MAT_COPPER_WEATHERED;
-        case OXIDIZED -> MAT_COPPER_OXIDIZED;
+        case UNAFFECTED -> COPPER;
+        case EXPOSED -> COPPER_EXPOSED;
+        case WEATHERED -> COPPER_WEATHERED;
+        case OXIDIZED -> COPPER_OXIDIZED;
       };
     }
 
-    return MAT_COPPER;
+    return COPPER;
   }
 
   @Override

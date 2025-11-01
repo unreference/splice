@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.FireBlock;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 
 @Mod(SpliceMain.MOD_ID)
@@ -32,10 +33,11 @@ public final class SpliceMain {
     SpliceParticleTypes.register(modEventBus);
     SpliceSoundEvents.register(modEventBus);
 
-    modEventBus.addListener(SpliceCreativeModeTabs::onBuildCreativeModeTabContents);
-    modEventBus.addListener(SpliceClientMain::onEntityRenderersEvent);
-    modEventBus.addListener(SpliceClientMain::onRegisterClientExtensions);
-    modEventBus.addListener(SpliceClientMain::onRegisterParticleProviders);
+    if (FMLEnvironment.dist.isClient()) {
+      modEventBus.register(SpliceClientMain.class);
+      modEventBus.register(SpliceCreativeModeTabs.class);
+    }
+
     modEventBus.addListener(this::onFmlCommonSetup);
   }
 
@@ -45,7 +47,9 @@ public final class SpliceMain {
     fireBlock.setFlammable(SpliceBlocks.PALE_OAK_PLANKS.get(), 5, 20);
     // Slab
     // Fence gate
+    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_FENCE_GATE.get(), 5, 20);
     // Fence
+    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_FENCE.get(), 5, 20);
     // Stairs
     // Log
     fireBlock.setFlammable(SpliceBlocks.PALE_OAK_LOG.get(), 5, 5);

@@ -105,14 +105,10 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         this.fenceGateBlock((FenceGateBlock) fenceGate, texture);
       }
 
-      final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
-      if (pressurePlate != null) {
-        this.pressurePlateBlock((PressurePlateBlock) pressurePlate, texture);
-      }
-
-      final Block wall = family.get(BlockFamily.Variant.WALL);
-      if (wall != null) {
-        this.wallBlock(((WallBlock) wall), texture);
+      final Block sign = family.get(BlockFamily.Variant.SIGN);
+      final Block wallSign = family.get(BlockFamily.Variant.WALL_SIGN);
+      if (sign != null && wallSign != null) {
+        this.signBlock((StandingSignBlock) sign, ((WallSignBlock) wallSign), texture);
       }
 
       final Block slab = family.get(BlockFamily.Variant.SLAB);
@@ -123,6 +119,16 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
       final Block stairs = family.get(BlockFamily.Variant.STAIRS);
       if (stairs != null) {
         this.stairsBlock(((StairBlock) stairs), texture);
+      }
+
+      final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
+      if (pressurePlate != null) {
+        this.pressurePlateBlock((PressurePlateBlock) pressurePlate, texture);
+      }
+
+      final Block wall = family.get(BlockFamily.Variant.WALL);
+      if (wall != null) {
+        this.wallBlock(((WallBlock) wall), texture);
       }
     }
   }
