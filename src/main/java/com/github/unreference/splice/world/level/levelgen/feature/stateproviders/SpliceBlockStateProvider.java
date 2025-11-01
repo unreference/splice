@@ -100,6 +100,11 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         this.fenceBlock((FenceBlock) fence, texture);
       }
 
+      final Block fenceGate = family.get(BlockFamily.Variant.FENCE_GATE);
+      if (fenceGate != null) {
+        this.fenceGateBlock((FenceGateBlock) fenceGate, texture);
+      }
+
       final Block wall = family.get(BlockFamily.Variant.WALL);
       if (wall != null) {
         this.wallBlock(((WallBlock) wall), texture);

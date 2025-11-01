@@ -5,6 +5,7 @@ import com.github.unreference.splice.core.particles.SpliceParticleTypes;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import com.github.unreference.splice.sounds.SpliceSoundType;
 import com.github.unreference.splice.world.level.block.state.properties.SpliceBlockSetType;
+import com.github.unreference.splice.world.level.block.state.properties.SpliceWoodType;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
@@ -214,6 +215,12 @@ public final class SpliceBlocks {
           props ->
               new FenceBlock(
                   getPaleOakProperties().mapColor(MapColor.QUARTZ).strength(2.0f, 3.0f)));
+
+  public static final DeferredBlock<FenceGateBlock> PALE_OAK_FENCE_GATE =
+      BLOCKS.registerBlock(
+          "pale_oak_fence_gate",
+          props -> new FenceGateBlock(SpliceWoodType.PALE_OAK, props),
+          getPaleOakProperties().mapColor(MapColor.QUARTZ).forceSolidOn().strength(2.0f, 3.0f));
 
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
