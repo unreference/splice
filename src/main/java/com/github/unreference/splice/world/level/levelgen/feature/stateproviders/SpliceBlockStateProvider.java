@@ -87,7 +87,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
       final Block button = family.get(BlockFamily.Variant.BUTTON);
       if (button != null) {
-        this.button((ButtonBlock) button, texture);
+        this.buttonBlock(((ButtonBlock) button), texture);
       }
 
       final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
@@ -95,25 +95,26 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         this.simpleBlock(chiseled);
       }
 
+      final Block fence = family.get(BlockFamily.Variant.FENCE);
+      if (fence != null) {
+        this.fenceBlock((FenceBlock) fence, texture);
+      }
+
       final Block wall = family.get(BlockFamily.Variant.WALL);
       if (wall != null) {
-        this.wall((WallBlock) wall, texture);
+        this.wallBlock(((WallBlock) wall), texture);
       }
 
       final Block slab = family.get(BlockFamily.Variant.SLAB);
       if (slab != null) {
-        this.slab((SlabBlock) slab, texture);
+        this.slabBlock(((SlabBlock) slab), texture, texture);
       }
 
       final Block stairs = family.get(BlockFamily.Variant.STAIRS);
       if (stairs != null) {
-        this.stairs((StairBlock) stairs, texture);
+        this.stairsBlock(((StairBlock) stairs), texture);
       }
     }
-  }
-
-  private void button(ButtonBlock button, ResourceLocation texture) {
-    this.buttonBlock(button, texture);
   }
 
   private void copperBlocks() {
@@ -125,18 +126,6 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
             this.simpleBlock(
                 block.get(), this.models().getExistingFile(SpliceUtils.getLocation(block.get()))));
     this.torch(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
-  }
-
-  private void wall(WallBlock block, ResourceLocation texture) {
-    this.wallBlock(block, texture);
-  }
-
-  private void stairs(StairBlock block, ResourceLocation texture) {
-    this.stairsBlock(block, texture);
-  }
-
-  private void slab(SlabBlock block, ResourceLocation texture) {
-    this.slabBlock(block, texture, texture);
   }
 
   private void multiface(DeferredBlock<Block> block) {

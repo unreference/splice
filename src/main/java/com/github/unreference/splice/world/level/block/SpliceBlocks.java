@@ -206,7 +206,14 @@ public final class SpliceBlocks {
       BLOCKS.registerBlock(
           "pale_oak_button",
           props -> new ButtonBlock(SpliceBlockSetType.PALE_OAK, 30, props),
-          getButtonProperties());
+          getPaleOakProperties());
+
+  public static final DeferredBlock<FenceBlock> PALE_OAK_FENCE =
+      BLOCKS.registerBlock(
+          "pale_oak_fence",
+          props ->
+              new FenceBlock(
+                  getPaleOakProperties().mapColor(MapColor.QUARTZ).strength(2.0f, 3.0f)));
 
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
@@ -285,7 +292,7 @@ public final class SpliceBlocks {
         .sound(SoundType.WOOD);
   }
 
-  private static BlockBehaviour.Properties getButtonProperties() {
+  private static BlockBehaviour.Properties getPaleOakProperties() {
     return BlockBehaviour.Properties.of()
         .noCollission()
         .strength(0.5f)

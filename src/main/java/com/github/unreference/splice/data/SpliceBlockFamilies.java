@@ -21,6 +21,7 @@ public final class SpliceBlockFamilies {
   private static final BlockFamily PALE_OAK_PLANKS =
       buildFamily(SpliceBlocks.PALE_OAK_PLANKS.get())
           .button(SpliceBlocks.PALE_OAK_BUTTON.get())
+          .fence(SpliceBlocks.PALE_OAK_FENCE.get())
           .getFamily();
 
   private static BlockFamily.Builder buildFamily(Block block) {

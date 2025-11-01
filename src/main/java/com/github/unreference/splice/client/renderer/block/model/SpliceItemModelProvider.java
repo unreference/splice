@@ -92,7 +92,6 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
       }
 
       final ResourceLocation texture = SpliceUtils.getLocation(base);
-
       this.simpleBlockItem(base);
 
       final Block button = family.get(BlockFamily.Variant.BUTTON);
@@ -103,6 +102,11 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
       final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
       if (chiseled != null) {
         this.simpleBlockItem(chiseled);
+      }
+
+      final Block fence = family.get(BlockFamily.Variant.FENCE);
+      if (fence != null) {
+        this.fenceInventory(SpliceUtils.getName(fence), texture);
       }
 
       final Block wall = family.get(BlockFamily.Variant.WALL);

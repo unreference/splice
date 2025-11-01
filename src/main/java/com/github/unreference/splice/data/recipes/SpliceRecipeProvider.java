@@ -3,7 +3,6 @@ package com.github.unreference.splice.data.recipes;
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.data.SpliceBlockFamilies;
 import com.github.unreference.splice.tags.SpliceItemTags;
-import com.github.unreference.splice.util.SpliceUtils;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.concurrent.CompletableFuture;
@@ -291,13 +290,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
       }
 
       final Block base = family.getBaseBlock();
-      if (base == null) {
-        return;
-      }
-
-      SpliceMain.LOGGER.info(SpliceUtils.getName(base) + " OK!");
       final Block button = family.get(BlockFamily.Variant.BUTTON);
-      SpliceMain.LOGGER.info(SpliceUtils.getName(button) + " OK!");
 
       if (button != null) {
         button(recipeOutput, button, base);
