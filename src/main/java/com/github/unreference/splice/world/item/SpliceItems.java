@@ -208,6 +208,9 @@ public final class SpliceItems {
   public static final DeferredItem<BlockItem> PALE_OAK_FENCE_GATE =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_FENCE_GATE);
 
+  public static final DeferredItem<BlockItem> PALE_OAK_PRESSURE_PLATE =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_PRESSURE_PLATE);
+
   public static final DeferredItem<Item> MUSIC_DISC_TEARS =
       ITEMS.registerSimpleItem(
           "music_disc_tears",

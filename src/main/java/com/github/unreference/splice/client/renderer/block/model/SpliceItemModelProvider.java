@@ -114,6 +114,11 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
         this.simpleBlockItem(fenceGate);
       }
 
+      final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
+      if (pressurePlate != null) {
+        this.simpleBlockItem(pressurePlate);
+      }
+
       final Block wall = family.get(BlockFamily.Variant.WALL);
       if (wall != null) {
         this.wallInventory(SpliceUtils.getName(wall), texture);

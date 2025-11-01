@@ -65,11 +65,12 @@ public final class SpliceCreativeModeTabs {
         event,
         SpliceItems.PALE_OAK_FENCE,
         SpliceItems.PALE_OAK_PLANKS); // TODO: Insert after pale oak slab
+    insert(event, SpliceItems.PALE_OAK_FENCE_GATE, SpliceItems.PALE_OAK_FENCE);
     insert(
         event,
-        SpliceItems.PALE_OAK_BUTTON,
-        SpliceItems.PALE_OAK_FENCE); // TODO: Insert after pale oak pressure plate
-    insert(event, SpliceItems.PALE_OAK_FENCE_GATE, SpliceItems.PALE_OAK_FENCE);
+        SpliceItems.PALE_OAK_PRESSURE_PLATE,
+        SpliceItems.PALE_OAK_FENCE_GATE); // TODO: insert after pale oak trapdoor
+    insert(event, SpliceItems.PALE_OAK_BUTTON, SpliceItems.PALE_OAK_PRESSURE_PLATE);
   }
 
   private static void copperIngredients(BuildCreativeModeTabContentsEvent event) {

@@ -222,6 +222,12 @@ public final class SpliceBlocks {
           props -> new FenceGateBlock(SpliceWoodType.PALE_OAK, props),
           getPaleOakProperties().mapColor(MapColor.QUARTZ).forceSolidOn().strength(2.0f, 3.0f));
 
+  public static final DeferredBlock<PressurePlateBlock> PALE_OAK_PRESSURE_PLATE =
+      BLOCKS.registerBlock(
+          "pale_oak_pressure_plate",
+          props -> new PressurePlateBlock(SpliceBlockSetType.PALE_OAK, props),
+          getPaleOakProperties().mapColor(MapColor.QUARTZ).forceSolidOn());
+
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =

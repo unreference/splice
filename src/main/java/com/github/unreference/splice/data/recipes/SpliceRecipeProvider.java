@@ -318,6 +318,11 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         fenceGate(recipeOutput, fenceGate, base);
       }
 
+      final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
+      if (pressurePlate != null) {
+        pressurePlate(recipeOutput, pressurePlate, base);
+      }
+
       final Block stairs = family.get(BlockFamily.Variant.STAIRS);
       if (stairs != null) {
         stairs(recipeOutput, stairs, base);
