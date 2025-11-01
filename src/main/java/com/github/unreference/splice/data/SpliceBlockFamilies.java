@@ -10,12 +10,17 @@ import net.minecraft.world.level.block.Block;
 public final class SpliceBlockFamilies {
   private static final Map<Block, BlockFamily> BLOCK_FAMILIES = new HashMap<>();
 
-  public static final BlockFamily RESIN_BRICKS =
+  private static final BlockFamily RESIN_BRICKS =
       buildFamily(SpliceBlocks.RESIN_BRICKS.get())
           .chiseled(SpliceBlocks.CHISELED_RESIN_BRICKS.get())
           .slab(SpliceBlocks.RESIN_BRICK_SLAB.get())
           .stairs(SpliceBlocks.RESIN_BRICK_STAIRS.get())
           .wall(SpliceBlocks.RESIN_BRICK_WALL.get())
+          .getFamily();
+
+  private static final BlockFamily PALE_OAK_PLANKS =
+      buildFamily(SpliceBlocks.PALE_OAK_PLANKS.get())
+          .button(SpliceBlocks.PALE_OAK_BUTTON.get())
           .getFamily();
 
   private static BlockFamily.Builder buildFamily(Block block) {

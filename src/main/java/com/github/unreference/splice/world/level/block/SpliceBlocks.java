@@ -4,6 +4,7 @@ import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.core.particles.SpliceParticleTypes;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import com.github.unreference.splice.sounds.SpliceSoundType;
+import com.github.unreference.splice.world.level.block.state.properties.SpliceBlockSetType;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
@@ -201,6 +202,12 @@ public final class SpliceBlocks {
   public static final DeferredBlock<Block> PALE_OAK_PLANKS =
       BLOCKS.registerSimpleBlock("pale_oak_planks", getLogProperties().mapColor(MapColor.QUARTZ));
 
+  public static final DeferredBlock<ButtonBlock> PALE_OAK_BUTTON =
+      BLOCKS.registerBlock(
+          "pale_oak_button",
+          props -> new ButtonBlock(SpliceBlockSetType.PALE_OAK, 30, props),
+          getButtonProperties());
+
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =
@@ -276,6 +283,13 @@ public final class SpliceBlocks {
         .instrument(NoteBlockInstrument.BASS)
         .strength(2.0f)
         .sound(SoundType.WOOD);
+  }
+
+  private static BlockBehaviour.Properties getButtonProperties() {
+    return BlockBehaviour.Properties.of()
+        .noCollission()
+        .strength(0.5f)
+        .pushReaction(PushReaction.DESTROY);
   }
 
   public static List<SpliceWeatheringCopperBlocks> getCopperFamily() {

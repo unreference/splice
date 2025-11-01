@@ -61,6 +61,10 @@ public final class SpliceCreativeModeTabs {
     insert(event, SpliceItems.STRIPPED_OAK_LOG, SpliceItems.PALE_OAK_LOG);
     insert(event, SpliceItems.STRIPPED_PALE_OAK_WOOD, SpliceItems.STRIPPED_OAK_LOG);
     insert(event, SpliceItems.PALE_OAK_PLANKS, SpliceItems.STRIPPED_PALE_OAK_WOOD);
+    insert(
+        event,
+        SpliceItems.PALE_OAK_BUTTON,
+        SpliceItems.PALE_OAK_PLANKS); // TODO: Insert after pale oak pressure plate
   }
 
   private static void copperIngredients(BuildCreativeModeTabContentsEvent event) {

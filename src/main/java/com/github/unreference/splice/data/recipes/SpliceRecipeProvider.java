@@ -3,6 +3,7 @@ package com.github.unreference.splice.data.recipes;
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.data.SpliceBlockFamilies;
 import com.github.unreference.splice.tags.SpliceItemTags;
+import com.github.unreference.splice.util.SpliceUtils;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import java.util.concurrent.CompletableFuture;
@@ -290,23 +291,49 @@ public final class SpliceRecipeProvider extends RecipeProvider {
       }
 
       final Block base = family.getBaseBlock();
+      if (base == null) {
+        return;
+      }
+
+      SpliceMain.LOGGER.info(SpliceUtils.getName(base) + " OK!");
+      final Block button = family.get(BlockFamily.Variant.BUTTON);
+      SpliceMain.LOGGER.info(SpliceUtils.getName(button) + " OK!");
+
+      if (button != null) {
+        button(recipeOutput, button, base);
+      }
 
       final Block slab = family.get(BlockFamily.Variant.SLAB);
-      slab(recipeOutput, slab, base);
-      stonecutter(recipeOutput, slab, base, 2);
+      if (slab != null) {
+        slab(recipeOutput, slab, base);
+        stonecutter(recipeOutput, slab, base, 2);
 
-      final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
-      chiseled(recipeOutput, chiseled, slab);
-      stonecutter(recipeOutput, chiseled, base);
+        final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
+        if (chiseled != null) {
+          chiseled(recipeOutput, chiseled, slab);
+          stonecutter(recipeOutput, chiseled, base);
+        }
+      }
 
       final Block stairs = family.get(BlockFamily.Variant.STAIRS);
-      stairs(recipeOutput, stairs, base);
-      stonecutter(recipeOutput, stairs, base);
+      if (stairs != null) {
+        stairs(recipeOutput, stairs, base);
+        stonecutter(recipeOutput, stairs, base);
+      }
 
       final Block wall = family.get(BlockFamily.Variant.WALL);
-      wall(recipeOutput, wall, base);
-      stonecutter(recipeOutput, wall, base);
+      if (wall != null) {
+        wall(recipeOutput, wall, base);
+        stonecutter(recipeOutput, wall, base);
+      }
     }
+  }
+
+  private static void button(
+      @NotNull RecipeOutput recipeOutput, ItemLike button, ItemLike material) {
+    buttonBuilder(button, Ingredient.of(material))
+        .unlockedBy(getHasName(material), has(material))
+        .save(recipeOutput);
   }
 
   private static void chiseled(RecipeOutput recipeOutput, ItemLike chiseled, ItemLike material) {
@@ -451,9 +478,9 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
     blockFamily(recipeOutput);
     bannerPatterns(recipeOutput);
-    copper(recipeOutput);
     saddle(recipeOutput);
     lead(recipeOutput);
+    copper(recipeOutput);
     resin(recipeOutput);
     paleOak(recipeOutput);
   }

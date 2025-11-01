@@ -61,7 +61,6 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.simpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get());
     this.simpleBlockItem(SpliceBlocks.PALE_OAK_WOOD.get());
     this.simpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get());
-    this.simpleBlockItem(SpliceBlocks.PALE_OAK_PLANKS.get());
   }
 
   private void resinItems() {
@@ -87,22 +86,39 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
         continue;
       }
 
-      final Block baseBlock = family.getBaseBlock();
-      final ResourceLocation baseTexture = SpliceUtils.getLocation(baseBlock);
+      final Block base = family.getBaseBlock();
+      if (base == null) {
+        return;
+      }
 
-      this.simpleBlockItem(baseBlock);
+      final ResourceLocation texture = SpliceUtils.getLocation(base);
+
+      this.simpleBlockItem(base);
+
+      final Block button = family.get(BlockFamily.Variant.BUTTON);
+      if (button != null) {
+        this.buttonInventory(SpliceUtils.getName(button), texture);
+      }
 
       final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
-      this.simpleBlockItem(chiseled);
+      if (chiseled != null) {
+        this.simpleBlockItem(chiseled);
+      }
 
       final Block wall = family.get(BlockFamily.Variant.WALL);
-      this.wallInventory(SpliceUtils.getName(wall), baseTexture);
+      if (wall != null) {
+        this.wallInventory(SpliceUtils.getName(wall), texture);
+      }
 
       final Block slab = family.get(BlockFamily.Variant.SLAB);
-      this.simpleBlockItem(slab);
+      if (slab != null) {
+        this.simpleBlockItem(slab);
+      }
 
       final Block stairs = family.get(BlockFamily.Variant.STAIRS);
-      this.simpleBlockItem(stairs);
+      if (stairs != null) {
+        this.simpleBlockItem(stairs);
+      }
     }
   }
 

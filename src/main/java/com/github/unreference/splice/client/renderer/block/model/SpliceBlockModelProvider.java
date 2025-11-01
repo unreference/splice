@@ -27,11 +27,6 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     this.blockFamily();
     this.copper();
     this.resin();
-    this.paleOak();
-  }
-
-  private void paleOak() {
-    this.cube(SpliceBlocks.PALE_OAK_PLANKS);
   }
 
   private void resin() {
@@ -52,11 +47,17 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
         continue;
       }
 
-      final Block baseBlock = family.getBaseBlock();
-      this.cube(baseBlock);
+      final Block base = family.getBaseBlock();
+      if (base == null) {
+        return;
+      }
+
+      this.cube(base);
 
       final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
-      this.cube(chiseled);
+      if (chiseled != null) {
+        this.cube(chiseled);
+      }
     }
   }
 

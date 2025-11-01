@@ -34,7 +34,6 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.wood(
         SpliceBlocks.STRIPPED_PALE_OAK_WOOD,
         SpliceUtils.getLocation(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get()));
-    this.block(SpliceBlocks.PALE_OAK_PLANKS);
   }
 
   private void log(DeferredBlock<RotatedPillarBlock> block) {
@@ -78,23 +77,43 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         continue;
       }
 
-      final Block baseBlock = family.getBaseBlock();
-      final ResourceLocation baseTexture = SpliceUtils.getLocation(baseBlock);
+      final Block base = family.getBaseBlock();
+      if (base == null) {
+        return;
+      }
 
-      this.simpleBlock(baseBlock);
+      this.simpleBlock(base);
+      final ResourceLocation texture = SpliceUtils.getLocation(base);
+
+      final Block button = family.get(BlockFamily.Variant.BUTTON);
+      if (button != null) {
+        this.button((ButtonBlock) button, texture);
+      }
 
       final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
-      this.simpleBlock(chiseled);
+      if (chiseled != null) {
+        this.simpleBlock(chiseled);
+      }
 
       final Block wall = family.get(BlockFamily.Variant.WALL);
-      this.wall((WallBlock) wall, baseTexture);
+      if (wall != null) {
+        this.wall((WallBlock) wall, texture);
+      }
 
       final Block slab = family.get(BlockFamily.Variant.SLAB);
-      this.slab((SlabBlock) slab, baseTexture);
+      if (slab != null) {
+        this.slab((SlabBlock) slab, texture);
+      }
 
       final Block stairs = family.get(BlockFamily.Variant.STAIRS);
-      this.stairs((StairBlock) stairs, baseTexture);
+      if (stairs != null) {
+        this.stairs((StairBlock) stairs, texture);
+      }
     }
+  }
+
+  private void button(ButtonBlock button, ResourceLocation texture) {
+    this.buttonBlock(button, texture);
   }
 
   private void copperBlocks() {
