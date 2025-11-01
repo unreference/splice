@@ -308,6 +308,16 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         }
       }
 
+      final Block fence = family.get(BlockFamily.Variant.FENCE);
+      if (fence != null) {
+        fence(recipeOutput, fence, base);
+      }
+
+      final Block fenceGate = family.get(BlockFamily.Variant.FENCE_GATE);
+      if (fenceGate != null) {
+        fenceGate(recipeOutput, fenceGate, base);
+      }
+
       final Block stairs = family.get(BlockFamily.Variant.STAIRS);
       if (stairs != null) {
         stairs(recipeOutput, stairs, base);
@@ -320,6 +330,19 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         stonecutter(recipeOutput, wall, base);
       }
     }
+  }
+
+  private static void fence(@NotNull RecipeOutput recipeOutput, Block fence, Block material) {
+    fenceBuilder(fence, Ingredient.of(material))
+        .unlockedBy(getHasName(material), has(material))
+        .save(recipeOutput);
+  }
+
+  private static void fenceGate(
+      @NotNull RecipeOutput recipeOutput, Block fenceGate, Block material) {
+    fenceGateBuilder(fenceGate, Ingredient.of(material))
+        .unlockedBy(getHasName(material), has(material))
+        .save(recipeOutput);
   }
 
   private static void button(
