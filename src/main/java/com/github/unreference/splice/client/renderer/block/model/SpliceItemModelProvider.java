@@ -117,7 +117,7 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
       final Block sign = family.get(BlockFamily.Variant.SIGN);
       final Block wallSign = family.get(BlockFamily.Variant.WALL_SIGN);
       if (sign != null && wallSign != null) {
-        this.basicItem(SpliceItems.PALE_OAK_SIGN.get());
+        this.basicItem(sign.asItem());
       }
 
       final Block slab = family.get(BlockFamily.Variant.SLAB);

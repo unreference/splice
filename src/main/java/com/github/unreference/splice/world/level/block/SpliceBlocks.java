@@ -180,6 +180,13 @@ public final class SpliceBlocks {
           props ->
               new StairBlock(RESIN_BRICKS.get().defaultBlockState(), getResinBricksProperties()));
 
+  public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
+      BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
+  public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =
+      BLOCKS.registerBlock("resin_brick_slab", props -> new SlabBlock(getResinBricksProperties()));
+  public static DeferredBlock<WallBlock> RESIN_BRICK_WALL =
+      BLOCKS.registerBlock("resin_brick_wall", props -> new WallBlock(getResinBricksProperties()));
+
   public static final DeferredBlock<RotatedPillarBlock> STRIPPED_PALE_OAK_LOG =
       BLOCKS.registerBlock(
           "stripped_pale_oak_log",
@@ -244,12 +251,11 @@ public final class SpliceBlocks {
               .forceSolidOn()
               .strength(1.0f));
 
-  public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
-      BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
-  public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =
-      BLOCKS.registerBlock("resin_brick_slab", props -> new SlabBlock(getResinBricksProperties()));
-  public static DeferredBlock<WallBlock> RESIN_BRICK_WALL =
-      BLOCKS.registerBlock("resin_brick_wall", props -> new WallBlock(getResinBricksProperties()));
+  public static final DeferredBlock<SlabBlock> PALE_OAK_SLAB =
+      BLOCKS.registerBlock(
+          "pale_oak_slab",
+          props ->
+              new SlabBlock(getPaleOakProperties().mapColor(MapColor.QUARTZ).strength(2.0f, 3.0f)));
 
   // ---- Helpers
 

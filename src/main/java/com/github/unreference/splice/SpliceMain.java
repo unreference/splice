@@ -46,6 +46,7 @@ public final class SpliceMain {
     // Planks
     fireBlock.setFlammable(SpliceBlocks.PALE_OAK_PLANKS.get(), 5, 20);
     // Slab
+    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_PLANKS.get(), 5, 20);
     // Fence gate
     fireBlock.setFlammable(SpliceBlocks.PALE_OAK_FENCE_GATE.get(), 5, 20);
     // Fence

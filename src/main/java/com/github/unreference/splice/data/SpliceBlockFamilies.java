@@ -25,6 +25,7 @@ public final class SpliceBlockFamilies {
           .fenceGate(SpliceBlocks.PALE_OAK_FENCE_GATE.get())
           .pressurePlate(SpliceBlocks.PALE_OAK_PRESSURE_PLATE.get())
           .sign(SpliceBlocks.PALE_OAK_SIGN.get(), SpliceBlocks.PALE_OAK_WALL_SIGN.get())
+          .slab(SpliceBlocks.PALE_OAK_SLAB.get())
           .getFamily();
 
   private static BlockFamily.Builder buildFamily(Block block) {
