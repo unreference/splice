@@ -66,10 +66,8 @@ public final class SpliceCreativeModeTabs {
     insert(event, SpliceItems.STRIPPED_OAK_LOG, SpliceItems.PALE_OAK_LOG);
     insert(event, SpliceItems.STRIPPED_PALE_OAK_WOOD, SpliceItems.STRIPPED_OAK_LOG);
     insert(event, SpliceItems.PALE_OAK_PLANKS, SpliceItems.STRIPPED_PALE_OAK_WOOD);
-    insert(
-        event,
-        SpliceItems.PALE_OAK_SLAB,
-        SpliceItems.PALE_OAK_PLANKS); // TODO: insert after pale oak stairs
+    insert(event, SpliceItems.PALE_OAK_STAIRS, SpliceItems.PALE_OAK_PLANKS);
+    insert(event, SpliceItems.PALE_OAK_SLAB, SpliceItems.PALE_OAK_STAIRS);
     insert(event, SpliceItems.PALE_OAK_FENCE, SpliceItems.PALE_OAK_SLAB);
     insert(event, SpliceItems.PALE_OAK_FENCE_GATE, SpliceItems.PALE_OAK_FENCE);
     insert(
