@@ -225,6 +225,9 @@ public final class SpliceItems {
   public static final DeferredItem<BlockItem> PALE_OAK_STAIRS =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_STAIRS);
 
+  public static final DeferredItem<BlockItem> PALE_OAK_DOOR =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_DOOR);
+
   public static final DeferredItem<Item> MUSIC_DISC_TEARS =
       ITEMS.registerSimpleItem(
           "music_disc_tears",

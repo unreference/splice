@@ -330,6 +330,11 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         stonecutter(recipeOutput, stairs, base);
       }
 
+      final Block door = family.get(BlockFamily.Variant.DOOR);
+      if (door != null) {
+        door(recipeOutput, door, base);
+      }
+
       final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
       if (pressurePlate != null) {
         pressurePlate(recipeOutput, pressurePlate, base);
@@ -341,6 +346,12 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         stonecutter(recipeOutput, wall, base);
       }
     }
+  }
+
+  private static void door(@NotNull RecipeOutput recipeOutput, Block door, Block material) {
+    doorBuilder(door, Ingredient.of(material))
+        .unlockedBy(getHasName(material), has(material))
+        .save(recipeOutput);
   }
 
   private static void sign(@NotNull RecipeOutput recipeOutput, Block sign, Block material) {

@@ -121,6 +121,14 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         this.stairsBlock(((StairBlock) stairs), texture);
       }
 
+      final Block door = family.get(BlockFamily.Variant.DOOR);
+      if (door != null) {
+        this.doorBlock(
+            (DoorBlock) door,
+            ResourceLocation.parse(SpliceUtils.getLocation(door) + "_bottom"),
+            ResourceLocation.parse(SpliceUtils.getLocation(door) + "_top"));
+      }
+
       final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
       if (pressurePlate != null) {
         this.pressurePlateBlock((PressurePlateBlock) pressurePlate, texture);

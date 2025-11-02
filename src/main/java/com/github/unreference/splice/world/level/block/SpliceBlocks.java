@@ -205,11 +205,14 @@ public final class SpliceBlocks {
   public static final DeferredBlock<ButtonBlock> PALE_OAK_BUTTON =
       BLOCKS.registerBlock(
           "pale_oak_button",
-          props -> new ButtonBlock(SpliceBlockSetType.PALE_OAK, 30, props),
-          getPaleOakPlanksProperties()
-              .noCollission()
-              .strength(0.5f)
-              .pushReaction(PushReaction.DESTROY));
+          props ->
+              new ButtonBlock(
+                  SpliceBlockSetType.PALE_OAK,
+                  30,
+                  getPaleOakPlanksProperties()
+                      .noCollission()
+                      .strength(0.5f)
+                      .pushReaction(PushReaction.DESTROY)));
   public static final DeferredBlock<FenceBlock> PALE_OAK_FENCE =
       BLOCKS.registerBlock(
           "pale_oak_fence",
@@ -217,17 +220,21 @@ public final class SpliceBlocks {
   public static final DeferredBlock<FenceGateBlock> PALE_OAK_FENCE_GATE =
       BLOCKS.registerBlock(
           "pale_oak_fence_gate",
-          props -> new FenceGateBlock(SpliceWoodType.PALE_OAK, props),
-          getPaleOakPlanksProperties().forceSolidOn().strength(2.0f, 3.0f));
+          props ->
+              new FenceGateBlock(
+                  SpliceWoodType.PALE_OAK,
+                  getPaleOakPlanksProperties().forceSolidOn().strength(2.0f, 3.0f)));
   public static final DeferredBlock<PressurePlateBlock> PALE_OAK_PRESSURE_PLATE =
       BLOCKS.registerBlock(
           "pale_oak_pressure_plate",
-          props -> new PressurePlateBlock(SpliceBlockSetType.PALE_OAK, props),
-          getPaleOakPlanksProperties()
-              .forceSolidOn()
-              .noCollission()
-              .strength(0.5f)
-              .pushReaction(PushReaction.DESTROY));
+          props ->
+              new PressurePlateBlock(
+                  SpliceBlockSetType.PALE_OAK,
+                  getPaleOakPlanksProperties()
+                      .forceSolidOn()
+                      .noCollission()
+                      .strength(0.5f)
+                      .pushReaction(PushReaction.DESTROY)));
   public static final DeferredBlock<SpliceStandingSignBlock> PALE_OAK_SIGN =
       BLOCKS.registerBlock(
           "pale_oak_sign",
@@ -246,6 +253,16 @@ public final class SpliceBlocks {
       BLOCKS.registerBlock(
           "pale_oak_slab",
           props -> new SlabBlock(getPaleOakPlanksProperties().strength(2.0f, 3.0f)));
+  public static final DeferredBlock<DoorBlock> PALE_OAK_DOOR =
+      BLOCKS.registerBlock(
+          "pale_oak_door",
+          props ->
+              new DoorBlock(
+                  SpliceBlockSetType.PALE_OAK,
+                  getPaleOakPlanksProperties()
+                      .strength(3.0f)
+                      .noOcclusion()
+                      .pushReaction(PushReaction.DESTROY)));
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =

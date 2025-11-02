@@ -130,6 +130,11 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
         this.simpleBlockItem(stairs);
       }
 
+      final Block door = family.get(BlockFamily.Variant.DOOR);
+      if (door != null) {
+        this.basicItem(door.asItem());
+      }
+
       final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
       if (pressurePlate != null) {
         this.simpleBlockItem(pressurePlate);

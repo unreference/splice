@@ -70,6 +70,7 @@ public final class SpliceCreativeModeTabs {
     insert(event, SpliceItems.PALE_OAK_SLAB, SpliceItems.PALE_OAK_STAIRS);
     insert(event, SpliceItems.PALE_OAK_FENCE, SpliceItems.PALE_OAK_SLAB);
     insert(event, SpliceItems.PALE_OAK_FENCE_GATE, SpliceItems.PALE_OAK_FENCE);
+    insert(event, SpliceItems.PALE_OAK_DOOR, SpliceItems.PALE_OAK_FENCE_GATE);
     insert(
         event,
         SpliceItems.PALE_OAK_PRESSURE_PLATE,
