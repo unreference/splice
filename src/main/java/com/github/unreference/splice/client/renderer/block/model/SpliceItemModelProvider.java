@@ -104,6 +104,11 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
         this.simpleBlockItem(chiseled);
       }
 
+      final Block door = family.get(BlockFamily.Variant.DOOR);
+      if (door != null) {
+        this.basicItem(door.asItem());
+      }
+
       final Block fence = family.get(BlockFamily.Variant.FENCE);
       if (fence != null) {
         this.fenceInventory(SpliceUtils.getName(fence), texture);
@@ -130,14 +135,15 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
         this.simpleBlockItem(stairs);
       }
 
-      final Block door = family.get(BlockFamily.Variant.DOOR);
-      if (door != null) {
-        this.basicItem(door.asItem());
-      }
-
       final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
       if (pressurePlate != null) {
         this.simpleBlockItem(pressurePlate);
+      }
+
+      final Block trapdoor = family.get(BlockFamily.Variant.TRAPDOOR);
+      if (trapdoor != null) {
+        this.trapdoorOrientableBottom(
+            SpliceUtils.getName(trapdoor), SpliceUtils.getLocation(trapdoor));
       }
 
       final Block wall = family.get(BlockFamily.Variant.WALL);
@@ -195,8 +201,20 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
   }
 
+  private void inventoryItem(Block block) {
+    final String name = SpliceUtils.getName(block);
+    final ResourceLocation texture = this.modLoc("item/" + SpliceUtils.stripWaxedPrefix(name));
+    this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
+  }
+
   private void inventoryBlockItem(DeferredBlock<? extends Block> block) {
     final String name = SpliceUtils.getName(block.get());
+    final ResourceLocation texture = this.modLoc("block/" + SpliceUtils.stripWaxedPrefix(name));
+    this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
+  }
+
+  private void inventoryBlockItem(Block block) {
+    final String name = SpliceUtils.getName(block);
     final ResourceLocation texture = this.modLoc("block/" + SpliceUtils.stripWaxedPrefix(name));
     this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
   }

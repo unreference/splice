@@ -95,6 +95,14 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         this.simpleBlock(chiseled);
       }
 
+      final Block door = family.get(BlockFamily.Variant.DOOR);
+      if (door != null) {
+        this.doorBlock(
+            (DoorBlock) door,
+            ResourceLocation.parse(SpliceUtils.getLocation(door) + "_bottom"),
+            ResourceLocation.parse(SpliceUtils.getLocation(door) + "_top"));
+      }
+
       final Block fence = family.get(BlockFamily.Variant.FENCE);
       if (fence != null) {
         this.fenceBlock((FenceBlock) fence, texture);
@@ -121,17 +129,14 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         this.stairsBlock(((StairBlock) stairs), texture);
       }
 
-      final Block door = family.get(BlockFamily.Variant.DOOR);
-      if (door != null) {
-        this.doorBlock(
-            (DoorBlock) door,
-            ResourceLocation.parse(SpliceUtils.getLocation(door) + "_bottom"),
-            ResourceLocation.parse(SpliceUtils.getLocation(door) + "_top"));
-      }
-
       final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
       if (pressurePlate != null) {
         this.pressurePlateBlock((PressurePlateBlock) pressurePlate, texture);
+      }
+
+      final Block trapdoor = family.get(BlockFamily.Variant.TRAPDOOR);
+      if (trapdoor != null) {
+        this.trapdoorBlock(((TrapDoorBlock) trapdoor), SpliceUtils.getLocation(trapdoor), true);
       }
 
       final Block wall = family.get(BlockFamily.Variant.WALL);

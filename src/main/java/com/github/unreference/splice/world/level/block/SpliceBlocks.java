@@ -263,6 +263,17 @@ public final class SpliceBlocks {
                       .strength(3.0f)
                       .noOcclusion()
                       .pushReaction(PushReaction.DESTROY)));
+  public static final DeferredBlock<TrapDoorBlock> PALE_OAK_TRAPDOOR =
+      BLOCKS.registerBlock(
+          "pale_oak_trapdoor",
+          props ->
+              new TrapDoorBlock(
+                  SpliceBlockSetType.PALE_OAK,
+                  getPaleOakPlanksProperties()
+                      .strength(3.0f)
+                      .noOcclusion()
+                      .isValidSpawn(Blocks::never)
+                      .pushReaction(PushReaction.DESTROY)));
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =

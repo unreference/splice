@@ -24,10 +24,11 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
   protected void addTags(HolderLookup.@NotNull Provider provider) {
     this.tag(BlockTags.PLANKS).add(SpliceBlocks.PALE_OAK_PLANKS.get());
     this.tag(BlockTags.WOODEN_BUTTONS).add(SpliceBlocks.PALE_OAK_BUTTON.get());
-    this.tag(BlockTags.WOODEN_DOORS);
-    this.tag(BlockTags.WOODEN_STAIRS);
+    this.tag(BlockTags.WOODEN_DOORS).add(SpliceBlocks.PALE_OAK_DOOR.get());
+    this.tag(BlockTags.WOODEN_STAIRS).add(SpliceBlocks.PALE_OAK_STAIRS.get());
     this.tag(BlockTags.WOODEN_SLABS).add(SpliceBlocks.PALE_OAK_SLAB.get());
     this.tag(BlockTags.WOODEN_FENCES).add(SpliceBlocks.PALE_OAK_FENCE.get());
+    this.tag(BlockTags.WOODEN_TRAPDOORS).add(SpliceBlocks.PALE_OAK_TRAPDOOR.get());
     this.tag(BlockTags.FENCE_GATES).add(SpliceBlocks.PALE_OAK_FENCE_GATE.get());
     this.tag(BlockTags.SAPLINGS);
     this.tag(SpliceBlockTags.PALE_OAK_LOGS)

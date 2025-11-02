@@ -296,6 +296,11 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         button(recipeOutput, button, base);
       }
 
+      final Block door = family.get(BlockFamily.Variant.DOOR);
+      if (door != null) {
+        door(recipeOutput, door, base);
+      }
+
       final Block fence = family.get(BlockFamily.Variant.FENCE);
       if (fence != null) {
         fence(recipeOutput, fence, base);
@@ -330,14 +335,14 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         stonecutter(recipeOutput, stairs, base);
       }
 
-      final Block door = family.get(BlockFamily.Variant.DOOR);
-      if (door != null) {
-        door(recipeOutput, door, base);
-      }
-
       final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
       if (pressurePlate != null) {
         pressurePlate(recipeOutput, pressurePlate, base);
+      }
+
+      final Block trapdoor = family.get(BlockFamily.Variant.TRAPDOOR);
+      if (trapdoor != null) {
+        trapdoor(recipeOutput, trapdoor, base);
       }
 
       final Block wall = family.get(BlockFamily.Variant.WALL);
@@ -346,6 +351,12 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         stonecutter(recipeOutput, wall, base);
       }
     }
+  }
+
+  private static void trapdoor(@NotNull RecipeOutput recipeOutput, Block trapdoor, Block material) {
+    trapdoorBuilder(trapdoor, Ingredient.of(material))
+        .unlockedBy(getHasName(material), has(material))
+        .save(recipeOutput);
   }
 
   private static void door(@NotNull RecipeOutput recipeOutput, Block door, Block material) {

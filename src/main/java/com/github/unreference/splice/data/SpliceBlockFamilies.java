@@ -28,6 +28,7 @@ public final class SpliceBlockFamilies {
           .slab(SpliceBlocks.PALE_OAK_SLAB.get())
           .stairs(SpliceBlocks.PALE_OAK_STAIRS.get())
           .door(SpliceBlocks.PALE_OAK_DOOR.get())
+          .trapdoor(SpliceBlocks.PALE_OAK_TRAPDOOR.get())
           .getFamily();
 
   private static BlockFamily.Builder buildFamily(Block block) {
