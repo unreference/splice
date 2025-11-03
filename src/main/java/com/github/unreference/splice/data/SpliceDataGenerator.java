@@ -8,10 +8,7 @@ import com.github.unreference.splice.data.loot.packs.SpliceLootTableProvider;
 import com.github.unreference.splice.data.recipes.SpliceRecipeProvider;
 import com.github.unreference.splice.data.registries.SpliceRegistries;
 import com.github.unreference.splice.data.sounds.SpliceSoundDefinitionProvider;
-import com.github.unreference.splice.data.tags.SpliceBannerPatternTagsProvider;
-import com.github.unreference.splice.data.tags.SpliceBlockTagsProvider;
-import com.github.unreference.splice.data.tags.SpliceItemTagsProvider;
-import com.github.unreference.splice.data.tags.SplicePaintingVariantTagsProvider;
+import com.github.unreference.splice.data.tags.*;
 import com.github.unreference.splice.world.level.levelgen.feature.stateproviders.SpliceBlockStateProvider;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
@@ -67,6 +64,7 @@ public final class SpliceDataGenerator {
     // Data maps provider
     generator.addProvider(true, new SpliceDataMapsProvider(output, lookup));
     // Biome tags provider
+    generator.addProvider(true, new SpliceBiomeTagsProvider(output, lookup, helper));
     // Banner pattern tags provider
     generator.addProvider(true, new SpliceBannerPatternTagsProvider(output, lookup, helper));
     // Structure tags provider

@@ -1,4 +1,5 @@
 {
+  "biome.splice.pale_garden": "Pale Garden",
   "block.minecraft.chain": "Iron Chain",
   "block.splice.chiseled_resin_bricks": "Chiseled Resin Bricks",
   "block.splice.copper_bars": "Copper Bars",
@@ -22,6 +23,7 @@
   "block.splice.pale_oak_log": "Pale Oak Log",
   "block.splice.pale_oak_planks": "Pale Oak Planks",
   "block.splice.pale_oak_pressure_plate": "Pale Oak Pressure Plate",
+  "block.splice.pale_oak_sapling": "Pale Oak Sapling",
   "block.splice.pale_oak_sign": "Pale Oak Sign",
   "block.splice.pale_oak_slab": "Pale Oak Slab",
   "block.splice.pale_oak_stairs": "Pale Oak Stairs",

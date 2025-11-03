@@ -1,6 +1,6 @@
 package com.github.unreference.splice.world.item;
 
-import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.data.registries.SpliceRegistries;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
@@ -8,7 +8,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.JukeboxSong;
 
@@ -17,9 +16,8 @@ public final class SpliceJukeboxSongs {
   public static final ResourceKey<JukeboxSong> LAVA_CHICKEN = create("lava_chicken");
   public static final ResourceKey<JukeboxSong> COFFEE_MACHINE = create("coffee_machine");
 
-  private static ResourceKey<JukeboxSong> create(String key) {
-    return ResourceKey.create(
-        Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, key));
+  private static ResourceKey<JukeboxSong> create(String name) {
+    return SpliceRegistries.createKey(Registries.JUKEBOX_SONG, name);
   }
 
   private static void register(

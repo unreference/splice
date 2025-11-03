@@ -23,7 +23,9 @@ public final class SpliceBlockEntityType {
 
   public static void register(IEventBus bus) {
     BLOCK_ENTITY_TYPES.register(bus);
-  }  public static final Supplier<BlockEntityType<SpliceCopperChestBlockEntity>> COPPER_CHEST =
+  }
+
+  public static final Supplier<BlockEntityType<SpliceCopperChestBlockEntity>> COPPER_CHEST =
       BLOCK_ENTITY_TYPES.register(
           "copper_chest",
           () ->
@@ -48,6 +50,4 @@ public final class SpliceBlockEntityType {
                       SpliceBlocks.PALE_OAK_SIGN.get(),
                       SpliceBlocks.PALE_OAK_WALL_SIGN.get())
                   .build(null));
-
-
 }

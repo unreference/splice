@@ -18,6 +18,7 @@ public final class SpliceCreativeModeTabs {
     // if (event.getTabKey().equals(CreativeModeTabs.COLORED_BLOCKS)) {}
 
     if (event.getTabKey().equals(CreativeModeTabs.NATURAL_BLOCKS)) {
+      paleOakNaturalBlocks(event);
       resinNaturalBlocks(event);
     }
 
@@ -54,6 +55,10 @@ public final class SpliceCreativeModeTabs {
     // if (event.getTabKey().equals(CreativeModeTabs.OP_BLOCKS)) {}
 
     // if (event.getTabKey().equals(CreativeModeTabs.INVENTORY)) {}
+  }
+
+  private static void paleOakNaturalBlocks(BuildCreativeModeTabContentsEvent event) {
+    insert(event, SpliceItems.PALE_OAK_SAPLING, Items.CHERRY_SAPLING);
   }
 
   private static void paleOakFunctionalBlocks(BuildCreativeModeTabContentsEvent event) {

@@ -27,6 +27,13 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     this.blockFamily();
     this.copper();
     this.resin();
+    this.paleOak();
+  }
+
+  private void paleOak() {
+    final Block sapling = SpliceBlocks.PALE_OAK_SAPLING.get();
+    this.cross(SpliceUtils.getName(sapling), SpliceUtils.getLocation(sapling))
+        .renderType("minecraft:cutout");
   }
 
   private void resin() {
@@ -107,19 +114,19 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
   private void copy(DeferredBlock<Block> from, DeferredBlock<Block> to) {
     final String fromName = SpliceUtils.getName(from.get());
     final String toName = SpliceUtils.getName(to.get());
-    this.withExistingParent(toName, modLoc("block/" + fromName));
+    this.withExistingParent(toName, this.modLoc("block/" + fromName));
   }
 
   private void chest(DeferredBlock<Block> block, Block particle) {
     final String name = SpliceUtils.getName(block.get());
-    this.withExistingParent(name, mcLoc("block/chest"))
+    this.withExistingParent(name, this.mcLoc("block/chest"))
         .texture("particle", SpliceUtils.getLocation(particle));
   }
 
   private void torch(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
     final String standingName = SpliceUtils.getName(standing.get());
     final String wallName = SpliceUtils.getName(wall.get());
-    final ResourceLocation texture = modLoc("block/" + standingName);
+    final ResourceLocation texture = this.modLoc("block/" + standingName);
 
     this.torch(standingName, texture).renderType("minecraft:cutout");
     this.torchWall(wallName, texture).renderType("minecraft:cutout");
@@ -135,13 +142,13 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     final Block id = block.get();
     final String name = SpliceUtils.getName(id);
     final String textureName = stripWaxedPrefix(name);
-    final ResourceLocation texture = modLoc("block/" + textureName);
+    final ResourceLocation texture = this.modLoc("block/" + textureName);
 
-    this.withExistingParent(name, mcLoc("block/template_lantern"))
+    this.withExistingParent(name, this.mcLoc("block/template_lantern"))
         .texture("lantern", texture)
         .renderType("minecraft:cutout");
 
-    this.withExistingParent(name + "_hanging", mcLoc("block/template_hanging_lantern"))
+    this.withExistingParent(name + "_hanging", this.mcLoc("block/template_hanging_lantern"))
         .texture("lantern", texture)
         .renderType("minecraft:cutout");
   }
@@ -157,8 +164,8 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     final String name = SpliceUtils.getName(id);
     final String texture = stripWaxedPrefix(name);
 
-    this.withExistingParent(name, mcLoc("block/chain"))
-        .texture("all", modLoc("block/" + texture))
+    this.withExistingParent(name, this.mcLoc("block/chain"))
+        .texture("all", this.modLoc("block/" + texture))
         .renderType("minecraft:cutout");
   }
 }

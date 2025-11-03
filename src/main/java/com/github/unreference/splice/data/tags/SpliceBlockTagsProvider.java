@@ -31,7 +31,7 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
     this.tag(BlockTags.WOODEN_FENCES).add(SpliceBlocks.PALE_OAK_FENCE.get());
     this.tag(BlockTags.WOODEN_TRAPDOORS).add(SpliceBlocks.PALE_OAK_TRAPDOOR.get());
     this.tag(BlockTags.FENCE_GATES).add(SpliceBlocks.PALE_OAK_FENCE_GATE.get());
-    this.tag(BlockTags.SAPLINGS);
+    this.tag(BlockTags.SAPLINGS).add(SpliceBlocks.PALE_OAK_SAPLING.get());
 
     this.tag(SpliceBlockTags.PALE_OAK_LOGS)
         .add(

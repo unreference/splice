@@ -1,11 +1,10 @@
 package com.github.unreference.splice.world.entity.decoration;
 
-import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.data.registries.SpliceRegistries;
 import java.awt.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.decoration.PaintingVariant;
 
 public final class SplicePaintingVariants {
@@ -19,9 +18,8 @@ public final class SplicePaintingVariants {
     context.register(key, new PaintingVariant(width, height, key.location()));
   }
 
-  private static ResourceKey<PaintingVariant> create(String key) {
-    return ResourceKey.create(
-        Registries.PAINTING_VARIANT, ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, key));
+  private static ResourceKey<PaintingVariant> create(String name) {
+    return SpliceRegistries.createKey(Registries.PAINTING_VARIANT, name);
   }
 
   public static void bootstrap(BootstrapContext<PaintingVariant> context) {

@@ -4,6 +4,7 @@ import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.core.particles.SpliceParticleTypes;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import com.github.unreference.splice.sounds.SpliceSoundType;
+import com.github.unreference.splice.world.level.block.grower.SpliceTreeGrower;
 import com.github.unreference.splice.world.level.block.state.properties.SpliceBlockSetType;
 import com.github.unreference.splice.world.level.block.state.properties.SpliceWoodType;
 import com.google.common.collect.ImmutableBiMap;
@@ -284,6 +285,21 @@ public final class SpliceBlocks {
                       .noOcclusion()
                       .isValidSpawn(Blocks::never)
                       .pushReaction(PushReaction.DESTROY)));
+
+  public static final DeferredBlock<SaplingBlock> PALE_OAK_SAPLING =
+      BLOCKS.register(
+          "pale_oak_sapling",
+          () ->
+              new SaplingBlock(
+                  SpliceTreeGrower.PALE_OAK,
+                  BlockBehaviour.Properties.of()
+                      .mapColor(MapColor.METAL)
+                      .noCollission()
+                      .randomTicks()
+                      .instabreak()
+                      .sound(SoundType.GRASS)
+                      .pushReaction(PushReaction.DESTROY)));
+
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =
