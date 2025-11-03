@@ -32,6 +32,10 @@ public final class SpliceBlockTypes {
   private static final Supplier<MapCodec<SpliceResinClumpBlock>> RESIN =
       CODEC.register("resin", () -> SpliceResinClumpBlock.CODEC);
 
+  private static final Supplier<MapCodec<SpliceUntintedParticleLeavesBlock>>
+      UNTINTED_PARTICLE_LEAVES =
+          CODEC.register("untinted_particle_leaves", () -> SpliceUntintedParticleLeavesBlock.CODEC);
+
   public static void register(IEventBus bus) {
     CODEC.register(bus);
   }

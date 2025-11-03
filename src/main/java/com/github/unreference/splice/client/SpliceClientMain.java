@@ -1,5 +1,6 @@
 package com.github.unreference.splice.client;
 
+import com.github.unreference.splice.client.particle.SpliceFallingLeavesParticle;
 import com.github.unreference.splice.client.renderer.entity.SpliceItemRenderer;
 import com.github.unreference.splice.client.renderer.entity.blockentity.SpliceCopperChestRenderer;
 import com.github.unreference.splice.core.particles.SpliceParticleTypes;
@@ -37,6 +38,9 @@ public final class SpliceClientMain {
   public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
     event.registerSpriteSet(
         SpliceParticleTypes.COPPER_FIRE_FLAME.get(), FlameParticle.Provider::new);
+    event.registerSpriteSet(
+        SpliceParticleTypes.PALE_OAK_LEAVES.get(),
+        SpliceFallingLeavesParticle.PaleOakProvider::new);
   }
 
   @SubscribeEvent

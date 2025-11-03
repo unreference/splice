@@ -58,6 +58,7 @@ public final class SpliceCreativeModeTabs {
   }
 
   private static void paleOakNaturalBlocks(BuildCreativeModeTabContentsEvent event) {
+    insert(event, SpliceItems.PALE_OAK_LEAVES, Items.CHERRY_LEAVES);
     insert(event, SpliceItems.PALE_OAK_SAPLING, Items.CHERRY_SAPLING);
   }
 

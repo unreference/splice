@@ -55,6 +55,11 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
     this.dropSelf(SpliceBlocks.PALE_OAK_TRAPDOOR.get());
     this.dropSelf(SpliceBlocks.PALE_OAK_HANGING_SIGN.get());
     this.dropSelf(SpliceBlocks.PALE_OAK_SAPLING.get());
+    this.add(
+        SpliceBlocks.PALE_OAK_LEAVES.get(),
+        block ->
+            this.createLeavesDrops(
+                block, SpliceBlocks.PALE_OAK_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
   }
 
   @Override

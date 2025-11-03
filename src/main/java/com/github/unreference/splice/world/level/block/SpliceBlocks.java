@@ -78,14 +78,14 @@ public final class SpliceBlocks {
       BLOCKS.register(
           "copper_torch",
           () ->
-              new SpliceDeferredTorchBlock(
+              new SpliceTorchBlock(
                   SpliceParticleTypes.COPPER_FIRE_FLAME, getCopperTorchProperties()));
 
   public static final DeferredBlock<Block> COPPER_WALL_TORCH =
       BLOCKS.register(
           "copper_wall_torch",
           () ->
-              new SpliceDeferredWallTorchBlock(
+              new SpliceWallTorchBlock(
                   SpliceParticleTypes.COPPER_FIRE_FLAME,
                   getCopperTorchProperties().lootFrom(COPPER_TORCH)));
 
@@ -283,7 +283,7 @@ public final class SpliceBlocks {
                   getPaleOakPlanksProperties()
                       .strength(3.0f)
                       .noOcclusion()
-                      .isValidSpawn(Blocks::never)
+                      .isValidSpawn((state, block, pos, entity) -> false)
                       .pushReaction(PushReaction.DESTROY)));
 
   public static final DeferredBlock<SaplingBlock> PALE_OAK_SAPLING =
@@ -299,6 +299,25 @@ public final class SpliceBlocks {
                       .instabreak()
                       .sound(SoundType.GRASS)
                       .pushReaction(PushReaction.DESTROY)));
+
+  public static final DeferredBlock<SpliceUntintedParticleLeavesBlock> PALE_OAK_LEAVES =
+      BLOCKS.register(
+          "pale_oak_leaves",
+          () ->
+              new SpliceUntintedParticleLeavesBlock(
+                  0.02f,
+                  SpliceParticleTypes.PALE_OAK_LEAVES,
+                  BlockBehaviour.Properties.of()
+                      .mapColor(MapColor.METAL)
+                      .strength(0.2f)
+                      .randomTicks()
+                      .sound(SoundType.GRASS)
+                      .noOcclusion()
+                      .isValidSpawn(Blocks::ocelotOrParrot)
+                      .isSuffocating((state, block, pos) -> false)
+                      .isViewBlocking((state, block, pos) -> false)
+                      .pushReaction(PushReaction.DESTROY)
+                      .isRedstoneConductor((state, block, pos) -> false)));
 
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());

@@ -1,5 +1,6 @@
 package com.github.unreference.splice.data.worldgen.biome;
 
+import com.github.unreference.splice.data.worldgen.placement.SpliceVegetationPlacements;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.biome.OverworldBiomes;
@@ -23,7 +24,7 @@ public final class SpliceOverworldBiomes extends OverworldBiomes {
 
     generationSettings.addFeature(
         GenerationStep.Decoration.VEGETAL_DECORATION,
-        VegetationPlacements.TREES_WINDSWEPT_FOREST); // TODO: Replace with pale garden vegetation
+        SpliceVegetationPlacements.PALE_GARDEN_VEGETATION);
 
     generationSettings.addFeature(
         GenerationStep.Decoration.VEGETAL_DECORATION,

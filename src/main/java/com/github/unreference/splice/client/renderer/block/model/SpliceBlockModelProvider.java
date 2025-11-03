@@ -34,6 +34,9 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     final Block sapling = SpliceBlocks.PALE_OAK_SAPLING.get();
     this.cross(SpliceUtils.getName(sapling), SpliceUtils.getLocation(sapling))
         .renderType("minecraft:cutout");
+
+    final Block leaves = SpliceBlocks.PALE_OAK_LEAVES.get();
+    this.leaves(SpliceUtils.getName(leaves), SpliceUtils.getLocation(leaves));
   }
 
   private void resin() {

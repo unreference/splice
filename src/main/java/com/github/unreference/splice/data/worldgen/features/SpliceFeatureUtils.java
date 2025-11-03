@@ -9,6 +9,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 public final class SpliceFeatureUtils {
   public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
     SpliceTreeFeatures.bootstrap(context);
+    SpliceVegetationFeatures.bootstrap(context);
   }
 
   public static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(

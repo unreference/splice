@@ -15,6 +15,9 @@ public final class SpliceParticleTypes {
   public static final DeferredHolder<ParticleType<?>, SimpleParticleType> COPPER_FIRE_FLAME =
       PARTICLE_TYPES.register("copper_fire_flame", () -> new SimpleParticleType(false));
 
+  public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PALE_OAK_LEAVES =
+      PARTICLE_TYPES.register("pale_oak_leaves", () -> new SimpleParticleType(false));
+
   public static void register(IEventBus bus) {
     PARTICLE_TYPES.register(bus);
   }

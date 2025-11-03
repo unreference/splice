@@ -7,7 +7,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
@@ -35,7 +34,7 @@ public final class SpliceTreeFeatures {
     return new TreeConfiguration.TreeConfigurationBuilder(
             BlockStateProvider.simple(SpliceBlocks.PALE_OAK_LOG.get()),
             new DarkOakTrunkPlacer(6, 2, 1),
-            BlockStateProvider.simple(Blocks.DARK_OAK_LEAVES),
+            BlockStateProvider.simple(SpliceBlocks.PALE_OAK_LEAVES.get()),
             new DarkOakFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0)),
             new ThreeLayersFeatureSize(1, 1, 0, 1, 2, OptionalInt.empty()))
         .ignoreVines();
@@ -45,9 +44,10 @@ public final class SpliceTreeFeatures {
     return new TreeConfiguration.TreeConfigurationBuilder(
             BlockStateProvider.simple(SpliceBlocks.PALE_OAK_LOG.get()),
             new DarkOakTrunkPlacer(6, 2, 1),
-            BlockStateProvider.simple(Blocks.DARK_OAK_LEAVES),
+            BlockStateProvider.simple(SpliceBlocks.PALE_OAK_LEAVES.get()),
             new DarkOakFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0)),
             new ThreeLayersFeatureSize(1, 1, 0, 1, 2, OptionalInt.empty()))
+        // TODO: Add pale moss decorator
         .ignoreVines();
   }
 }

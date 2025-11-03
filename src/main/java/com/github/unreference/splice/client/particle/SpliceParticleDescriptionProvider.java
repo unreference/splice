@@ -17,5 +17,11 @@ public final class SpliceParticleDescriptionProvider extends ParticleDescription
     this.sprite(
         SpliceParticleTypes.COPPER_FIRE_FLAME.get(),
         ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, "copper_fire_flame"));
+
+    this.spriteSet(
+        SpliceParticleTypes.PALE_OAK_LEAVES.get(),
+        ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, "pale_oak"),
+        12,
+        false);
   }
 }

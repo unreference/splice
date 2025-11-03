@@ -10,10 +10,10 @@ import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public final class SpliceDeferredTorchBlock extends TorchBlock {
+public final class SpliceTorchBlock extends TorchBlock {
   private final Supplier<? extends SimpleParticleType> flameParticle;
 
-  public SpliceDeferredTorchBlock(
+  public SpliceTorchBlock(
       Supplier<? extends SimpleParticleType> flameParticle, Properties properties) {
     super(ParticleTypes.FLAME, properties);
     this.flameParticle = flameParticle;

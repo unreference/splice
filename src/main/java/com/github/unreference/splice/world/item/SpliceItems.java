@@ -199,6 +199,9 @@ public final class SpliceItems {
   public static final DeferredItem<BlockItem> PALE_OAK_SAPLING =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_SAPLING);
 
+  public static final DeferredItem<BlockItem> PALE_OAK_LEAVES =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_LEAVES);
+
   public static final DeferredItem<BlockItem> PALE_OAK_PLANKS =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_PLANKS);
 

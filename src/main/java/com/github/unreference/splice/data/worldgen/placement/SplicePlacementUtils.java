@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 public final class SplicePlacementUtils {
   public static void bootstrap(BootstrapContext<PlacedFeature> context) {
     SpliceTreePlacements.bootstrap(context);
+    SpliceVegetationPlacements.bootstrap(context);
   }
 
   public static void register(

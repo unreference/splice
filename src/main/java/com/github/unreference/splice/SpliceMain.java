@@ -62,5 +62,6 @@ public final class SpliceMain {
     // Wood
     fireBlock.setFlammable(SpliceBlocks.PALE_OAK_WOOD.get(), 5, 5);
     // Leaves
+    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_LEAVES.get(), 30, 60);
   }
 }
