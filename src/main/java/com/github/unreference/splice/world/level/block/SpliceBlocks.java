@@ -300,6 +300,15 @@ public final class SpliceBlocks {
                       .sound(SoundType.GRASS)
                       .pushReaction(PushReaction.DESTROY)));
 
+  public static final DeferredBlock<FlowerPotBlock> POTTED_PALE_OAK_SAPLING =
+      BLOCKS.register(
+          "potted_pale_oak_sapling",
+          () ->
+              new FlowerPotBlock(
+                  () -> (FlowerPotBlock) Blocks.FLOWER_POT,
+                  PALE_OAK_SAPLING,
+                  getFlowerPotProperties()));
+
   public static final DeferredBlock<SpliceUntintedParticleLeavesBlock> PALE_OAK_LEAVES =
       BLOCKS.register(
           "pale_oak_leaves",
@@ -413,6 +422,13 @@ public final class SpliceBlocks {
 
   private static BlockBehaviour.Properties getPaleOakPlanksProperties() {
     return getLogProperties().mapColor(MapColor.QUARTZ).strength(2.0f, 3.0f);
+  }
+
+  private static BlockBehaviour.Properties getFlowerPotProperties() {
+    return BlockBehaviour.Properties.of()
+        .instabreak()
+        .noOcclusion()
+        .pushReaction(PushReaction.DESTROY);
   }
 
   public static void register(IEventBus bus) {

@@ -60,6 +60,7 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
         block ->
             this.createLeavesDrops(
                 block, SpliceBlocks.PALE_OAK_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
+    this.dropPottedContents(SpliceBlocks.POTTED_PALE_OAK_SAPLING.get());
   }
 
   @Override

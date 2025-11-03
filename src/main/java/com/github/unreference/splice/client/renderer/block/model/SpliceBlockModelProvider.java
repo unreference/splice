@@ -32,11 +32,19 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
   private void paleOak() {
     final Block sapling = SpliceBlocks.PALE_OAK_SAPLING.get();
-    this.cross(SpliceUtils.getName(sapling), SpliceUtils.getLocation(sapling))
-        .renderType("minecraft:cutout");
+    this.cross(SpliceUtils.getName(sapling), SpliceUtils.getLocation(sapling)).renderType("cutout");
 
     final Block leaves = SpliceBlocks.PALE_OAK_LEAVES.get();
     this.leaves(SpliceUtils.getName(leaves), SpliceUtils.getLocation(leaves));
+
+    final Block pottedSapling = SpliceBlocks.POTTED_PALE_OAK_SAPLING.get();
+    this.flowerPot(SpliceUtils.getName(pottedSapling), SpliceBlocks.PALE_OAK_SAPLING);
+  }
+
+  private void flowerPot(String name, DeferredBlock<?> plant) {
+    this.withExistingParent(name, this.mcLoc("block/flower_pot_cross"))
+        .texture("plant", SpliceUtils.getLocation(plant.get()))
+        .renderType("cutout");
   }
 
   private void resin() {
@@ -74,7 +82,7 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
   private void resinClump() {
     final ResourceLocation texture = this.modLoc("block/resin_clump");
     this.getBuilder("resin_clump")
-        .renderType("minecraft:cutout")
+        .renderType("cutout")
         .ao(false)
         .texture("particle", texture)
         .texture("texture", texture)
@@ -131,8 +139,8 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     final String wallName = SpliceUtils.getName(wall.get());
     final ResourceLocation texture = this.modLoc("block/" + standingName);
 
-    this.torch(standingName, texture).renderType("minecraft:cutout");
-    this.torchWall(wallName, texture).renderType("minecraft:cutout");
+    this.torch(standingName, texture).renderType("cutout");
+    this.torchWall(wallName, texture).renderType("cutout");
   }
 
   private void copperLantern(
@@ -149,11 +157,11 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
     this.withExistingParent(name, this.mcLoc("block/template_lantern"))
         .texture("lantern", texture)
-        .renderType("minecraft:cutout");
+        .renderType("cutout");
 
     this.withExistingParent(name + "_hanging", this.mcLoc("block/template_hanging_lantern"))
         .texture("lantern", texture)
-        .renderType("minecraft:cutout");
+        .renderType("cutout");
   }
 
   private void copperChain(
@@ -169,6 +177,6 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
     this.withExistingParent(name, this.mcLoc("block/chain"))
         .texture("all", this.modLoc("block/" + texture))
-        .renderType("minecraft:cutout");
+        .renderType("cutout");
   }
 }

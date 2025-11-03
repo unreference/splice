@@ -12,6 +12,7 @@ import com.github.unreference.splice.world.level.block.entity.SpliceBlockEntityT
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -42,26 +43,32 @@ public final class SpliceMain {
   }
 
   private void onFmlCommonSetup(FMLCommonSetupEvent event) {
-    final FireBlock fireBlock = (FireBlock) Blocks.FIRE;
-    // Planks
-    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_PLANKS.get(), 5, 20);
-    // Slab
-    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_PLANKS.get(), 5, 20);
-    // Fence gate
-    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_FENCE_GATE.get(), 5, 20);
-    // Fence
-    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_FENCE.get(), 5, 20);
-    // Stairs
-    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_STAIRS.get(), 5, 20);
-    // Log
-    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_LOG.get(), 5, 5);
-    // Stripped log
-    fireBlock.setFlammable(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get(), 5, 5);
-    // Stripped wood
-    fireBlock.setFlammable(SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get(), 5, 5);
-    // Wood
-    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_WOOD.get(), 5, 5);
-    // Leaves
-    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_LEAVES.get(), 30, 60);
+    event.enqueueWork(
+        () -> {
+          final FireBlock fireBlock = (FireBlock) Blocks.FIRE;
+          // Planks
+          fireBlock.setFlammable(SpliceBlocks.PALE_OAK_PLANKS.get(), 5, 20);
+          // Slab
+          fireBlock.setFlammable(SpliceBlocks.PALE_OAK_PLANKS.get(), 5, 20);
+          // Fence gate
+          fireBlock.setFlammable(SpliceBlocks.PALE_OAK_FENCE_GATE.get(), 5, 20);
+          // Fence
+          fireBlock.setFlammable(SpliceBlocks.PALE_OAK_FENCE.get(), 5, 20);
+          // Stairs
+          fireBlock.setFlammable(SpliceBlocks.PALE_OAK_STAIRS.get(), 5, 20);
+          // Log
+          fireBlock.setFlammable(SpliceBlocks.PALE_OAK_LOG.get(), 5, 5);
+          // Stripped log
+          fireBlock.setFlammable(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get(), 5, 5);
+          // Stripped wood
+          fireBlock.setFlammable(SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get(), 5, 5);
+          // Wood
+          fireBlock.setFlammable(SpliceBlocks.PALE_OAK_WOOD.get(), 5, 5);
+          // Leaves
+          fireBlock.setFlammable(SpliceBlocks.PALE_OAK_LEAVES.get(), 30, 60);
+
+          final FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
+          pot.addPlant(SpliceBlocks.PALE_OAK_SAPLING.getId(), SpliceBlocks.POTTED_PALE_OAK_SAPLING);
+        });
   }
 }
