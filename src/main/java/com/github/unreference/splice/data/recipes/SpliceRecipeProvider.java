@@ -527,6 +527,8 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     woodFromLogs(recipeOutput, SpliceBlocks.PALE_OAK_WOOD, SpliceBlocks.PALE_OAK_LOG);
     woodFromLogs(
         recipeOutput, SpliceBlocks.STRIPPED_PALE_OAK_WOOD, SpliceBlocks.STRIPPED_PALE_OAK_LOG);
+    hangingSign(
+        recipeOutput, SpliceBlocks.PALE_OAK_HANGING_SIGN.get(), SpliceBlocks.STRIPPED_PALE_OAK_LOG);
   }
 
   @Override
