@@ -58,6 +58,7 @@ public final class SpliceCreativeModeTabs {
 
   private static void paleOakFunctionalBlocks(BuildCreativeModeTabContentsEvent event) {
     insert(event, SpliceItems.PALE_OAK_SIGN, Items.CHERRY_HANGING_SIGN);
+    insert(event, SpliceItems.PALE_OAK_HANGING_SIGN, SpliceItems.PALE_OAK_SIGN);
   }
 
   private static void paleOakBuildingBlocks(BuildCreativeModeTabContentsEvent event) {

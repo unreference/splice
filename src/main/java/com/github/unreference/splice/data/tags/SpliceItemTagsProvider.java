@@ -39,6 +39,7 @@ public final class SpliceItemTagsProvider extends ItemTagsProvider {
     this.copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
     this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
     this.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
+    this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
     this.copy(BlockTags.STAIRS, ItemTags.STAIRS);
     this.copy(BlockTags.SLABS, ItemTags.SLABS);
     this.copy(BlockTags.WALLS, ItemTags.WALLS);

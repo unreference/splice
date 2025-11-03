@@ -53,6 +53,7 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
     this.dropSelf(SpliceBlocks.PALE_OAK_STAIRS.get());
     this.add(SpliceBlocks.PALE_OAK_DOOR.get(), this::createDoorTable);
     this.dropSelf(SpliceBlocks.PALE_OAK_TRAPDOOR.get());
+    this.dropSelf(SpliceBlocks.PALE_OAK_HANGING_SIGN.get());
   }
 
   @Override

@@ -171,37 +171,30 @@ public final class SpliceBlocks {
           "resin_brick_stairs",
           props ->
               new StairBlock(RESIN_BRICKS.get().defaultBlockState(), getResinBricksProperties()));
-
   public static final DeferredBlock<RotatedPillarBlock> STRIPPED_PALE_OAK_LOG =
       BLOCKS.registerBlock(
           "stripped_pale_oak_log", props -> new RotatedPillarBlock(getPaleOakPlanksProperties()));
-
   public static final DeferredBlock<RotatedPillarBlock> PALE_OAK_LOG =
       BLOCKS.register(
           "pale_oak_log",
           () -> new SpliceStrippableLogBlock(STRIPPED_PALE_OAK_LOG, getPaleOakPlanksProperties()));
-
   public static final DeferredBlock<RotatedPillarBlock> STRIPPED_PALE_OAK_WOOD =
       BLOCKS.registerBlock(
           "stripped_pale_oak_wood",
           RotatedPillarBlock::new,
           getLogProperties().mapColor(MapColor.STONE));
-
   public static final DeferredBlock<RotatedPillarBlock> PALE_OAK_WOOD =
       BLOCKS.register(
           "pale_oak_wood",
           () -> new SpliceStrippableLogBlock(STRIPPED_PALE_OAK_WOOD, getLogProperties()));
-
   public static final DeferredBlock<Block> PALE_OAK_PLANKS =
       BLOCKS.registerSimpleBlock("pale_oak_planks", getPaleOakPlanksProperties());
-
   public static final DeferredBlock<StairBlock> PALE_OAK_STAIRS =
       BLOCKS.registerBlock(
           "pale_oak_stairs",
           props ->
               new StairBlock(
                   PALE_OAK_PLANKS.get().defaultBlockState(), getPaleOakPlanksProperties()));
-
   public static final DeferredBlock<ButtonBlock> PALE_OAK_BUTTON =
       BLOCKS.registerBlock(
           "pale_oak_button",
@@ -213,17 +206,14 @@ public final class SpliceBlocks {
                       .noCollission()
                       .strength(0.5f)
                       .pushReaction(PushReaction.DESTROY)));
-
   public static final DeferredBlock<FenceBlock> PALE_OAK_FENCE =
       BLOCKS.registerBlock("pale_oak_fence", props -> new FenceBlock(getPaleOakPlanksProperties()));
-
   public static final DeferredBlock<FenceGateBlock> PALE_OAK_FENCE_GATE =
       BLOCKS.registerBlock(
           "pale_oak_fence_gate",
           props ->
               new FenceGateBlock(
                   SpliceWoodType.PALE_OAK, getPaleOakPlanksProperties().forceSolidOn()));
-
   public static final DeferredBlock<PressurePlateBlock> PALE_OAK_PRESSURE_PLATE =
       BLOCKS.registerBlock(
           "pale_oak_pressure_plate",
@@ -235,26 +225,44 @@ public final class SpliceBlocks {
                       .noCollission()
                       .strength(0.5f)
                       .pushReaction(PushReaction.DESTROY)));
-
   public static final DeferredBlock<SpliceStandingSignBlock> PALE_OAK_SIGN =
-      BLOCKS.registerBlock(
+      BLOCKS.register(
           "pale_oak_sign",
-          props -> new SpliceStandingSignBlock(SpliceWoodType.PALE_OAK, props),
-          getPaleOakPlanksProperties().forceSolidOn().noCollission().strength(1.0f));
-
+          () ->
+              new SpliceStandingSignBlock(
+                  SpliceWoodType.PALE_OAK,
+                  getPaleOakPlanksProperties().forceSolidOn().noCollission().strength(1.0f)));
   public static final DeferredBlock<SpliceWallSignBlock> PALE_OAK_WALL_SIGN =
-      BLOCKS.registerBlock(
+      BLOCKS.register(
           "pale_oak_wall_sign",
-          props -> new SpliceWallSignBlock(SpliceWoodType.PALE_OAK, props),
-          getPaleOakPlanksProperties()
-              .lootFrom(PALE_OAK_SIGN)
-              .forceSolidOn()
-              .noCollission()
-              .strength(1.0f));
-
+          () ->
+              new SpliceWallSignBlock(
+                  SpliceWoodType.PALE_OAK,
+                  getPaleOakPlanksProperties()
+                      .lootFrom(PALE_OAK_SIGN)
+                      .forceSolidOn()
+                      .noCollission()
+                      .strength(1.0f)));
+  public static final DeferredBlock<SpliceCeilingHangingSignBlock> PALE_OAK_HANGING_SIGN =
+      BLOCKS.register(
+          "pale_oak_hanging_sign",
+          () ->
+              new SpliceCeilingHangingSignBlock(
+                  SpliceWoodType.PALE_OAK,
+                  getPaleOakPlanksProperties().forceSolidOn().noOcclusion().strength(1.0f)));
+  public static final DeferredBlock<SpliceWallHangingSignBlock> PALE_OAK_WALL_HANGING_SIGN =
+      BLOCKS.register(
+          "pale_oak_wall_hanging_sign",
+          () ->
+              new SpliceWallHangingSignBlock(
+                  SpliceWoodType.PALE_OAK,
+                  getPaleOakPlanksProperties()
+                      .lootFrom(PALE_OAK_HANGING_SIGN)
+                      .forceSolidOn()
+                      .noOcclusion()
+                      .strength(1.0f)));
   public static final DeferredBlock<SlabBlock> PALE_OAK_SLAB =
       BLOCKS.registerBlock("pale_oak_slab", SlabBlock::new, getPaleOakPlanksProperties());
-
   public static final DeferredBlock<DoorBlock> PALE_OAK_DOOR =
       BLOCKS.register(
           "pale_oak_door",
@@ -265,7 +273,6 @@ public final class SpliceBlocks {
                       .strength(3.0f)
                       .noOcclusion()
                       .pushReaction(PushReaction.DESTROY)));
-
   public static final DeferredBlock<TrapDoorBlock> PALE_OAK_TRAPDOOR =
       BLOCKS.register(
           "pale_oak_trapdoor",
@@ -277,13 +284,10 @@ public final class SpliceBlocks {
                       .noOcclusion()
                       .isValidSpawn(Blocks::never)
                       .pushReaction(PushReaction.DESTROY)));
-
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
-
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =
       BLOCKS.registerBlock("resin_brick_slab", props -> new SlabBlock(getResinBricksProperties()));
-
   public static DeferredBlock<WallBlock> RESIN_BRICK_WALL =
       BLOCKS.registerBlock("resin_brick_wall", props -> new WallBlock(getResinBricksProperties()));
 

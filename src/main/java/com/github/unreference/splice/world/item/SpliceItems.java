@@ -219,6 +219,15 @@ public final class SpliceItems {
                   props, SpliceBlocks.PALE_OAK_SIGN.get(), SpliceBlocks.PALE_OAK_WALL_SIGN.get()),
           new Item.Properties().stacksTo(16));
 
+  public static final DeferredItem<HangingSignItem> PALE_OAK_HANGING_SIGN =
+      ITEMS.register(
+          "pale_oak_hanging_sign",
+          () ->
+              new HangingSignItem(
+                  SpliceBlocks.PALE_OAK_HANGING_SIGN.get(),
+                  SpliceBlocks.PALE_OAK_WALL_HANGING_SIGN.get(),
+                  new Item.Properties().stacksTo(16)));
+
   public static final DeferredItem<BlockItem> PALE_OAK_SLAB =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_SLAB);
 

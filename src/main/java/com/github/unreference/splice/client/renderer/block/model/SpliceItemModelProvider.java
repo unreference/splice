@@ -61,6 +61,7 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.simpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get());
     this.simpleBlockItem(SpliceBlocks.PALE_OAK_WOOD.get());
     this.simpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get());
+    this.basicItem(SpliceItems.PALE_OAK_HANGING_SIGN.get());
   }
 
   private void resinItems() {

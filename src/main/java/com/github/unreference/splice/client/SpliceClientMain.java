@@ -10,6 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
@@ -28,6 +29,8 @@ public final class SpliceClientMain {
     event.registerBlockEntityRenderer(
         SpliceBlockEntityType.COPPER_CHEST.get(), SpliceCopperChestRenderer::new);
     event.registerBlockEntityRenderer(SpliceBlockEntityType.SIGN.get(), SignRenderer::new);
+    event.registerBlockEntityRenderer(
+        SpliceBlockEntityType.HANGING_SIGN.get(), HangingSignRenderer::new);
   }
 
   @SubscribeEvent
