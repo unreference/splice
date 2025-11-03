@@ -26,16 +26,15 @@ public final class SpliceDataMapsProvider extends DataMapProvider {
     final Builder<Waxable, Block> waxable = builder(NeoForgeDataMaps.WAXABLES);
     final Builder<Oxidizable, Block> weathering = builder(NeoForgeDataMaps.OXIDIZABLES);
 
-    SpliceBlocks.getCopperFamily()
-        .forEach(
-            block -> {
-              block
-                  .waxedMapping()
-                  .forEach((from, to) -> waxable.add(from.getKey(), new Waxable(to.get()), false));
-              block
-                  .weatheringMapping()
-                  .forEach(
-                      (from, to) -> weathering.add(from.getKey(), new Oxidizable(to.get()), false));
-            });
+    SpliceBlocks.COPPER_FAMILY.forEach(
+        block -> {
+          block
+              .waxedMapping()
+              .forEach((from, to) -> waxable.add(from.getKey(), new Waxable(to.get()), false));
+          block
+              .weatheringMapping()
+              .forEach(
+                  (from, to) -> weathering.add(from.getKey(), new Oxidizable(to.get()), false));
+        });
   }
 }

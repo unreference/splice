@@ -57,7 +57,7 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
 
   @Override
   protected @NotNull Iterable<Block> getKnownBlocks() {
-    return SpliceBlocks.getBlocks().getEntries().stream().map(Holder::value)::iterator;
+    return SpliceBlocks.BLOCKS.getEntries().stream().map(Holder::value)::iterator;
   }
 
   private LootTable.Builder createMultifaceBlockDrops(Block block) {

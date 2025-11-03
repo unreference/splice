@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +41,6 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
     this.tag(BlockTags.LOGS_THAT_BURN).addTag(SpliceBlockTags.PALE_OAK_LOGS);
     this.tag(BlockTags.OVERWORLD_NATURAL_LOGS).add(SpliceBlocks.PALE_OAK_LOG.get());
     this.tag(BlockTags.WOODEN_PRESSURE_PLATES).add(SpliceBlocks.PALE_OAK_PRESSURE_PLATE.get());
-    this.tag(BlockTags.WOODEN_TRAPDOORS);
     this.tag(BlockTags.STANDING_SIGNS).add(SpliceBlocks.PALE_OAK_SIGN.get());
     this.tag(BlockTags.WALL_SIGNS).add(SpliceBlocks.PALE_OAK_WALL_SIGN.get());
     this.tag(BlockTags.CEILING_HANGING_SIGNS);
@@ -56,6 +56,12 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
     SpliceBlocks.COPPER_CHESTS.forEach(
         block -> this.tag(SpliceBlockTags.COPPER_CHESTS).add(block.get()));
 
+    this.tag(SpliceBlockTags.BARS).add(Blocks.IRON_BARS);
+    this.tag(SpliceBlockTags.CHAINS).add(Blocks.CHAIN);
+    this.tag(SpliceBlockTags.LANTERNS)
+        .add(Blocks.LANTERN)
+        .add(Blocks.SEA_LANTERN)
+        .add(Blocks.SOUL_LANTERN);
     this.tag(BlockTags.GUARDED_BY_PIGLINS).addTag(SpliceBlockTags.COPPER_CHESTS);
     this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
         .addTag(SpliceBlockTags.BARS)

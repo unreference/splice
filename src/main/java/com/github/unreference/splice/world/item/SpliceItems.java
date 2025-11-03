@@ -256,6 +256,9 @@ public final class SpliceItems {
               .jukeboxPlayable(SpliceJukeboxSongs.COFFEE_MACHINE));
 
   public static void register(IEventBus bus) {
+    bannerPatterns();
     ITEMS.register(bus);
   }
+
+  private static void bannerPatterns() {}
 }

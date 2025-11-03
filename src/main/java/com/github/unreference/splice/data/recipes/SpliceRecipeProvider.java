@@ -251,7 +251,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   }
 
   private static void waxable(RecipeOutput output) {
-    SpliceBlocks.getCopperFamily().stream()
+    SpliceBlocks.COPPER_FAMILY.stream()
         .flatMap(f -> f.waxedMapping().entrySet().stream())
         .forEach(entry -> waxable(output, entry.getKey().get(), entry.getValue().get()));
   }

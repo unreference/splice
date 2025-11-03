@@ -52,6 +52,7 @@ public final class SpliceMain {
     // Fence
     fireBlock.setFlammable(SpliceBlocks.PALE_OAK_FENCE.get(), 5, 20);
     // Stairs
+    fireBlock.setFlammable(SpliceBlocks.PALE_OAK_STAIRS.get(), 5, 20);
     // Log
     fireBlock.setFlammable(SpliceBlocks.PALE_OAK_LOG.get(), 5, 5);
     // Stripped log

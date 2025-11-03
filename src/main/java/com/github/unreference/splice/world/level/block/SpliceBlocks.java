@@ -22,7 +22,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class SpliceBlocks {
-  private static final DeferredRegister.Blocks BLOCKS =
+  public static final DeferredRegister.Blocks BLOCKS =
       DeferredRegister.createBlocks(SpliceMain.MOD_ID);
 
   public static final SpliceWeatheringCopperBlocks COPPER_BARS =
@@ -74,27 +74,19 @@ public final class SpliceBlocks {
               .build();
 
   public static final DeferredBlock<Block> COPPER_TORCH =
-      BLOCKS.registerBlock(
+      BLOCKS.register(
           "copper_torch",
-          props -> new SpliceDeferredTorchBlock(SpliceParticleTypes.COPPER_FIRE_FLAME, props),
-          BlockBehaviour.Properties.of()
-              .noCollission()
-              .instabreak()
-              .lightLevel(emission -> 14)
-              .sound(SoundType.WOOD)
-              .pushReaction(PushReaction.DESTROY));
+          () ->
+              new SpliceDeferredTorchBlock(
+                  SpliceParticleTypes.COPPER_FIRE_FLAME, getCopperTorchProperties()));
 
   public static final DeferredBlock<Block> COPPER_WALL_TORCH =
-      BLOCKS.registerBlock(
+      BLOCKS.register(
           "copper_wall_torch",
-          props -> new SpliceDeferredWallTorchBlock(SpliceParticleTypes.COPPER_FIRE_FLAME, props),
-          BlockBehaviour.Properties.of()
-              .noCollission()
-              .instabreak()
-              .lightLevel(emission -> 14)
-              .sound(SoundType.WOOD)
-              .lootFrom(COPPER_TORCH)
-              .pushReaction(PushReaction.DESTROY));
+          () ->
+              new SpliceDeferredWallTorchBlock(
+                  SpliceParticleTypes.COPPER_FIRE_FLAME,
+                  getCopperTorchProperties().lootFrom(COPPER_TORCH)));
 
   public static final SpliceWeatheringCopperBlocks COPPER_LANTERN =
       SpliceWeatheringCopperBlocks.create(
@@ -114,12 +106,16 @@ public final class SpliceBlocks {
 
   public static final DeferredBlock<Block> WAXED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.UNAFFECTED, true);
+
   public static final DeferredBlock<Block> WAXED_EXPOSED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.EXPOSED, true);
+
   public static final DeferredBlock<Block> WAXED_WEATHERED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.WEATHERED, true);
+
   public static final DeferredBlock<Block> WAXED_OXIDIZED_COPPER_CHEST =
       registerChest(WeatheringCopper.WeatherState.OXIDIZED, true);
+
   private static final ImmutableBiMap<
           DeferredBlock<? extends Block>, DeferredBlock<? extends Block>>
       CHEST_WAXED_MAP =
@@ -129,12 +125,14 @@ public final class SpliceBlocks {
               .put(WEATHERED_COPPER_CHEST, WAXED_WEATHERED_COPPER_CHEST)
               .put(OXIDIZED_COPPER_CHEST, WAXED_OXIDIZED_COPPER_CHEST)
               .build();
+
   private static final ImmutableList<DeferredBlock<? extends Block>> ALL_CHEST_VARIANTS =
       ImmutableList.of(
           COPPER_CHEST, WAXED_COPPER_CHEST,
           EXPOSED_COPPER_CHEST, WAXED_EXPOSED_COPPER_CHEST,
           WEATHERED_COPPER_CHEST, WAXED_WEATHERED_COPPER_CHEST,
           OXIDIZED_COPPER_CHEST, WAXED_OXIDIZED_COPPER_CHEST);
+
   public static final SpliceWeatheringCopperBlocks COPPER_CHESTS =
       new SpliceWeatheringCopperBlocks(
           COPPER_CHEST,
@@ -148,26 +146,20 @@ public final class SpliceBlocks {
           CHEST_WEATHERING_CHAIN,
           CHEST_WAXED_MAP,
           ALL_CHEST_VARIANTS);
-  private static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
+
+  public static final List<SpliceWeatheringCopperBlocks> COPPER_FAMILY =
       List.of(COPPER_BARS, COPPER_CHAIN, COPPER_LANTERN, COPPER_CHESTS);
 
   public static final DeferredBlock<Block> RESIN_BLOCK =
-      BLOCKS.registerSimpleBlock(
-          "resin_block",
-          BlockBehaviour.Properties.of()
-              .mapColor(MapColor.TERRACOTTA_ORANGE)
-              .instrument(NoteBlockInstrument.BASEDRUM)
-              .sound(SpliceSoundType.RESIN));
+      BLOCKS.registerSimpleBlock("resin_block", getResinProperties());
 
   public static final DeferredBlock<Block> RESIN_CLUMP =
       BLOCKS.registerBlock(
           "resin_clump",
           SpliceResinClumpBlock::new,
-          BlockBehaviour.Properties.of()
-              .mapColor(MapColor.TERRACOTTA_ORANGE)
+          getResinProperties()
               .replaceable()
               .noCollission()
-              .sound(SpliceSoundType.RESIN)
               .ignitedByLava()
               .pushReaction(PushReaction.DESTROY));
 
@@ -179,29 +171,37 @@ public final class SpliceBlocks {
           "resin_brick_stairs",
           props ->
               new StairBlock(RESIN_BRICKS.get().defaultBlockState(), getResinBricksProperties()));
+
   public static final DeferredBlock<RotatedPillarBlock> STRIPPED_PALE_OAK_LOG =
       BLOCKS.registerBlock(
           "stripped_pale_oak_log", props -> new RotatedPillarBlock(getPaleOakPlanksProperties()));
+
   public static final DeferredBlock<RotatedPillarBlock> PALE_OAK_LOG =
       BLOCKS.register(
           "pale_oak_log",
           () -> new SpliceStrippableLogBlock(STRIPPED_PALE_OAK_LOG, getPaleOakPlanksProperties()));
+
   public static final DeferredBlock<RotatedPillarBlock> STRIPPED_PALE_OAK_WOOD =
       BLOCKS.registerBlock(
           "stripped_pale_oak_wood",
-          props -> new RotatedPillarBlock(getLogProperties().mapColor(MapColor.STONE)));
+          RotatedPillarBlock::new,
+          getLogProperties().mapColor(MapColor.STONE));
+
   public static final DeferredBlock<RotatedPillarBlock> PALE_OAK_WOOD =
       BLOCKS.register(
           "pale_oak_wood",
           () -> new SpliceStrippableLogBlock(STRIPPED_PALE_OAK_WOOD, getLogProperties()));
+
   public static final DeferredBlock<Block> PALE_OAK_PLANKS =
       BLOCKS.registerSimpleBlock("pale_oak_planks", getPaleOakPlanksProperties());
+
   public static final DeferredBlock<StairBlock> PALE_OAK_STAIRS =
       BLOCKS.registerBlock(
           "pale_oak_stairs",
           props ->
               new StairBlock(
                   PALE_OAK_PLANKS.get().defaultBlockState(), getPaleOakPlanksProperties()));
+
   public static final DeferredBlock<ButtonBlock> PALE_OAK_BUTTON =
       BLOCKS.registerBlock(
           "pale_oak_button",
@@ -213,17 +213,17 @@ public final class SpliceBlocks {
                       .noCollission()
                       .strength(0.5f)
                       .pushReaction(PushReaction.DESTROY)));
+
   public static final DeferredBlock<FenceBlock> PALE_OAK_FENCE =
-      BLOCKS.registerBlock(
-          "pale_oak_fence",
-          props -> new FenceBlock(getPaleOakPlanksProperties().strength(2.0f, 3.0f)));
+      BLOCKS.registerBlock("pale_oak_fence", props -> new FenceBlock(getPaleOakPlanksProperties()));
+
   public static final DeferredBlock<FenceGateBlock> PALE_OAK_FENCE_GATE =
       BLOCKS.registerBlock(
           "pale_oak_fence_gate",
           props ->
               new FenceGateBlock(
-                  SpliceWoodType.PALE_OAK,
-                  getPaleOakPlanksProperties().forceSolidOn().strength(2.0f, 3.0f)));
+                  SpliceWoodType.PALE_OAK, getPaleOakPlanksProperties().forceSolidOn()));
+
   public static final DeferredBlock<PressurePlateBlock> PALE_OAK_PRESSURE_PLATE =
       BLOCKS.registerBlock(
           "pale_oak_pressure_plate",
@@ -235,11 +235,13 @@ public final class SpliceBlocks {
                       .noCollission()
                       .strength(0.5f)
                       .pushReaction(PushReaction.DESTROY)));
+
   public static final DeferredBlock<SpliceStandingSignBlock> PALE_OAK_SIGN =
       BLOCKS.registerBlock(
           "pale_oak_sign",
           props -> new SpliceStandingSignBlock(SpliceWoodType.PALE_OAK, props),
           getPaleOakPlanksProperties().forceSolidOn().noCollission().strength(1.0f));
+
   public static final DeferredBlock<SpliceWallSignBlock> PALE_OAK_WALL_SIGN =
       BLOCKS.registerBlock(
           "pale_oak_wall_sign",
@@ -249,24 +251,25 @@ public final class SpliceBlocks {
               .forceSolidOn()
               .noCollission()
               .strength(1.0f));
+
   public static final DeferredBlock<SlabBlock> PALE_OAK_SLAB =
-      BLOCKS.registerBlock(
-          "pale_oak_slab",
-          props -> new SlabBlock(getPaleOakPlanksProperties().strength(2.0f, 3.0f)));
+      BLOCKS.registerBlock("pale_oak_slab", SlabBlock::new, getPaleOakPlanksProperties());
+
   public static final DeferredBlock<DoorBlock> PALE_OAK_DOOR =
-      BLOCKS.registerBlock(
+      BLOCKS.register(
           "pale_oak_door",
-          props ->
+          () ->
               new DoorBlock(
                   SpliceBlockSetType.PALE_OAK,
                   getPaleOakPlanksProperties()
                       .strength(3.0f)
                       .noOcclusion()
                       .pushReaction(PushReaction.DESTROY)));
+
   public static final DeferredBlock<TrapDoorBlock> PALE_OAK_TRAPDOOR =
-      BLOCKS.registerBlock(
+      BLOCKS.register(
           "pale_oak_trapdoor",
-          props ->
+          () ->
               new TrapDoorBlock(
                   SpliceBlockSetType.PALE_OAK,
                   getPaleOakPlanksProperties()
@@ -274,10 +277,13 @@ public final class SpliceBlocks {
                       .noOcclusion()
                       .isValidSpawn(Blocks::never)
                       .pushReaction(PushReaction.DESTROY)));
+
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
+
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =
       BLOCKS.registerBlock("resin_brick_slab", props -> new SlabBlock(getResinBricksProperties()));
+
   public static DeferredBlock<WallBlock> RESIN_BRICK_WALL =
       BLOCKS.registerBlock("resin_brick_wall", props -> new WallBlock(getResinBricksProperties()));
 
@@ -308,14 +314,14 @@ public final class SpliceBlocks {
           case OXIDIZED -> SpliceSoundEvents.COPPER_CHEST_OXIDIZED_CLOSE;
         };
 
-    final BlockBehaviour.Properties props = getChestProps(state);
+    final BlockBehaviour.Properties chestProps = getChestProps(state);
 
     final Function<BlockBehaviour.Properties, ? extends Block> ctor =
         isWaxed
             ? (p) -> new SpliceCopperChestBlock(state, openSound, closeSound, p)
             : (p) -> new SpliceWeatheringCopperChestBlock(state, openSound, closeSound, p);
 
-    return BLOCKS.registerBlock(id, ctor, props);
+    return BLOCKS.registerBlock(id, ctor, chestProps);
   }
 
   private static BlockBehaviour.Properties getChestProps(WeatheringCopper.WeatherState state) {
@@ -334,10 +340,24 @@ public final class SpliceBlocks {
         .requiresCorrectToolForDrops();
   }
 
-  private static BlockBehaviour.Properties getResinBricksProperties() {
+  private static BlockBehaviour.Properties getCopperTorchProperties() {
+    return BlockBehaviour.Properties.of()
+        .noCollission()
+        .instabreak()
+        .lightLevel(emission -> 14)
+        .sound(SoundType.WOOD)
+        .pushReaction(PushReaction.DESTROY);
+  }
+
+  private static BlockBehaviour.Properties getResinProperties() {
     return BlockBehaviour.Properties.of()
         .mapColor(MapColor.TERRACOTTA_ORANGE)
         .instrument(NoteBlockInstrument.BASEDRUM)
+        .sound(SpliceSoundType.RESIN);
+  }
+
+  private static BlockBehaviour.Properties getResinBricksProperties() {
+    return getResinProperties()
         .requiresCorrectToolForDrops()
         .sound(SpliceSoundType.RESIN_BRICKS)
         .strength(1.5f, 6.0f);
@@ -353,15 +373,7 @@ public final class SpliceBlocks {
   }
 
   private static BlockBehaviour.Properties getPaleOakPlanksProperties() {
-    return getLogProperties().mapColor(MapColor.QUARTZ);
-  }
-
-  public static List<SpliceWeatheringCopperBlocks> getCopperFamily() {
-    return COPPER_FAMILY;
-  }
-
-  public static DeferredRegister.Blocks getBlocks() {
-    return BLOCKS;
+    return getLogProperties().mapColor(MapColor.QUARTZ).strength(2.0f, 3.0f);
   }
 
   public static void register(IEventBus bus) {
