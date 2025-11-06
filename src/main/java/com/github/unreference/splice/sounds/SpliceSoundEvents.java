@@ -45,6 +45,8 @@ public final class SpliceSoundEvents {
       register("block.resin_bricks.hit");
   public static final DeferredHolder<SoundEvent, SoundEvent> RESIN_BRICKS_FALL =
       register("block.resin_bricks.fall");
+  public static final DeferredHolder<SoundEvent, SoundEvent> PALE_HANGING_MOSS_IDLE =
+      register("block.pale_hanging_moss.idle");
 
   public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_TEARS =
       register("music_disc.tears");

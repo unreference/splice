@@ -65,6 +65,16 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
     final Block mossBlock = SpliceBlocks.PALE_MOSS_BLOCK.get();
     this.cube(mossBlock);
+
+    final Block hangingMoss = SpliceBlocks.PALE_HANGING_MOSS.get();
+    this.hangingMoss(hangingMoss);
+  }
+
+  private void hangingMoss(Block block) {
+    final String name = SpliceUtils.getName(block);
+    this.cross(name, SpliceUtils.getLocation(block)).renderType("cutout");
+    this.cross(name + "_tip", ResourceLocation.parse(SpliceUtils.getLocation(block) + "_tip"))
+        .renderType("cutout");
   }
 
   private void mossCarpet(Block block) {

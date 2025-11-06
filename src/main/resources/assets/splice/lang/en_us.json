@@ -15,6 +15,7 @@
   "block.splice.oxidized_copper_chain": "Oxidized Copper Chain",
   "block.splice.oxidized_copper_chest": "Oxidized Copper Chest",
   "block.splice.oxidized_copper_lantern": "Oxidized Copper Lantern",
+  "block.splice.pale_hanging_moss": "Pale Hanging Moss",
   "block.splice.pale_moss_block": "Pale Moss Block",
   "block.splice.pale_moss_carpet": "Pale Moss Carpet",
   "block.splice.pale_oak_button": "Pale Oak Button",
@@ -89,5 +90,6 @@
   "painting.splice.dennis.author": "Sarah Boeving",
   "painting.splice.dennis.title": "Dennis",
   "subtitles.splice.block.generic.fall": "Something falls on a block",
+  "subtitles.splice.block.pale_hanging_moss.idle": "Eerie noise",
   "subtitles.splice.item.armor.equip_copper": "Copper armor clonks"
 }

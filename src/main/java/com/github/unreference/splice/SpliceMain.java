@@ -10,6 +10,7 @@ import com.github.unreference.splice.world.level.block.SpliceBlockTypes;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import com.github.unreference.splice.world.level.block.entity.SpliceBlockEntityType;
 import com.github.unreference.splice.world.level.levelgen.feature.SpliceFeature;
+import com.github.unreference.splice.world.level.levelgen.feature.treedecorators.SpliceTreeDecoratorType;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
@@ -29,6 +30,7 @@ public final class SpliceMain {
     modEventBus.addListener(SpliceDataGenerator::onGatherData);
 
     SpliceFeature.register(modEventBus);
+    SpliceTreeDecoratorType.register(modEventBus);
     SpliceBlocks.register(modEventBus);
     SpliceBlockEntityType.register(modEventBus);
     SpliceBlockTypes.register(modEventBus);
@@ -56,6 +58,7 @@ public final class SpliceMain {
     block.setFlammable(SpliceBlocks.PALE_OAK_WOOD.get(), 5, 5);
     block.setFlammable(SpliceBlocks.PALE_OAK_LEAVES.get(), 30, 60);
     block.setFlammable(SpliceBlocks.PALE_MOSS_CARPET.get(), 5, 100);
+    block.setFlammable(SpliceBlocks.PALE_HANGING_MOSS.get(), 5, 100);
   }
 
   private static void addPottedPlants() {

@@ -4,6 +4,7 @@ import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.data.SpliceBlockFamilies;
 import com.github.unreference.splice.util.SpliceUtils;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
+import com.github.unreference.splice.world.level.block.SpliceHangingMossBlock;
 import com.github.unreference.splice.world.level.block.SpliceMossyCarpetBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.data.BlockFamily;
@@ -84,6 +85,28 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.block(SpliceBlocks.POTTED_PALE_OAK_SAPLING);
     this.mossyCarpet(SpliceBlocks.PALE_MOSS_CARPET);
     this.block(SpliceBlocks.PALE_MOSS_BLOCK);
+    this.hangingMoss(SpliceBlocks.PALE_HANGING_MOSS);
+  }
+
+  private void hangingMoss(DeferredBlock<SpliceHangingMossBlock> block) {
+    final Block id = block.get();
+    final String name = SpliceUtils.getName(id);
+    final ModelFile hangingMoss = this.models().getExistingFile(this.modLoc("block/" + name));
+    final ModelFile hangingMossTip =
+        this.models().getExistingFile(this.modLoc("block/" + name + "_tip"));
+
+    final VariantBlockStateBuilder builder = this.getVariantBuilder(id);
+    builder
+        .partialState()
+        .with(SpliceHangingMossBlock.IS_JUST_THE_TIP, false)
+        .modelForState()
+        .modelFile(hangingMoss)
+        .addModel()
+        .partialState()
+        .with(SpliceHangingMossBlock.IS_JUST_THE_TIP, true)
+        .modelForState()
+        .modelFile(hangingMossTip)
+        .addModel();
   }
 
   private void mossyCarpet(DeferredBlock<SpliceMossyCarpetBlock> block) {

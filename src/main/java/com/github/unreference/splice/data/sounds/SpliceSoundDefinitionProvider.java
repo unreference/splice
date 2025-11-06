@@ -169,6 +169,27 @@ public final class SpliceSoundDefinitionProvider extends SoundDefinitionsProvide
             .subtitle("subtitles.splice.block.generic.fall"));
 
     this.add(
+        SpliceSoundEvents.PALE_HANGING_MOSS_IDLE,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss1")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss2")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss3")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss4")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss5")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss6")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss7")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss8")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss9")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss10")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss11")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss12")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss13")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss14")),
+                sound(getResourceLocation("block/pale_hanging_moss/pale_hanging_moss15")))
+            .subtitle("subtitles.splice.block.pale_hanging_moss.idle"));
+
+    this.add(
         SpliceSoundEvents.MUSIC_DISC_TEARS,
         SoundDefinition.definition().with(sound(getResourceLocation("records/tears")).stream()));
 

@@ -3,12 +3,14 @@ package com.github.unreference.splice.data.loot.packs;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import com.github.unreference.splice.world.level.block.SpliceMossyCarpetBlock;
 import java.util.Set;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -16,6 +18,8 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,6 +68,24 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
     this.dropPottedContents(SpliceBlocks.POTTED_PALE_OAK_SAPLING.get());
     this.add(SpliceBlocks.PALE_MOSS_CARPET.get(), this::createMossyCarpetBlockDrops);
     this.dropSelf(SpliceBlocks.PALE_MOSS_BLOCK.get());
+    this.add(SpliceBlocks.PALE_HANGING_MOSS.get(), this::createShearsOrSilkTouchDrop);
+  }
+
+  private LootTable.Builder createShearsOrSilkTouchDrop(Block block) {
+    return LootTable.lootTable()
+        .withPool(
+            LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1.0f))
+                .when(this.hasShearsOrSilkTouch())
+                .add(LootItem.lootTableItem(block)));
+  }
+
+  private LootItemCondition.Builder hasShearsOrSilkTouch() {
+    return this.hasShears().or(this.hasSilkTouch());
+  }
+
+  private LootItemCondition.Builder hasShears() {
+    return MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS));
   }
 
   @Override

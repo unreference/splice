@@ -44,6 +44,9 @@ public final class SpliceBlockTypes {
           CODEC.register(
               "bone_mealable_feature_placer", () -> SpliceBoneMealableFeaturePlacerBlock.CODEC);
 
+  private static final Supplier<MapCodec<SpliceHangingMossBlock>> HANGING_MOSS =
+      CODEC.register("hanging_moss", () -> SpliceHangingMossBlock.CODEC);
+
   public static void register(IEventBus bus) {
     CODEC.register(bus);
   }

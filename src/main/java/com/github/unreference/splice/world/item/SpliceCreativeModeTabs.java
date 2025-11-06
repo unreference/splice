@@ -60,6 +60,7 @@ public final class SpliceCreativeModeTabs {
   private static void paleGardenNaturalBlocks(BuildCreativeModeTabContentsEvent event) {
     insert(event, SpliceItems.PALE_MOSS_BLOCK, Items.MOSS_CARPET);
     insert(event, SpliceItems.PALE_MOSS_CARPET, SpliceItems.PALE_MOSS_BLOCK);
+    insert(event, SpliceItems.PALE_HANGING_MOSS, SpliceItems.PALE_MOSS_CARPET);
     insert(event, SpliceItems.PALE_OAK_LEAVES, Items.CHERRY_LEAVES);
     insert(event, SpliceItems.PALE_OAK_SAPLING, Items.CHERRY_SAPLING);
   }

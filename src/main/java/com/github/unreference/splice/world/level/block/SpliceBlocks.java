@@ -343,6 +343,12 @@ public final class SpliceBlocks {
                   SpliceVegetationFeatures.PALE_MOSS_PATCH_BONE_MEAL,
                   getPaleMossBlockProperties()));
 
+  public static final DeferredBlock<SpliceHangingMossBlock> PALE_HANGING_MOSS =
+      BLOCKS.registerBlock(
+          "pale_hanging_moss",
+          SpliceHangingMossBlock::new,
+          getPaleMossBlockProperties().noCollission().sound(SoundType.MOSS_CARPET));
+
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =

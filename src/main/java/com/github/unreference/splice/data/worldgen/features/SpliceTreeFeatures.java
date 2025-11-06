@@ -2,6 +2,8 @@ package com.github.unreference.splice.data.worldgen.features;
 
 import com.github.unreference.splice.data.registries.SpliceRegistries;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
+import com.github.unreference.splice.world.level.levelgen.feature.treedecorators.SplicePaleMossDecorator;
+import com.google.common.collect.ImmutableList;
 import java.util.OptionalInt;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -47,7 +49,7 @@ public final class SpliceTreeFeatures {
             BlockStateProvider.simple(SpliceBlocks.PALE_OAK_LEAVES.get()),
             new DarkOakFoliagePlacer(ConstantInt.of(0), ConstantInt.of(0)),
             new ThreeLayersFeatureSize(1, 1, 0, 1, 2, OptionalInt.empty()))
-        // TODO: Add pale moss decorator
+        .decorators(ImmutableList.of(new SplicePaleMossDecorator(0.15f, 0.4f, 0.8f)))
         .ignoreVines();
   }
 }

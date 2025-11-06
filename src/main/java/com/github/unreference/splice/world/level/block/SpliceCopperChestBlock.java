@@ -142,7 +142,7 @@ public class SpliceCopperChestBlock extends ChestBlock {
         result = result.setValue(ChestBlock.TYPE, prevType);
       }
 
-      // TODO: Find a way to carry the particles over to connected chest.
+      // TODO: Find a way to carry the particles over to connected chest
       return result;
     }
 
