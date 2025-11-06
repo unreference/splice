@@ -71,13 +71,13 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
           Direction.DOWN,
           DOWN_SHAPE,
           Direction.NORTH,
-          Shapes.or(NORTH_SHAPE, DOWN_SHAPE),
+          NORTH_SHAPE,
           Direction.SOUTH,
-          Shapes.or(SOUTH_SHAPE, DOWN_SHAPE),
+          SOUTH_SHAPE,
           Direction.EAST,
-          Shapes.or(EAST_SHAPE, DOWN_SHAPE),
+          EAST_SHAPE,
           Direction.WEST,
-          Shapes.or(WEST_SHAPE, DOWN_SHAPE));
+          WEST_SHAPE);
   public static final MapCodec<SpliceMossyCarpetBlock> CODEC =
       simpleCodec(SpliceMossyCarpetBlock::new);
   private final Function<BlockState, VoxelShape> shapes;
@@ -112,52 +112,52 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
   }
 
   private static boolean canSupportAtFace(BlockGetter level, BlockPos pos, Direction direction) {
-    return direction != Direction.UP
-        && MultifaceBlock.canAttachTo(level, direction, pos, level.getBlockState(pos));
-  }
-
-  private static BlockState getUpdatedState(
-      BlockState state, BlockGetter level, BlockPos pos, boolean isBase) {
-    final Block paleMossCarpet = SpliceBlocks.PALE_MOSS_CARPET.get();
-
-    BlockState above = null;
-    BlockState below = null;
-    isBase |= state.getValue(IS_BASE);
-
-    for (Direction direction : Direction.Plane.HORIZONTAL) {
-      final EnumProperty<WallSide> wall = getPropertyForFace(direction);
-
-      WallSide side =
-          canSupportAtFace(level, pos, direction)
-              ? (isBase ? WallSide.LOW : state.getValue(wall))
-              : WallSide.NONE;
-
-      if (side == WallSide.LOW) {
-        if (above == null) {
-          above = level.getBlockState(pos.above());
-        }
-
-        if (above.is(paleMossCarpet)
-            && above.getValue(wall) != WallSide.NONE
-            && !above.getValue(IS_BASE)) {
-          side = WallSide.TALL;
-        }
-
-        if (!state.getValue(IS_BASE)) {
-          if (below == null) {
-            below = level.getBlockState(pos.below());
-          }
-
-          if (below.is(paleMossCarpet) && below.getValue(wall) == WallSide.NONE) {
-            side = WallSide.NONE;
-          }
-        }
-      }
-
-      state = state.setValue(wall, side);
+    if (direction == Direction.UP) {
+      return false;
     }
 
-    return state;
+    final BlockPos neighborPos = pos.relative(direction);
+    final BlockState neighborState = level.getBlockState(neighborPos);
+
+    return MultifaceBlock.canAttachTo(level, direction.getOpposite(), neighborPos, neighborState);
+  }
+
+  private static BlockState getUpdatedState(BlockState state, BlockGetter level, BlockPos pos) {
+    final Block paleMossCarpet = SpliceBlocks.PALE_MOSS_CARPET.get();
+
+    if (!state.getValue(IS_BASE)) {
+      final BlockState below = level.getBlockState(pos.below());
+      if (below.is(paleMossCarpet) && below.getValue(IS_BASE)) {
+        BlockState updated = state;
+
+        for (Map.Entry<Direction, EnumProperty<WallSide>> entry :
+            PROPERTY_BY_DIRECTION.entrySet()) {
+          final WallSide side = below.getValue(entry.getValue());
+          updated =
+              updated.setValue(
+                  entry.getValue(), side == WallSide.TALL ? WallSide.LOW : WallSide.NONE);
+        }
+
+        return updated;
+      }
+
+      return Blocks.AIR.defaultBlockState();
+    }
+
+    BlockState updated = state;
+    for (Direction direction : Direction.Plane.HORIZONTAL) {
+      final EnumProperty<WallSide> side = getPropertyForFace(direction);
+
+      if (canSupportAtFace(level, pos, direction)) {
+        if (updated.getValue(side) == WallSide.NONE) {
+          updated = updated.setValue(side, WallSide.LOW);
+        }
+      } else {
+        updated = updated.setValue(side, WallSide.NONE);
+      }
+    }
+
+    return updated;
   }
 
   private static EnumProperty<WallSide> getPropertyForFace(Direction direction) {
@@ -166,41 +166,67 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
 
   public static void placeAt(LevelAccessor level, BlockPos pos, RandomSource random, int flags) {
     final BlockState state = SpliceBlocks.PALE_MOSS_CARPET.get().defaultBlockState();
-    final BlockState updated = getUpdatedState(state, level, pos, true);
-
-    level.setBlock(pos, updated, flags);
+    final BlockState base = getUpdatedState(state, level, pos);
+    level.setBlock(pos, base, flags);
 
     final BlockState topper = createTopperWithSideChance(level, pos, random::nextBoolean);
     if (!topper.isAir()) {
+      BlockState updated = level.getBlockState(pos);
+
+      for (Direction direction : Direction.Plane.HORIZONTAL) {
+        if (topper.getValue(getPropertyForFace(direction)) == WallSide.LOW) {
+          updated = updated.setValue(getPropertyForFace(direction), WallSide.TALL);
+        }
+      }
+
+      level.setBlock(pos, updated, flags);
       level.setBlock(pos.above(), topper, flags);
-      final BlockState updatedTopper = getUpdatedState(updated, level, pos, true);
-      level.setBlock(pos, updatedTopper, flags);
     }
   }
 
   private static BlockState createTopperWithSideChance(
       LevelReader level, BlockPos pos, BooleanSupplier supplier) {
-    final BlockPos posAbove = pos.above();
-    final BlockState above = level.getBlockState(posAbove);
-    final boolean isPaleMossCarpet = above.is(SpliceBlocks.PALE_MOSS_CARPET);
+    final BlockState state = level.getBlockState(pos);
+    final Block paleMossCarpet = SpliceBlocks.PALE_MOSS_CARPET.get();
 
-    if ((!isPaleMossCarpet || !above.getValue(IS_BASE))
-        && (isPaleMossCarpet || above.canBeReplaced())) {
-      final BlockState state =
-          SpliceBlocks.PALE_MOSS_CARPET.get().defaultBlockState().setValue(IS_BASE, false);
-      BlockState updated = getUpdatedState(state, level, posAbove, true);
-
-      for (Direction direction : Direction.Plane.HORIZONTAL) {
-        final EnumProperty<WallSide> wall = getPropertyForFace(direction);
-        if (updated.getValue(wall) != WallSide.NONE && !supplier.getAsBoolean()) {
-          updated = updated.setValue(wall, WallSide.NONE);
-        }
-      }
-
-      return hasFaces(updated) && updated != above ? updated : Blocks.AIR.defaultBlockState();
+    if (!state.is(paleMossCarpet) || !state.getValue(IS_BASE)) {
+      return Blocks.AIR.defaultBlockState();
     }
 
-    return Blocks.AIR.defaultBlockState();
+    final BlockState above = level.getBlockState(pos.above());
+    BlockState topper = Blocks.AIR.defaultBlockState();
+    boolean isTopperPlaceable = false;
+
+    if (above.isAir()) {
+      topper = paleMossCarpet.defaultBlockState().setValue(IS_BASE, false);
+      isTopperPlaceable = true;
+    } else if (above.is(paleMossCarpet) && !above.getValue(IS_BASE)) {
+      topper = above;
+      isTopperPlaceable = true;
+    }
+
+    if (!isTopperPlaceable) {
+      return Blocks.AIR.defaultBlockState();
+    }
+
+    boolean isTopperGrowing = false;
+    for (Direction direction : Direction.Plane.HORIZONTAL) {
+      if (state.getValue(getPropertyForFace(direction)) == WallSide.LOW) {
+        final BlockPos neighbor = pos.relative(direction);
+        final boolean isTwoBlocksTall =
+            level.getBlockState(neighbor).isFaceSturdy(level, neighbor, direction.getOpposite())
+                && level
+                    .getBlockState(neighbor.above())
+                    .isFaceSturdy(level, neighbor.above(), direction.getOpposite());
+
+        if (isTwoBlocksTall && supplier.getAsBoolean()) {
+          topper = topper.setValue(getPropertyForFace(direction), WallSide.LOW);
+          isTopperGrowing = true;
+        }
+      }
+    }
+
+    return isTopperGrowing ? topper : Blocks.AIR.defaultBlockState();
   }
 
   @Override
@@ -245,7 +271,7 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
       @NotNull BlockGetter level,
       @NotNull BlockPos pos,
       @NotNull CollisionContext context) {
-    return state.getValue(IS_BASE) ? this.shapes.apply(this.defaultBlockState()) : Shapes.empty();
+    return state.getValue(IS_BASE) ? DOWN_SHAPE : Shapes.empty();
   }
 
   @Override
@@ -258,15 +284,17 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
   protected boolean canSurvive(
       @NotNull BlockState state, @NotNull LevelReader level, @NotNull BlockPos pos) {
     final BlockState stateBelow = level.getBlockState(pos.below());
-    return state.getValue(IS_BASE)
-        ? !stateBelow.isAir()
-        : stateBelow.is(this) && stateBelow.getValue(IS_BASE);
+
+    if (state.getValue(IS_BASE)) {
+      return stateBelow.isFaceSturdy(level, pos.below(), Direction.UP);
+    }
+
+    return stateBelow.is(this) && stateBelow.getValue(IS_BASE);
   }
 
   @Override
   public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
-    return getUpdatedState(
-        this.defaultBlockState(), context.getLevel(), context.getClickedPos(), true);
+    return getUpdatedState(this.defaultBlockState(), context.getLevel(), context.getClickedPos());
   }
 
   @Override
@@ -279,7 +307,17 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
     if (!level.isClientSide()) {
       final RandomSource random = level.getRandom();
       final BlockState topper = createTopperWithSideChance(level, pos, random::nextBoolean);
+
       if (!topper.isAir()) {
+        BlockState base = level.getBlockState(pos);
+
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+          if (topper.getValue(getPropertyForFace(direction)) == WallSide.LOW) {
+            base = base.setValue(getPropertyForFace(direction), WallSide.TALL);
+          }
+        }
+
+        level.setBlock(pos, base, 3);
         level.setBlock(pos.above(), topper, 3);
       }
     }
@@ -297,8 +335,38 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
       return Blocks.AIR.defaultBlockState();
     }
 
-    final BlockState updated = getUpdatedState(state, level, pos, false);
-    return !hasFaces(updated) ? Blocks.AIR.defaultBlockState() : updated;
+    if (!state.getValue(IS_BASE)) {
+      if (direction == Direction.DOWN) {
+        final BlockState updated = getUpdatedState(state, level, pos);
+        return hasFaces(updated) ? updated : Blocks.AIR.defaultBlockState();
+      }
+
+      return state;
+    }
+
+    if (direction.getAxis().isHorizontal()) {
+      return getUpdatedState(state, level, pos);
+    }
+
+    if (direction == Direction.UP) {
+      if (!neighborState.is(this) || neighborState.getValue(IS_BASE)) {
+        BlockState updated = state;
+
+        for (Direction horizontal : Direction.Plane.HORIZONTAL) {
+          if (updated.getValue(getPropertyForFace(horizontal)) == WallSide.TALL) {
+            if (canSupportAtFace(level, pos, horizontal)) {
+              updated = updated.setValue(getPropertyForFace(horizontal), WallSide.LOW);
+            } else {
+              updated = updated.setValue(getPropertyForFace(horizontal), WallSide.NONE);
+            }
+          }
+        }
+
+        return updated;
+      }
+    }
+
+    return state;
   }
 
   @Override
@@ -345,7 +413,7 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
   @Override
   public boolean isValidBonemealTarget(
       @NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state) {
-    return state.getValue(IS_BASE) && !createTopperWithSideChance(level, pos, () -> true).isAir();
+    return true;
   }
 
   @Override
@@ -365,6 +433,15 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
       @NotNull BlockState state) {
     final BlockState topper = createTopperWithSideChance(level, pos, () -> true);
     if (!topper.isAir()) {
+      BlockState base = level.getBlockState(pos);
+
+      for (Direction direction : Direction.Plane.HORIZONTAL) {
+        if (topper.getValue(getPropertyForFace(direction)) == WallSide.LOW) {
+          base = base.setValue(getPropertyForFace(direction), WallSide.TALL);
+        }
+      }
+
+      level.setBlock(pos, base, 3);
       level.setBlock(pos.above(), topper, 3);
     }
   }
