@@ -39,6 +39,11 @@ public final class SpliceBlockTypes {
   private static final Supplier<MapCodec<SpliceMossyCarpetBlock>> MOSSY_CARPET =
       CODEC.register("mossy_carpet", () -> SpliceMossyCarpetBlock.CODEC);
 
+  private static final Supplier<MapCodec<SpliceBoneMealableFeaturePlacerBlock>>
+      BONE_MEALABLE_FEATURE_PLACER =
+          CODEC.register(
+              "bone_mealable_feature_placer", () -> SpliceBoneMealableFeaturePlacerBlock.CODEC);
+
   public static void register(IEventBus bus) {
     CODEC.register(bus);
   }

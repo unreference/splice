@@ -36,8 +36,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
 
   private static void bannerPatterns(RecipeOutput recipeOutput) {
     // Field masoned
-    ShapelessRecipeBuilder.shapeless(
-            RecipeCategory.MISC, SpliceItems.FIELD_MASONED_BANNER_PATTERN.get())
+    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SpliceItems.FIELD_MASONED_BANNER_PATTERN)
         .requires(Items.PAPER)
         .requires(Blocks.BRICKS)
         .unlockedBy(getHasName(Blocks.BRICKS), has(Blocks.BRICKS))
@@ -45,7 +44,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
 
     // Bordure indented
     ShapelessRecipeBuilder.shapeless(
-            RecipeCategory.MISC, SpliceItems.BORDURE_INDENTED_BANNER_PATTERN.get())
+            RecipeCategory.MISC, SpliceItems.BORDURE_INDENTED_BANNER_PATTERN)
         .requires(Items.PAPER)
         .requires(Blocks.VINE)
         .unlockedBy(getHasName(Blocks.VINE), has(Blocks.VINE))
@@ -96,8 +95,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .pattern("III")
         .pattern("ICI")
         .pattern("III")
-        .unlockedBy(
-            getHasName(SpliceBlocks.COPPER_CHEST.get()), has(SpliceBlocks.COPPER_CHEST.get()))
+        .unlockedBy(getHasName(SpliceBlocks.COPPER_CHEST), has(SpliceBlocks.COPPER_CHEST))
         .save(recipeOutput);
 
     // Torch
@@ -136,7 +134,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     final Item stick = Items.STICK;
     final TagKey<Item> copperMaterials = SpliceItemTags.COPPER_TOOL_MATERIALS;
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_SHOVEL.get())
+    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_SHOVEL)
         .define('C', copperMaterials)
         .define('S', stick)
         .pattern("C")
@@ -145,7 +143,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_PICKAXE.get())
+    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_PICKAXE)
         .define('C', copperMaterials)
         .define('S', stick)
         .pattern("CCC")
@@ -154,7 +152,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_AXE.get())
+    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_AXE)
         .define('C', copperMaterials)
         .define('S', stick)
         .pattern("CC")
@@ -163,7 +161,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_HOE.get())
+    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_HOE)
         .define('C', copperMaterials)
         .define('S', stick)
         .pattern("CC")
@@ -172,7 +170,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_SWORD.get())
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_SWORD)
         .define('C', copperMaterials)
         .define('S', stick)
         .pattern("C")
@@ -181,14 +179,14 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_HELMET.get())
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_HELMET)
         .define('C', copperMaterials)
         .pattern("CCC")
         .pattern("C C")
         .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_CHESTPLATE.get())
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_CHESTPLATE)
         .define('C', copperMaterials)
         .pattern("C C")
         .pattern("CCC")
@@ -196,7 +194,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_LEGGINGS.get())
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_LEGGINGS)
         .define('C', copperMaterials)
         .pattern("CCC")
         .pattern("C C")
@@ -204,7 +202,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .unlockedBy(getHasName(ingot), has(copperMaterials))
         .save(recipeOutput);
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_BOOTS.get())
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_BOOTS)
         .define('C', copperMaterials)
         .pattern("C C")
         .pattern("C C")
@@ -216,16 +214,16 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     final Item nugget = SpliceItems.COPPER_NUGGET.get();
 
     final ItemLike[] meltable = {
-      SpliceItems.COPPER_SHOVEL.get(),
-      SpliceItems.COPPER_PICKAXE.get(),
-      SpliceItems.COPPER_AXE.get(),
+      SpliceItems.COPPER_SHOVEL,
+      SpliceItems.COPPER_PICKAXE,
+      SpliceItems.COPPER_AXE,
       SpliceItems.COPPER_HOE,
-      SpliceItems.COPPER_SWORD.get(),
-      SpliceItems.COPPER_HELMET.get(),
-      SpliceItems.COPPER_CHESTPLATE.get(),
-      SpliceItems.COPPER_LEGGINGS.get(),
-      SpliceItems.COPPER_BOOTS.get(),
-      SpliceItems.COPPER_HORSE_ARMOR.get(),
+      SpliceItems.COPPER_SWORD,
+      SpliceItems.COPPER_HELMET,
+      SpliceItems.COPPER_CHESTPLATE,
+      SpliceItems.COPPER_LEGGINGS,
+      SpliceItems.COPPER_BOOTS,
+      SpliceItems.COPPER_HORSE_ARMOR,
     };
 
     final Ingredient inputs = Ingredient.of(meltable);
@@ -522,13 +520,14 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput, getResourceLocation(packedName));
   }
 
-  private static void paleOak(@NotNull RecipeOutput recipeOutput) {
+  private static void paleGarden(@NotNull RecipeOutput recipeOutput) {
     planksFromLog(recipeOutput, SpliceBlocks.PALE_OAK_PLANKS, SpliceItemTags.PALE_OAK_LOGS, 4);
     woodFromLogs(recipeOutput, SpliceBlocks.PALE_OAK_WOOD, SpliceBlocks.PALE_OAK_LOG);
     woodFromLogs(
         recipeOutput, SpliceBlocks.STRIPPED_PALE_OAK_WOOD, SpliceBlocks.STRIPPED_PALE_OAK_LOG);
     hangingSign(
-        recipeOutput, SpliceBlocks.PALE_OAK_HANGING_SIGN.get(), SpliceBlocks.STRIPPED_PALE_OAK_LOG);
+        recipeOutput, SpliceBlocks.PALE_OAK_HANGING_SIGN, SpliceBlocks.STRIPPED_PALE_OAK_LOG);
+    carpet(recipeOutput, SpliceBlocks.PALE_MOSS_CARPET, SpliceBlocks.PALE_MOSS_BLOCK);
   }
 
   @Override
@@ -539,6 +538,6 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     lead(recipeOutput);
     copper(recipeOutput);
     resin(recipeOutput);
-    paleOak(recipeOutput);
+    paleGarden(recipeOutput);
   }
 }

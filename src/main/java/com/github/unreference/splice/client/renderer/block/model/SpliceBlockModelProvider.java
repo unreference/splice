@@ -28,7 +28,7 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     this.copper();
     this.resin();
     this.mossyCarpetSide();
-    this.paleOak();
+    this.paleGarden();
   }
 
   private void mossyCarpetSide() {
@@ -50,7 +50,7 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
         .end();
   }
 
-  private void paleOak() {
+  private void paleGarden() {
     final Block sapling = SpliceBlocks.PALE_OAK_SAPLING.get();
     this.cross(SpliceUtils.getName(sapling), SpliceUtils.getLocation(sapling)).renderType("cutout");
 
@@ -62,6 +62,9 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
     final Block mossCarpet = SpliceBlocks.PALE_MOSS_CARPET.get();
     this.mossCarpet(mossCarpet);
+
+    final Block mossBlock = SpliceBlocks.PALE_MOSS_BLOCK.get();
+    this.cube(mossBlock);
   }
 
   private void mossCarpet(Block block) {

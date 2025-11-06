@@ -9,7 +9,7 @@ public final class SpliceCreativeModeTabs {
   @SubscribeEvent
   public static void onBuildCreativeModeTabContents(BuildCreativeModeTabContentsEvent event) {
     if (event.getTabKey().equals(CreativeModeTabs.BUILDING_BLOCKS)) {
-      paleOakBuildingBlocks(event);
+      paleGardenBuildingBlocks(event);
       copperBarsBuildingBlocks(event);
       copperChainBuildingBlocks(event);
       resinBuildingBlocks(event);
@@ -18,12 +18,12 @@ public final class SpliceCreativeModeTabs {
     // if (event.getTabKey().equals(CreativeModeTabs.COLORED_BLOCKS)) {}
 
     if (event.getTabKey().equals(CreativeModeTabs.NATURAL_BLOCKS)) {
-      paleOakNaturalBlocks(event);
+      paleGardenNaturalBlocks(event);
       resinNaturalBlocks(event);
     }
 
     if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS)) {
-      paleOakFunctionalBlocks(event);
+      paleGardenFunctionalBlocks(event);
       copperFunctionalBlocks(event);
     }
 
@@ -57,21 +57,19 @@ public final class SpliceCreativeModeTabs {
     // if (event.getTabKey().equals(CreativeModeTabs.INVENTORY)) {}
   }
 
-  private static void paleOakNaturalBlocks(BuildCreativeModeTabContentsEvent event) {
-    insert(
-        event,
-        SpliceItems.PALE_MOSS_CARPET,
-        Items.MOSS_CARPET); // TODO: Insert after pale moss block
+  private static void paleGardenNaturalBlocks(BuildCreativeModeTabContentsEvent event) {
+    insert(event, SpliceItems.PALE_MOSS_BLOCK, Items.MOSS_CARPET);
+    insert(event, SpliceItems.PALE_MOSS_CARPET, SpliceItems.PALE_MOSS_BLOCK);
     insert(event, SpliceItems.PALE_OAK_LEAVES, Items.CHERRY_LEAVES);
     insert(event, SpliceItems.PALE_OAK_SAPLING, Items.CHERRY_SAPLING);
   }
 
-  private static void paleOakFunctionalBlocks(BuildCreativeModeTabContentsEvent event) {
+  private static void paleGardenFunctionalBlocks(BuildCreativeModeTabContentsEvent event) {
     insert(event, SpliceItems.PALE_OAK_SIGN, Items.CHERRY_HANGING_SIGN);
     insert(event, SpliceItems.PALE_OAK_HANGING_SIGN, SpliceItems.PALE_OAK_SIGN);
   }
 
-  private static void paleOakBuildingBlocks(BuildCreativeModeTabContentsEvent event) {
+  private static void paleGardenBuildingBlocks(BuildCreativeModeTabContentsEvent event) {
     insert(event, SpliceItems.PALE_OAK_LOG, Items.CHERRY_BUTTON);
     insert(event, SpliceItems.PALE_OAK_WOOD, SpliceItems.PALE_OAK_LOG);
     insert(event, SpliceItems.STRIPPED_OAK_LOG, SpliceItems.PALE_OAK_LOG);

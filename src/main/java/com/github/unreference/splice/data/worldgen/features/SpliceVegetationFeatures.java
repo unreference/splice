@@ -35,6 +35,8 @@ public final class SpliceVegetationFeatures {
       create("pale_moss_vegetation");
   public static final ResourceKey<ConfiguredFeature<?, ?>> PALE_MOSS_PATCH =
       create("pale_moss_patch");
+  public static final ResourceKey<ConfiguredFeature<?, ?>> PALE_MOSS_PATCH_BONE_MEAL =
+      create("pale_moss_patch_bone_meal");
 
   private static ResourceKey<ConfiguredFeature<?, ?>> create(String name) {
     return SpliceRegistries.createKey(Registries.CONFIGURED_FEATURE, name);
@@ -71,7 +73,8 @@ public final class SpliceVegetationFeatures {
         Feature.VEGETATION_PATCH,
         new VegetationPatchConfiguration(
             BlockTags.MOSS_REPLACEABLE,
-            BlockStateProvider.simple(Blocks.MOSS_BLOCK), // TODO: Replace with pale moss block
+            BlockStateProvider.simple(
+                SpliceBlocks.PALE_MOSS_BLOCK.get()), // TODO: Replace with pale moss block
             PlacementUtils.inlinePlaced(configured.getOrThrow(PALE_MOSS_VEGETATION)),
             CaveSurface.FLOOR,
             ConstantInt.of(1),
@@ -79,6 +82,22 @@ public final class SpliceVegetationFeatures {
             5,
             0.3f,
             UniformInt.of(2, 4),
+            0.75f));
+
+    SpliceFeatureUtils.register(
+        context,
+        PALE_MOSS_PATCH_BONE_MEAL,
+        Feature.VEGETATION_PATCH,
+        new VegetationPatchConfiguration(
+            BlockTags.MOSS_REPLACEABLE,
+            BlockStateProvider.simple(SpliceBlocks.PALE_MOSS_BLOCK.get().defaultBlockState()),
+            PlacementUtils.inlinePlaced(configured.getOrThrow(PALE_MOSS_VEGETATION)),
+            CaveSurface.FLOOR,
+            ConstantInt.of(1),
+            0.0f,
+            5,
+            0.6f,
+            UniformInt.of(1, 2),
             0.75f));
   }
 }

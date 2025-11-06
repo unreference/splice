@@ -53,10 +53,10 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.copperItems();
     this.musicDiscItems();
     this.resinItems();
-    this.paleOakItems();
+    this.paleGardenItems();
   }
 
-  private void paleOakItems() {
+  private void paleGardenItems() {
     this.simpleBlockItem(SpliceBlocks.PALE_OAK_LOG.get());
     this.simpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get());
     this.simpleBlockItem(SpliceBlocks.PALE_OAK_WOOD.get());
@@ -65,6 +65,7 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.inventoryBlockItem(SpliceBlocks.PALE_OAK_SAPLING.get());
     this.simpleBlockItem(SpliceBlocks.PALE_OAK_LEAVES.get());
     this.simpleBlockItem(SpliceBlocks.PALE_MOSS_CARPET.get());
+    this.simpleBlockItem(SpliceBlocks.PALE_MOSS_BLOCK.get());
   }
 
   private void resinItems() {

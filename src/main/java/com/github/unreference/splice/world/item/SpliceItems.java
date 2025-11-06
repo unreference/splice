@@ -208,6 +208,11 @@ public final class SpliceItems {
   public static final DeferredItem<BlockItem> PALE_MOSS_CARPET =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_MOSS_CARPET);
 
+  // TODO: Add to villager trades
+  // TODO: Add to composter
+  public static final DeferredItem<BlockItem> PALE_MOSS_BLOCK =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_MOSS_BLOCK);
+
   public static final DeferredItem<BlockItem> PALE_OAK_PLANKS =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_PLANKS);
 

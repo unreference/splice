@@ -63,6 +63,7 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
                 block, SpliceBlocks.PALE_OAK_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
     this.dropPottedContents(SpliceBlocks.POTTED_PALE_OAK_SAPLING.get());
     this.add(SpliceBlocks.PALE_MOSS_CARPET.get(), this::createMossyCarpetBlockDrops);
+    this.dropSelf(SpliceBlocks.PALE_MOSS_BLOCK.get());
   }
 
   @Override

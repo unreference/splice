@@ -413,7 +413,7 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
   @Override
   public boolean isValidBonemealTarget(
       @NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state) {
-    return true;
+    return state.getValue(IS_BASE) && !createTopperWithSideChance(level, pos, () -> true).isAir();
   }
 
   @Override

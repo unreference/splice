@@ -65,10 +65,10 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.blockFamilyBlocks();
     this.copperBlocks();
     this.resinBlocks();
-    this.paleOakBlocks();
+    this.paleGardenBlocks();
   }
 
-  private void paleOakBlocks() {
+  private void paleGardenBlocks() {
     this.log(SpliceBlocks.PALE_OAK_LOG);
     this.log(SpliceBlocks.STRIPPED_PALE_OAK_LOG);
     this.wood(SpliceBlocks.PALE_OAK_WOOD, SpliceUtils.getLocation(SpliceBlocks.PALE_OAK_LOG.get()));
@@ -83,6 +83,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.block(SpliceBlocks.PALE_OAK_LEAVES);
     this.block(SpliceBlocks.POTTED_PALE_OAK_SAPLING);
     this.mossyCarpet(SpliceBlocks.PALE_MOSS_CARPET);
+    this.block(SpliceBlocks.PALE_MOSS_BLOCK);
   }
 
   private void mossyCarpet(DeferredBlock<SpliceMossyCarpetBlock> block) {

@@ -2,6 +2,7 @@ package com.github.unreference.splice.world.level.block;
 
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.core.particles.SpliceParticleTypes;
+import com.github.unreference.splice.data.worldgen.features.SpliceVegetationFeatures;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import com.github.unreference.splice.sounds.SpliceSoundType;
 import com.github.unreference.splice.world.level.block.grower.SpliceTreeGrower;
@@ -332,12 +333,15 @@ public final class SpliceBlocks {
       BLOCKS.registerBlock(
           "pale_moss_carpet",
           SpliceMossyCarpetBlock::new,
-          BlockBehaviour.Properties.of()
-              .ignitedByLava()
-              .mapColor(MapColor.COLOR_LIGHT_GRAY)
-              .strength(0.1f)
-              .sound(SoundType.MOSS_CARPET)
-              .pushReaction(PushReaction.DESTROY));
+          getPaleMossBlockProperties().sound(SoundType.MOSS_CARPET));
+
+  public static final DeferredBlock<SpliceBoneMealableFeaturePlacerBlock> PALE_MOSS_BLOCK =
+      BLOCKS.register(
+          "pale_moss_block",
+          () ->
+              new SpliceBoneMealableFeaturePlacerBlock(
+                  SpliceVegetationFeatures.PALE_MOSS_PATCH_BONE_MEAL,
+                  getPaleMossBlockProperties()));
 
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
@@ -439,6 +443,15 @@ public final class SpliceBlocks {
     return BlockBehaviour.Properties.of()
         .instabreak()
         .noOcclusion()
+        .pushReaction(PushReaction.DESTROY);
+  }
+
+  private static BlockBehaviour.Properties getPaleMossBlockProperties() {
+    return BlockBehaviour.Properties.of()
+        .ignitedByLava()
+        .mapColor(MapColor.COLOR_LIGHT_GRAY)
+        .strength(0.1f)
+        .sound(SoundType.MOSS)
         .pushReaction(PushReaction.DESTROY);
   }
 
