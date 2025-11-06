@@ -25,10 +25,8 @@ public final class SpliceOverworldBiomes extends OverworldBiomes {
     generationSettings.addFeature(
         GenerationStep.Decoration.VEGETAL_DECORATION,
         SpliceVegetationPlacements.PALE_GARDEN_VEGETATION);
-
     generationSettings.addFeature(
-        GenerationStep.Decoration.VEGETAL_DECORATION,
-        VegetationPlacements.PATCH_DEAD_BUSH); // TODO: Replace with pale moss patch
+        GenerationStep.Decoration.VEGETAL_DECORATION, SpliceVegetationPlacements.PALE_MOSS_PATCH);
     generationSettings.addFeature(
         GenerationStep.Decoration.VEGETAL_DECORATION,
         VegetationPlacements.PATCH_DEAD_BUSH_2); // TODO: Replace with pale garden flowers

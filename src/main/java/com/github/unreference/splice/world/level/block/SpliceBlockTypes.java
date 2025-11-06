@@ -36,6 +36,9 @@ public final class SpliceBlockTypes {
       UNTINTED_PARTICLE_LEAVES =
           CODEC.register("untinted_particle_leaves", () -> SpliceUntintedParticleLeavesBlock.CODEC);
 
+  private static final Supplier<MapCodec<SpliceMossyCarpetBlock>> MOSSY_CARPET =
+      CODEC.register("mossy_carpet", () -> SpliceMossyCarpetBlock.CODEC);
+
   public static void register(IEventBus bus) {
     CODEC.register(bus);
   }

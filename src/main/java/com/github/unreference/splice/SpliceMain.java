@@ -9,6 +9,7 @@ import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlockTypes;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import com.github.unreference.splice.world.level.block.entity.SpliceBlockEntityType;
+import com.github.unreference.splice.world.level.levelgen.feature.SpliceFeature;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
@@ -27,6 +28,7 @@ public final class SpliceMain {
   public SpliceMain(IEventBus modEventBus) {
     modEventBus.addListener(SpliceDataGenerator::onGatherData);
 
+    SpliceFeature.register(modEventBus);
     SpliceBlocks.register(modEventBus);
     SpliceBlockEntityType.register(modEventBus);
     SpliceBlockTypes.register(modEventBus);

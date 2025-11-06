@@ -196,11 +196,17 @@ public final class SpliceItems {
   public static final DeferredItem<BlockItem> STRIPPED_OAK_LOG =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_LOG);
 
+  // TODO: Add to composter
   public static final DeferredItem<BlockItem> PALE_OAK_SAPLING =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_SAPLING);
 
+  // TODO: Add to composter
   public static final DeferredItem<BlockItem> PALE_OAK_LEAVES =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_LEAVES);
+
+  // TODO: Add to composter
+  public static final DeferredItem<BlockItem> PALE_MOSS_CARPET =
+      ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_MOSS_CARPET);
 
   public static final DeferredItem<BlockItem> PALE_OAK_PLANKS =
       ITEMS.registerSimpleBlockItem(SpliceBlocks.PALE_OAK_PLANKS);

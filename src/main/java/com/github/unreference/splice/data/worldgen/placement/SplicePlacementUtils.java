@@ -4,11 +4,16 @@ import java.util.List;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.placement.HeightmapPlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 
 public final class SplicePlacementUtils {
+  public static final PlacementModifier HEIGHTMAP_NO_LEAVES =
+      HeightmapPlacement.onHeightmap(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES);
+
   public static void bootstrap(BootstrapContext<PlacedFeature> context) {
     SpliceTreePlacements.bootstrap(context);
     SpliceVegetationPlacements.bootstrap(context);

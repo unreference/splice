@@ -27,7 +27,27 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     this.blockFamily();
     this.copper();
     this.resin();
+    this.mossyCarpetSide();
     this.paleOak();
+  }
+
+  private void mossyCarpetSide() {
+    final String side = "#side";
+    this.getBuilder("mossy_carpet_side")
+        .ao(true)
+        .texture("particle", side)
+        .element()
+        .from(0.0f, 0.0f, 0.1f)
+        .to(16.0f, 16.0f, 0.1f)
+        .shade(true)
+        .face(Direction.NORTH)
+        .uvs(16.0f, 0.0f, 0.0f, 16.0f)
+        .texture(side)
+        .end()
+        .face(Direction.SOUTH)
+        .uvs(0.0f, 0.0f, 16.0f, 16.0f)
+        .texture(side)
+        .end();
   }
 
   private void paleOak() {
@@ -39,6 +59,25 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
     final Block pottedSapling = SpliceBlocks.POTTED_PALE_OAK_SAPLING.get();
     this.flowerPot(SpliceUtils.getName(pottedSapling), SpliceBlocks.PALE_OAK_SAPLING);
+
+    final Block mossCarpet = SpliceBlocks.PALE_MOSS_CARPET.get();
+    this.mossCarpet(mossCarpet);
+  }
+
+  private void mossCarpet(Block block) {
+    final String name = SpliceUtils.getName(block);
+    final ResourceLocation texture = SpliceUtils.getLocation(block);
+    final ResourceLocation mossyCarpetSide = this.modLoc("block/mossy_carpet_side");
+    final ResourceLocation sideTallTexture = ResourceLocation.parse(texture + "_side_tall");
+    final ResourceLocation sideSmallTexture = ResourceLocation.parse(texture + "_side_small");
+
+    this.withExistingParent(name, this.mcLoc("block/carpet")).texture("wool", texture);
+    this.withExistingParent(name + "_side_tall", mossyCarpetSide)
+        .texture("side", sideTallTexture)
+        .renderType("cutout");
+    this.withExistingParent(name + "_side_small", mossyCarpetSide)
+        .texture("side", sideSmallTexture)
+        .renderType("cutout");
   }
 
   private void flowerPot(String name, DeferredBlock<?> plant) {

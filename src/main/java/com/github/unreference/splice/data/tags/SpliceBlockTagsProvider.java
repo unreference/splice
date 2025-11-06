@@ -70,6 +70,7 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
         .add(Blocks.SOUL_LANTERN);
 
     this.tag(BlockTags.GUARDED_BY_PIGLINS).addTag(SpliceBlockTags.COPPER_CHESTS);
+
     this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
         .addTag(SpliceBlockTags.BARS)
         .addTag(SpliceBlockTags.CHAINS)
@@ -78,11 +79,16 @@ public final class SpliceBlockTagsProvider extends BlockTagsProvider {
         .add(SpliceBlocks.RESIN_BRICKS.get())
         .add(SpliceBlocks.CHISELED_RESIN_BRICKS.get());
 
+    this.tag(BlockTags.MINEABLE_WITH_HOE).add(SpliceBlocks.PALE_MOSS_CARPET.get());
+
+    this.tag(BlockTags.REPLACEABLE_BY_TREES).add(SpliceBlocks.PALE_MOSS_CARPET.get());
+
     this.tag(BlockTags.NEEDS_STONE_TOOL).addTag(SpliceBlockTags.COPPER_CHESTS);
     this.tag(BlockTags.WALL_POST_OVERRIDE).add(SpliceBlocks.COPPER_TORCH.get());
     this.tag(BlockTags.COMBINATION_STEP_SOUND_BLOCKS).add(SpliceBlocks.RESIN_CLUMP.get());
     this.tag(BlockTags.STAIRS).add(SpliceBlocks.RESIN_BRICK_STAIRS.get());
     this.tag(BlockTags.SLABS).add(SpliceBlocks.RESIN_BRICK_SLAB.get());
     this.tag(BlockTags.WALLS).add(SpliceBlocks.RESIN_BRICK_WALL.get());
+    this.tag(BlockTags.WOOL_CARPETS).add(SpliceBlocks.PALE_MOSS_CARPET.get());
   }
 }

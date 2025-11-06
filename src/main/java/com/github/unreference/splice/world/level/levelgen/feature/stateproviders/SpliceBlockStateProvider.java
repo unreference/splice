@@ -4,12 +4,15 @@ import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.data.SpliceBlockFamilies;
 import com.github.unreference.splice.util.SpliceUtils;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
+import com.github.unreference.splice.world.level.block.SpliceMossyCarpetBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.WallSide;
 import net.neoforged.neoforge.client.model.generators.*;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -17,6 +20,44 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 public final class SpliceBlockStateProvider extends BlockStateProvider {
   public SpliceBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
     super(output, SpliceMain.MOD_ID, exFileHelper);
+  }
+
+  private static void applyDotCondition(
+      MultiPartBlockStateBuilder builder, ModelFile model, int yRotation, boolean isUvLocked) {
+    builder
+        .part()
+        .rotationY(yRotation)
+        .uvLock(isUvLocked)
+        .modelFile(model)
+        .addModel()
+        .condition(SpliceMossyCarpetBlock.IS_BASE, false)
+        .condition(SpliceMossyCarpetBlock.NORTH, WallSide.NONE)
+        .condition(SpliceMossyCarpetBlock.SOUTH, WallSide.NONE)
+        .condition(SpliceMossyCarpetBlock.EAST, WallSide.NONE)
+        .condition(SpliceMossyCarpetBlock.WEST, WallSide.NONE);
+  }
+
+  private static void applyWallSide(
+      MultiPartBlockStateBuilder builder,
+      EnumProperty<WallSide> wall,
+      ModelFile tall,
+      ModelFile low,
+      int yRotation,
+      boolean isUvLocked) {
+    builder
+        .part()
+        .modelFile(tall)
+        .rotationY(yRotation)
+        .uvLock(isUvLocked)
+        .addModel()
+        .condition(wall, WallSide.TALL);
+    builder
+        .part()
+        .modelFile(low)
+        .rotationY(yRotation)
+        .uvLock(isUvLocked)
+        .addModel()
+        .condition(wall, WallSide.LOW);
   }
 
   @Override
@@ -41,6 +82,31 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.block(SpliceBlocks.PALE_OAK_SAPLING);
     this.block(SpliceBlocks.PALE_OAK_LEAVES);
     this.block(SpliceBlocks.POTTED_PALE_OAK_SAPLING);
+    this.mossyCarpet(SpliceBlocks.PALE_MOSS_CARPET);
+  }
+
+  private void mossyCarpet(DeferredBlock<SpliceMossyCarpetBlock> block) {
+    final Block id = block.get();
+    final String name = SpliceUtils.getName(id);
+    final ModelFile carpet = this.models().getExistingFile(this.modLoc("block/" + name));
+    final ModelFile sideTall =
+        this.models().getExistingFile(this.modLoc("block/" + name + "_side_tall"));
+    final ModelFile sideLow =
+        this.models().getExistingFile(this.modLoc("block/" + name + "_side_small"));
+
+    final MultiPartBlockStateBuilder builder = this.getMultipartBuilder(id);
+    builder.part().modelFile(carpet).addModel().condition(SpliceMossyCarpetBlock.IS_BASE, true);
+
+    applyWallSide(builder, SpliceMossyCarpetBlock.NORTH, sideTall, sideLow, 0, false);
+    applyWallSide(builder, SpliceMossyCarpetBlock.SOUTH, sideTall, sideLow, 180, true);
+    applyWallSide(builder, SpliceMossyCarpetBlock.EAST, sideTall, sideLow, 90, true);
+    applyWallSide(builder, SpliceMossyCarpetBlock.WEST, sideTall, sideLow, 270, true);
+
+    applyDotCondition(builder, carpet, 0, false);
+    applyDotCondition(builder, sideTall, 0, false);
+    applyDotCondition(builder, sideTall, 90, true);
+    applyDotCondition(builder, sideTall, 180, true);
+    applyDotCondition(builder, sideTall, 270, true);
   }
 
   private void log(DeferredBlock<RotatedPillarBlock> block) {
@@ -52,7 +118,8 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     final String name = SpliceUtils.getName(id);
 
     final ModelFile model = this.models().cubeColumn(name, texture, texture);
-    this.getVariantBuilder(id)
+    final VariantBlockStateBuilder builder = this.getVariantBuilder(id);
+    builder
         .partialState()
         .with(RotatedPillarBlock.AXIS, Direction.Axis.Y)
         .modelForState()
@@ -166,9 +233,10 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
   private void multiface(DeferredBlock<Block> block) {
     final Block id = block.get();
-    final MultiPartBlockStateBuilder builder = this.getMultipartBuilder(id);
 
+    final MultiPartBlockStateBuilder builder = this.getMultipartBuilder(id);
     final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
+
     builder
         .part()
         .modelFile(model)

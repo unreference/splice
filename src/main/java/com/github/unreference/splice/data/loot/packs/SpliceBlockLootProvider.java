@@ -1,6 +1,7 @@
 package com.github.unreference.splice.data.loot.packs;
 
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
+import com.github.unreference.splice.world.level.block.SpliceMossyCarpetBlock;
 import java.util.Set;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Direction;
@@ -61,6 +62,7 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
             this.createLeavesDrops(
                 block, SpliceBlocks.PALE_OAK_SAPLING.get(), NORMAL_LEAVES_SAPLING_CHANCES));
     this.dropPottedContents(SpliceBlocks.POTTED_PALE_OAK_SAPLING.get());
+    this.add(SpliceBlocks.PALE_MOSS_CARPET.get(), this::createMossyCarpetBlockDrops);
   }
 
   @Override
@@ -92,5 +94,20 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
                             .apply(
                                 SetItemCountFunction.setCount(
                                     ConstantValue.exactly(-1.0f), true)))));
+  }
+
+  private LootTable.Builder createMossyCarpetBlockDrops(Block block) {
+    return LootTable.lootTable()
+        .withPool(
+            LootPool.lootPool()
+                .add(
+                    this.applyExplosionDecay(
+                        block,
+                        LootItem.lootTableItem(block)
+                            .when(
+                                LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
+                                    .setProperties(
+                                        StatePropertiesPredicate.Builder.properties()
+                                            .hasProperty(SpliceMossyCarpetBlock.IS_BASE, true))))));
   }
 }

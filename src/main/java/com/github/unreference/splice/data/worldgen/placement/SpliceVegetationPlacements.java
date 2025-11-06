@@ -14,6 +14,7 @@ import net.minecraft.world.level.levelgen.placement.*;
 public final class SpliceVegetationPlacements {
   public static final ResourceKey<PlacedFeature> PALE_GARDEN_VEGETATION =
       create("pale_garden_vegetation");
+  public static final ResourceKey<PlacedFeature> PALE_MOSS_PATCH = create("pale_moss_patch");
 
   private static ResourceKey<PlacedFeature> create(String name) {
     return SpliceRegistries.createKey(Registries.PLACED_FEATURE, name);
@@ -22,17 +23,28 @@ public final class SpliceVegetationPlacements {
   public static void bootstrap(BootstrapContext<PlacedFeature> context) {
     final HolderGetter<ConfiguredFeature<?, ?>> configured =
         context.lookup(Registries.CONFIGURED_FEATURE);
-    final Holder<ConfiguredFeature<?, ?>> paleGarden =
+    final Holder<ConfiguredFeature<?, ?>> paleGardenVegetation =
         configured.getOrThrow(SpliceVegetationFeatures.PALE_GARDEN_VEGETATION);
+    final Holder<ConfiguredFeature<?, ?>> paleMossPatch =
+        configured.getOrThrow(SpliceVegetationFeatures.PALE_MOSS_PATCH);
 
     SplicePlacementUtils.register(
         context,
         PALE_GARDEN_VEGETATION,
-        paleGarden,
+        paleGardenVegetation,
         CountPlacement.of(16),
         InSquarePlacement.spread(),
         SurfaceWaterDepthFilter.forMaxDepth(0),
         PlacementUtils.HEIGHTMAP_OCEAN_FLOOR,
+        BiomeFilter.biome());
+
+    SplicePlacementUtils.register(
+        context,
+        PALE_MOSS_PATCH,
+        paleMossPatch,
+        CountPlacement.of(1),
+        InSquarePlacement.spread(),
+        SplicePlacementUtils.HEIGHTMAP_NO_LEAVES,
         BiomeFilter.biome());
   }
 }

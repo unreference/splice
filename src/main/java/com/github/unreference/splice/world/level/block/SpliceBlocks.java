@@ -328,6 +328,17 @@ public final class SpliceBlocks {
                       .pushReaction(PushReaction.DESTROY)
                       .isRedstoneConductor((state, block, pos) -> false)));
 
+  public static final DeferredBlock<SpliceMossyCarpetBlock> PALE_MOSS_CARPET =
+      BLOCKS.registerBlock(
+          "pale_moss_carpet",
+          SpliceMossyCarpetBlock::new,
+          BlockBehaviour.Properties.of()
+              .ignitedByLava()
+              .mapColor(MapColor.COLOR_LIGHT_GRAY)
+              .strength(0.1f)
+              .sound(SoundType.MOSS_CARPET)
+              .pushReaction(PushReaction.DESTROY));
+
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());
   public static DeferredBlock<SlabBlock> RESIN_BRICK_SLAB =
