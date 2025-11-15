@@ -520,6 +520,27 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(recipeOutput, getResourceLocation(packedName));
   }
 
+  protected static void oneToOneConversionRecipe(
+      @NotNull RecipeOutput recipeOutput,
+      ItemLike result,
+      ItemLike ingredient,
+      @Nullable String group) {
+    oneToOneConversionRecipe(recipeOutput, result, ingredient, group, 1);
+  }
+
+  protected static void oneToOneConversionRecipe(
+      @NotNull RecipeOutput recipeOutput,
+      ItemLike result,
+      ItemLike ingredient,
+      @Nullable String group,
+      int resultCount) {
+    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result, resultCount)
+        .requires(ingredient)
+        .group(group)
+        .unlockedBy(getHasName(ingredient), has(ingredient))
+        .save(recipeOutput, getResourceLocation(getConversionRecipeName(result, ingredient)));
+  }
+
   private static void paleGarden(@NotNull RecipeOutput recipeOutput) {
     planksFromLog(recipeOutput, SpliceBlocks.PALE_OAK_PLANKS, SpliceItemTags.PALE_OAK_LOGS, 4);
     woodFromLogs(recipeOutput, SpliceBlocks.PALE_OAK_WOOD, SpliceBlocks.PALE_OAK_LOG);
@@ -528,6 +549,10 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     hangingSign(
         recipeOutput, SpliceBlocks.PALE_OAK_HANGING_SIGN, SpliceBlocks.STRIPPED_PALE_OAK_LOG);
     carpet(recipeOutput, SpliceBlocks.PALE_MOSS_CARPET, SpliceBlocks.PALE_MOSS_BLOCK);
+    oneToOneConversionRecipe(
+        recipeOutput, Items.GRAY_DYE, SpliceBlocks.CLOSED_EYEBLOSSOM, "gray_dye");
+    oneToOneConversionRecipe(
+        recipeOutput, Items.ORANGE_DYE, SpliceBlocks.OPEN_EYEBLOSSOM, "orange_dye");
   }
 
   @Override

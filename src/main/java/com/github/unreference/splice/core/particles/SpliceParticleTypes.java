@@ -18,6 +18,9 @@ public final class SpliceParticleTypes {
   public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PALE_OAK_LEAVES =
       PARTICLE_TYPES.register("pale_oak_leaves", () -> new SimpleParticleType(false));
 
+  public static final DeferredHolder<ParticleType<?>, ParticleType<SpliceTrailParticleOption>>
+      TRAIL = PARTICLE_TYPES.register("trail", () -> new SpliceTrailParticleType(false));
+
   public static void register(IEventBus bus) {
     PARTICLE_TYPES.register(bus);
   }

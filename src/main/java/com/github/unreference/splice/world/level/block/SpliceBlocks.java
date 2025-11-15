@@ -347,7 +347,52 @@ public final class SpliceBlocks {
       BLOCKS.registerBlock(
           "pale_hanging_moss",
           SpliceHangingMossBlock::new,
-          getPaleMossBlockProperties().noCollission().sound(SoundType.MOSS_CARPET));
+          getPaleMossBlockProperties().noCollission().instabreak().sound(SoundType.MOSS_CARPET));
+
+  public static final DeferredBlock<SpliceEyeblossomBlock> CLOSED_EYEBLOSSOM =
+      BLOCKS.register(
+          "closed_eyeblossom",
+          () ->
+              new SpliceEyeblossomBlock(
+                  SpliceEyeblossomBlock.Type.CLOSED,
+                  BlockBehaviour.Properties.of()
+                      .mapColor(MapColor.METAL)
+                      .noCollission()
+                      .instabreak()
+                      .sound(SoundType.GRASS)
+                      .offsetType(BlockBehaviour.OffsetType.XZ)
+                      .pushReaction(PushReaction.DESTROY)
+                      .randomTicks()));
+  public static final DeferredBlock<FlowerPotBlock> POTTED_CLOSED_EYEBLOSSOM =
+      BLOCKS.register(
+          "potted_closed_eyeblossom",
+          () ->
+              new FlowerPotBlock(
+                  () -> (FlowerPotBlock) Blocks.FLOWER_POT,
+                  CLOSED_EYEBLOSSOM,
+                  getFlowerPotProperties()));
+  public static final DeferredBlock<SpliceEyeblossomBlock> OPEN_EYEBLOSSOM =
+      BLOCKS.register(
+          "open_eyeblossom",
+          () ->
+              new SpliceEyeblossomBlock(
+                  SpliceEyeblossomBlock.Type.OPEN,
+                  BlockBehaviour.Properties.of()
+                      .mapColor(MapColor.COLOR_ORANGE)
+                      .noCollission()
+                      .instabreak()
+                      .sound(SoundType.GRASS)
+                      .offsetType(BlockBehaviour.OffsetType.XZ)
+                      .pushReaction(PushReaction.DESTROY)
+                      .randomTicks()));
+  public static final DeferredBlock<FlowerPotBlock> POTTED_OPEN_EYEBLOSSOM =
+      BLOCKS.register(
+          "potted_open_eyeblossom",
+          () ->
+              new FlowerPotBlock(
+                  () -> (FlowerPotBlock) Blocks.FLOWER_POT,
+                  OPEN_EYEBLOSSOM,
+                  getFlowerPotProperties()));
 
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());

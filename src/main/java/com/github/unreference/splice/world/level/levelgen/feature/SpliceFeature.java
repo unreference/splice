@@ -1,9 +1,9 @@
 package com.github.unreference.splice.world.level.levelgen.feature;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.world.level.levelgen.feature.configurations.SpliceSimpleBlockConfiguration;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -17,7 +17,7 @@ public class SpliceFeature {
 
   private static DeferredHolder<Feature<?>, SpliceSimpleBlockFeature> register(String name) {
     return FEATURES.register(
-        name, () -> new SpliceSimpleBlockFeature(SimpleBlockConfiguration.CODEC));
+        name, () -> new SpliceSimpleBlockFeature(SpliceSimpleBlockConfiguration.CODEC));
   }
 
   public static void register(IEventBus bus) {

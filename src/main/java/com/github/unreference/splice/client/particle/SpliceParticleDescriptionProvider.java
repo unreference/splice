@@ -23,5 +23,8 @@ public final class SpliceParticleDescriptionProvider extends ParticleDescription
         ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, "pale_oak"),
         12,
         false);
+
+    this.sprite(
+        SpliceParticleTypes.TRAIL.get(), ResourceLocation.withDefaultNamespace("generic_0"));
   }
 }

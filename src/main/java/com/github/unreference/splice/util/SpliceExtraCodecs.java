@@ -3,8 +3,15 @@ package com.github.unreference.splice.util;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import java.util.function.Function;
+import net.minecraft.util.ExtraCodecs;
 
 public final class SpliceExtraCodecs {
+  public static final Codec<Integer> RGB_COLOR_CODEC =
+      Codec.withAlternative(
+          Codec.INT,
+          ExtraCodecs.VECTOR3F,
+          color -> Argb.color(1.0f, color.x(), color.y(), color.z()));
+
   private static Codec<Float> floatRangeMinInclusiveWithMessage(
       float min, float max, Function<Float, String> message) {
     return Codec.FLOAT.validate(
@@ -16,8 +23,6 @@ public final class SpliceExtraCodecs {
 
   public static Codec<Float> floatRange(float min, float max) {
     return floatRangeMinInclusiveWithMessage(
-        min,
-        max,
-        p_386312_ -> "Value must be within range [" + min + ";" + max + "]: " + p_386312_);
+        min, max, value -> "Value must be within range [" + min + ";" + max + "]: " + value);
   }
 }

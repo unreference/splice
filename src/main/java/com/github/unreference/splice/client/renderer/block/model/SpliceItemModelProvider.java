@@ -67,6 +67,8 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.simpleBlockItem(SpliceBlocks.PALE_MOSS_CARPET.get());
     this.simpleBlockItem(SpliceBlocks.PALE_MOSS_BLOCK.get());
     this.inventoryBlockItem(SpliceBlocks.PALE_HANGING_MOSS.get());
+    this.inventoryBlockItem(SpliceBlocks.CLOSED_EYEBLOSSOM.get());
+    this.inventoryBlockItem(SpliceBlocks.OPEN_EYEBLOSSOM.get());
   }
 
   private void resinItems() {

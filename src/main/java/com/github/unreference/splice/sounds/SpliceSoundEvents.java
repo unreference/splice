@@ -47,6 +47,16 @@ public final class SpliceSoundEvents {
       register("block.resin_bricks.fall");
   public static final DeferredHolder<SoundEvent, SoundEvent> PALE_HANGING_MOSS_IDLE =
       register("block.pale_hanging_moss.idle");
+  public static final DeferredHolder<SoundEvent, SoundEvent> EYEBLOSSOM_OPEN_LONG =
+      register("block.eyeblossom.open_long");
+  public static final DeferredHolder<SoundEvent, SoundEvent> EYEBLOSSOM_OPEN =
+      register("block.eyeblossom.open");
+  public static final DeferredHolder<SoundEvent, SoundEvent> EYEBLOSSOM_CLOSE_LONG =
+      register("block.eyeblossom.close_long");
+  public static final DeferredHolder<SoundEvent, SoundEvent> EYEBLOSSOM_CLOSE =
+      register("block.eyeblossom.close");
+  public static final DeferredHolder<SoundEvent, SoundEvent> EYEBLOSSOM_IDLE =
+      register("block.eyeblossom.idle");
 
   public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_TEARS =
       register("music_disc.tears");

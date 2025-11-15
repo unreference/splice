@@ -69,6 +69,10 @@ public final class SpliceBlockLootProvider extends BlockLootSubProvider {
     this.add(SpliceBlocks.PALE_MOSS_CARPET.get(), this::createMossyCarpetBlockDrops);
     this.dropSelf(SpliceBlocks.PALE_MOSS_BLOCK.get());
     this.add(SpliceBlocks.PALE_HANGING_MOSS.get(), this::createShearsOrSilkTouchDrop);
+    this.dropSelf(SpliceBlocks.CLOSED_EYEBLOSSOM.get());
+    this.dropSelf(SpliceBlocks.OPEN_EYEBLOSSOM.get());
+    this.dropPottedContents(SpliceBlocks.POTTED_CLOSED_EYEBLOSSOM.get());
+    this.dropPottedContents(SpliceBlocks.POTTED_OPEN_EYEBLOSSOM.get());
   }
 
   private LootTable.Builder createShearsOrSilkTouchDrop(Block block) {

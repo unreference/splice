@@ -4,7 +4,6 @@ import com.github.unreference.splice.data.worldgen.placement.SpliceVegetationPla
 import net.minecraft.core.HolderGetter;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.biome.OverworldBiomes;
-import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
@@ -29,15 +28,14 @@ public final class SpliceOverworldBiomes extends OverworldBiomes {
         GenerationStep.Decoration.VEGETAL_DECORATION, SpliceVegetationPlacements.PALE_MOSS_PATCH);
     generationSettings.addFeature(
         GenerationStep.Decoration.VEGETAL_DECORATION,
-        VegetationPlacements.PATCH_DEAD_BUSH_2); // TODO: Replace with pale garden flowers
+        SpliceVegetationPlacements.PALE_GARDEN_FLOWERS);
 
     BiomeDefaultFeatures.addDefaultOres(generationSettings);
     BiomeDefaultFeatures.addDefaultSoftDisks(generationSettings);
 
     generationSettings.addFeature(
         GenerationStep.Decoration.VEGETAL_DECORATION,
-        VegetationPlacements
-            .PATCH_DEAD_BUSH_BADLANDS); // TODO: Replace with pale garden flower vegetation
+        SpliceVegetationPlacements.PALE_GARDEN_FLOWER);
 
     BiomeDefaultFeatures.addForestGrass(generationSettings);
     BiomeDefaultFeatures.addDefaultExtraVegetation(generationSettings);

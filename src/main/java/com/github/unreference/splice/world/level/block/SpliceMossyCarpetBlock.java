@@ -44,12 +44,12 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
                   Direction.SOUTH, SOUTH,
                   Direction.EAST, EAST,
                   Direction.WEST, WEST)));
-  private static final VoxelShape UP_SHAPE = Block.box(0.0, 15.0, 0.0, 16.0, 16.0, 16.0);
-  private static final VoxelShape DOWN_SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
-  private static final VoxelShape NORTH_SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 1.0);
-  private static final VoxelShape SOUTH_SHAPE = Block.box(0.0, 0.0, 15.0, 16.0, 16.0, 16.0);
-  private static final VoxelShape EAST_SHAPE = Block.box(15.0, 0.0, 0.0, 16.0, 16.0, 16.0);
-  private static final VoxelShape WEST_SHAPE = Block.box(0.0, 0.0, 0.0, 1.0, 16.0, 16.0);
+  private static final VoxelShape UP_SHAPE = SpliceBlock.face(Direction.UP);
+  private static final VoxelShape DOWN_SHAPE = SpliceBlock.face(Direction.DOWN);
+  private static final VoxelShape NORTH_SHAPE = SpliceBlock.face(Direction.NORTH);
+  private static final VoxelShape SOUTH_SHAPE = SpliceBlock.face(Direction.SOUTH);
+  private static final VoxelShape EAST_SHAPE = SpliceBlock.face(Direction.EAST);
+  private static final VoxelShape WEST_SHAPE = SpliceBlock.face(Direction.WEST);
   private static final Map<Direction, VoxelShape> TALL_SIDE =
       ImmutableMap.of(
           Direction.UP,
@@ -317,8 +317,8 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
           }
         }
 
-        level.setBlock(pos, base, 3);
-        level.setBlock(pos.above(), topper, 3);
+        level.setBlock(pos, base, Block.UPDATE_ALL);
+        level.setBlock(pos.above(), topper, Block.UPDATE_ALL);
       }
     }
   }
@@ -441,8 +441,8 @@ public final class SpliceMossyCarpetBlock extends Block implements BonemealableB
         }
       }
 
-      level.setBlock(pos, base, 3);
-      level.setBlock(pos.above(), topper, 3);
+      level.setBlock(pos, base, Block.UPDATE_ALL);
+      level.setBlock(pos.above(), topper, Block.UPDATE_ALL);
     }
   }
 }

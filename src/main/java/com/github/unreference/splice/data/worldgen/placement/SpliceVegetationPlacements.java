@@ -15,6 +15,9 @@ public final class SpliceVegetationPlacements {
   public static final ResourceKey<PlacedFeature> PALE_GARDEN_VEGETATION =
       create("pale_garden_vegetation");
   public static final ResourceKey<PlacedFeature> PALE_MOSS_PATCH = create("pale_moss_patch");
+  public static final ResourceKey<PlacedFeature> PALE_GARDEN_FLOWERS =
+      create("pale_garden_flowers");
+  public static final ResourceKey<PlacedFeature> PALE_GARDEN_FLOWER = create("pale_garden_flower");
 
   private static ResourceKey<PlacedFeature> create(String name) {
     return SpliceRegistries.createKey(Registries.PLACED_FEATURE, name);
@@ -27,6 +30,10 @@ public final class SpliceVegetationPlacements {
         configured.getOrThrow(SpliceVegetationFeatures.PALE_GARDEN_VEGETATION);
     final Holder<ConfiguredFeature<?, ?>> paleMossPatch =
         configured.getOrThrow(SpliceVegetationFeatures.PALE_MOSS_PATCH);
+    final Holder<ConfiguredFeature<?, ?>> paleGardenFlowers =
+        configured.getOrThrow(SpliceVegetationFeatures.PALE_GARDEN_FLOWERS);
+    final Holder<ConfiguredFeature<?, ?>> paleGardenFlower =
+        configured.getOrThrow(SpliceVegetationFeatures.PALE_GARDEN_FLOWER);
 
     SplicePlacementUtils.register(
         context,
@@ -40,11 +47,29 @@ public final class SpliceVegetationPlacements {
 
     SplicePlacementUtils.register(
         context,
+        PALE_GARDEN_FLOWERS,
+        paleGardenFlowers,
+        RarityFilter.onAverageOnceEvery(8),
+        InSquarePlacement.spread(),
+        SplicePlacementUtils.HEIGHTMAP_NO_LEAVES,
+        BiomeFilter.biome());
+
+    SplicePlacementUtils.register(
+        context,
         PALE_MOSS_PATCH,
         paleMossPatch,
         CountPlacement.of(1),
         InSquarePlacement.spread(),
         SplicePlacementUtils.HEIGHTMAP_NO_LEAVES,
+        BiomeFilter.biome());
+
+    SplicePlacementUtils.register(
+        context,
+        PALE_GARDEN_FLOWER,
+        paleGardenFlower,
+        RarityFilter.onAverageOnceEvery(32),
+        InSquarePlacement.spread(),
+        PlacementUtils.HEIGHTMAP,
         BiomeFilter.biome());
   }
 }

@@ -83,13 +83,17 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.block(SpliceBlocks.PALE_OAK_SAPLING);
     this.block(SpliceBlocks.PALE_OAK_LEAVES);
     this.block(SpliceBlocks.POTTED_PALE_OAK_SAPLING);
-    this.mossyCarpet(SpliceBlocks.PALE_MOSS_CARPET);
+    this.mossyCarpet();
     this.block(SpliceBlocks.PALE_MOSS_BLOCK);
-    this.hangingMoss(SpliceBlocks.PALE_HANGING_MOSS);
+    this.hangingMoss();
+    this.block(SpliceBlocks.CLOSED_EYEBLOSSOM);
+    this.block(SpliceBlocks.OPEN_EYEBLOSSOM);
+    this.block(SpliceBlocks.POTTED_CLOSED_EYEBLOSSOM);
+    this.block(SpliceBlocks.POTTED_OPEN_EYEBLOSSOM);
   }
 
-  private void hangingMoss(DeferredBlock<SpliceHangingMossBlock> block) {
-    final Block id = block.get();
+  private void hangingMoss() {
+    final Block id = SpliceBlocks.PALE_HANGING_MOSS.get();
     final String name = SpliceUtils.getName(id);
     final ModelFile hangingMoss = this.models().getExistingFile(this.modLoc("block/" + name));
     final ModelFile hangingMossTip =
@@ -109,8 +113,8 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         .addModel();
   }
 
-  private void mossyCarpet(DeferredBlock<SpliceMossyCarpetBlock> block) {
-    final Block id = block.get();
+  private void mossyCarpet() {
+    final Block id = SpliceBlocks.PALE_MOSS_CARPET.get();
     final String name = SpliceUtils.getName(id);
     final ModelFile carpet = this.models().getExistingFile(this.modLoc("block/" + name));
     final ModelFile sideTall =

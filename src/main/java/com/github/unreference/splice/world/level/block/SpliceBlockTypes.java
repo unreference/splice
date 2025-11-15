@@ -47,6 +47,9 @@ public final class SpliceBlockTypes {
   private static final Supplier<MapCodec<SpliceHangingMossBlock>> HANGING_MOSS =
       CODEC.register("hanging_moss", () -> SpliceHangingMossBlock.CODEC);
 
+  private static final Supplier<MapCodec<SpliceEyeblossomBlock>> EYEBLOSSOM =
+      CODEC.register("eyeblossom", () -> SpliceEyeblossomBlock.CODEC);
+
   public static void register(IEventBus bus) {
     CODEC.register(bus);
   }

@@ -58,6 +58,11 @@ public final class SpliceCreativeModeTabs {
   }
 
   private static void paleGardenNaturalBlocks(BuildCreativeModeTabContentsEvent event) {
+    insert(
+        event,
+        SpliceItems.CLOSED_EYEBLOSSOM,
+        Items.TORCHFLOWER); // TODO: Replace with cactus flower
+    insert(event, SpliceItems.OPEN_EYEBLOSSOM, SpliceItems.CLOSED_EYEBLOSSOM);
     insert(event, SpliceItems.PALE_MOSS_BLOCK, Items.MOSS_CARPET);
     insert(event, SpliceItems.PALE_MOSS_CARPET, SpliceItems.PALE_MOSS_BLOCK);
     insert(event, SpliceItems.PALE_HANGING_MOSS, SpliceItems.PALE_MOSS_CARPET);
@@ -73,7 +78,7 @@ public final class SpliceCreativeModeTabs {
   private static void paleGardenBuildingBlocks(BuildCreativeModeTabContentsEvent event) {
     insert(event, SpliceItems.PALE_OAK_LOG, Items.CHERRY_BUTTON);
     insert(event, SpliceItems.PALE_OAK_WOOD, SpliceItems.PALE_OAK_LOG);
-    insert(event, SpliceItems.STRIPPED_OAK_LOG, SpliceItems.PALE_OAK_LOG);
+    insert(event, SpliceItems.STRIPPED_OAK_LOG, SpliceItems.PALE_OAK_WOOD);
     insert(event, SpliceItems.STRIPPED_PALE_OAK_WOOD, SpliceItems.STRIPPED_OAK_LOG);
     insert(event, SpliceItems.PALE_OAK_PLANKS, SpliceItems.STRIPPED_PALE_OAK_WOOD);
     insert(event, SpliceItems.PALE_OAK_STAIRS, SpliceItems.PALE_OAK_PLANKS);

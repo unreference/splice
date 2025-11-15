@@ -2,6 +2,7 @@
   "biome.splice.pale_garden": "Pale Garden",
   "block.minecraft.chain": "Iron Chain",
   "block.splice.chiseled_resin_bricks": "Chiseled Resin Bricks",
+  "block.splice.closed_eyeblossom": "Closed Eyeblossom",
   "block.splice.copper_bars": "Copper Bars",
   "block.splice.copper_chain": "Copper Chain",
   "block.splice.copper_chest": "Copper Chest",
@@ -11,6 +12,7 @@
   "block.splice.exposed_copper_chain": "Exposed Copper Chain",
   "block.splice.exposed_copper_chest": "Exposed Copper Chest",
   "block.splice.exposed_copper_lantern": "Exposed Copper Lantern",
+  "block.splice.open_eyeblossom": "Open Eyeblossom",
   "block.splice.oxidized_copper_bars": "Oxidized Copper Bars",
   "block.splice.oxidized_copper_chain": "Oxidized Copper Chain",
   "block.splice.oxidized_copper_chest": "Oxidized Copper Chest",
@@ -89,7 +91,16 @@
   "jukebox_song.splice.tears": "Amos Roddy - Tears",
   "painting.splice.dennis.author": "Sarah Boeving",
   "painting.splice.dennis.title": "Dennis",
+  "subtitles.splice.block.eyeblossom.close": "Eyeblossom closes",
+  "subtitles.splice.block.eyeblossom.idle": "Eyeblossom whispers",
+  "subtitles.splice.block.eyeblossom.open": "Eyeblossom opens",
   "subtitles.splice.block.generic.fall": "Something falls on a block",
   "subtitles.splice.block.pale_hanging_moss.idle": "Eerie noise",
-  "subtitles.splice.item.armor.equip_copper": "Copper armor clonks"
+  "subtitles.splice.item.armor.equip_copper": "Copper armor clonks",
+  "tag.splice.bars": "Bars",
+  "tag.splice.chains": "Chains",
+  "tag.splice.copper_chests": "Copper Chests",
+  "tag.splice.copper_tool_materials": "Copper Tool Materials",
+  "tag.splice.lanterns": "Lanterns",
+  "tag.splice.pale_oak_logs": "Pale Oak Logs"
 }

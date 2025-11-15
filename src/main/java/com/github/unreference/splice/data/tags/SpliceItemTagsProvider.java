@@ -44,6 +44,9 @@ public final class SpliceItemTagsProvider extends ItemTagsProvider {
     this.copy(BlockTags.STAIRS, ItemTags.STAIRS);
     this.copy(BlockTags.SLABS, ItemTags.SLABS);
     this.copy(BlockTags.WALLS, ItemTags.WALLS);
+    this.copy(BlockTags.DIRT, ItemTags.DIRT);
+    this.copy(BlockTags.FLOWERS, ItemTags.FLOWERS);
+    this.copy(BlockTags.SMALL_FLOWERS, ItemTags.SMALL_FLOWERS);
 
     this.copy(SpliceBlockTags.COPPER_CHESTS, SpliceItemTags.COPPER_CHESTS);
     this.copy(SpliceBlockTags.BARS, SpliceItemTags.BARS);

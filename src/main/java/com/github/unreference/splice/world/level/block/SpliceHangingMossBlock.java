@@ -27,8 +27,8 @@ public final class SpliceHangingMossBlock extends Block implements BonemealableB
   public static final BooleanProperty IS_JUST_THE_TIP = SpliceBlockStateProperties.TIP;
   public static final MapCodec<SpliceHangingMossBlock> CODEC =
       simpleCodec(SpliceHangingMossBlock::new);
-  private static final VoxelShape SHAPE_BASE = SpliceBlock.column(14.0f, 0.0f, 16.0f);
-  private static final VoxelShape SHAPE_TIP = SpliceBlock.column(14.0f, 2.0f, 16.0f);
+  private static final VoxelShape SHAPE_BASE = SpliceBlock.column(14.0, 0.0, 16.0);
+  private static final VoxelShape SHAPE_TIP = SpliceBlock.column(14.0, 2.0, 16.0);
 
   public SpliceHangingMossBlock(Properties properties) {
     super(properties);

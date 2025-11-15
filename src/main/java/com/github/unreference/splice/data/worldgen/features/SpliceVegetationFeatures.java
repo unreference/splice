@@ -4,11 +4,13 @@ import com.github.unreference.splice.data.registries.SpliceRegistries;
 import com.github.unreference.splice.data.worldgen.placement.SpliceTreePlacements;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import com.github.unreference.splice.world.level.levelgen.feature.SpliceFeature;
+import com.github.unreference.splice.world.level.levelgen.feature.configurations.SpliceSimpleBlockConfiguration;
 import java.util.List;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
@@ -21,7 +23,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.VegetationPatchConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.WeightedStateProvider;
@@ -37,6 +39,10 @@ public final class SpliceVegetationFeatures {
       create("pale_moss_patch");
   public static final ResourceKey<ConfiguredFeature<?, ?>> PALE_MOSS_PATCH_BONE_MEAL =
       create("pale_moss_patch_bone_meal");
+  public static final ResourceKey<ConfiguredFeature<?, ?>> PALE_GARDEN_FLOWERS =
+      create("pale_garden_flowers");
+  public static final ResourceKey<ConfiguredFeature<?, ?>> PALE_GARDEN_FLOWER =
+      create("pale_garden_flower");
 
   private static ResourceKey<ConfiguredFeature<?, ?>> create(String name) {
     return SpliceRegistries.createKey(Registries.CONFIGURED_FEATURE, name);
@@ -60,7 +66,7 @@ public final class SpliceVegetationFeatures {
         context,
         PALE_MOSS_VEGETATION,
         SpliceFeature.SIMPLE_BLOCK.get(),
-        new SimpleBlockConfiguration(
+        new SpliceSimpleBlockConfiguration(
             new WeightedStateProvider(
                 SimpleWeightedRandomList.<BlockState>builder()
                     .add(SpliceBlocks.PALE_MOSS_CARPET.get().defaultBlockState(), 25)
@@ -98,5 +104,27 @@ public final class SpliceVegetationFeatures {
             0.6f,
             UniformInt.of(1, 2),
             0.75f));
+
+    SpliceFeatureUtils.register(
+        context,
+        PALE_GARDEN_FLOWERS,
+        Feature.RANDOM_PATCH,
+        FeatureUtils.simplePatchConfiguration(
+            SpliceFeature.SIMPLE_BLOCK.get(),
+            new SpliceSimpleBlockConfiguration(
+                BlockStateProvider.simple(SpliceBlocks.CLOSED_EYEBLOSSOM.get()), true)));
+
+    SpliceFeatureUtils.register(
+        context,
+        PALE_GARDEN_FLOWER,
+        Feature.FLOWER,
+        new RandomPatchConfiguration(
+            1,
+            0,
+            0,
+            PlacementUtils.onlyWhenEmpty(
+                SpliceFeature.SIMPLE_BLOCK.get(),
+                new SpliceSimpleBlockConfiguration(
+                    BlockStateProvider.simple(SpliceBlocks.CLOSED_EYEBLOSSOM.get()), true))));
   }
 }

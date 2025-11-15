@@ -1,6 +1,7 @@
 package com.github.unreference.splice.client;
 
 import com.github.unreference.splice.client.particle.SpliceFallingLeavesParticle;
+import com.github.unreference.splice.client.particle.SpliceTrailParticle;
 import com.github.unreference.splice.client.renderer.entity.SpliceItemRenderer;
 import com.github.unreference.splice.client.renderer.entity.blockentity.SpliceCopperChestRenderer;
 import com.github.unreference.splice.core.particles.SpliceParticleTypes;
@@ -41,6 +42,7 @@ public final class SpliceClientMain {
     event.registerSpriteSet(
         SpliceParticleTypes.PALE_OAK_LEAVES.get(),
         SpliceFallingLeavesParticle.PaleOakProvider::new);
+    event.registerSpriteSet(SpliceParticleTypes.TRAIL.get(), SpliceTrailParticle.Provider::new);
   }
 
   @SubscribeEvent

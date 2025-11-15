@@ -68,6 +68,20 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
 
     final Block hangingMoss = SpliceBlocks.PALE_HANGING_MOSS.get();
     this.hangingMoss(hangingMoss);
+
+    final Block closedEyeblossom = SpliceBlocks.CLOSED_EYEBLOSSOM.get();
+    this.cross(SpliceUtils.getName(closedEyeblossom), SpliceUtils.getLocation(closedEyeblossom))
+        .renderType("cutout");
+
+    final Block openEyeblossom = SpliceBlocks.OPEN_EYEBLOSSOM.get();
+    this.cross(SpliceUtils.getName(openEyeblossom), SpliceUtils.getLocation(openEyeblossom))
+        .renderType("cutout");
+
+    final Block pottedClosedEyeblossom = SpliceBlocks.POTTED_CLOSED_EYEBLOSSOM.get();
+    this.flowerPot(SpliceUtils.getName(pottedClosedEyeblossom), SpliceBlocks.CLOSED_EYEBLOSSOM);
+
+    final Block pottedOpenEyeblossom = SpliceBlocks.POTTED_OPEN_EYEBLOSSOM.get();
+    this.flowerPot(SpliceUtils.getName(pottedOpenEyeblossom), SpliceBlocks.OPEN_EYEBLOSSOM);
   }
 
   private void hangingMoss(Block block) {

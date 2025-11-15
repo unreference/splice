@@ -58,12 +58,17 @@ public final class SpliceMain {
     block.setFlammable(SpliceBlocks.PALE_OAK_WOOD.get(), 5, 5);
     block.setFlammable(SpliceBlocks.PALE_OAK_LEAVES.get(), 30, 60);
     block.setFlammable(SpliceBlocks.PALE_MOSS_CARPET.get(), 5, 100);
+    block.setFlammable(SpliceBlocks.PALE_MOSS_BLOCK.get(), 5, 100);
     block.setFlammable(SpliceBlocks.PALE_HANGING_MOSS.get(), 5, 100);
+    block.setFlammable(SpliceBlocks.CLOSED_EYEBLOSSOM.get(), 60, 100);
+    block.setFlammable(SpliceBlocks.OPEN_EYEBLOSSOM.get(), 60, 100);
   }
 
   private static void addPottedPlants() {
     final FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
     pot.addPlant(SpliceBlocks.PALE_OAK_SAPLING.getId(), SpliceBlocks.POTTED_PALE_OAK_SAPLING);
+    pot.addPlant(SpliceBlocks.CLOSED_EYEBLOSSOM.getId(), SpliceBlocks.POTTED_CLOSED_EYEBLOSSOM);
+    pot.addPlant(SpliceBlocks.OPEN_EYEBLOSSOM.getId(), SpliceBlocks.POTTED_OPEN_EYEBLOSSOM);
   }
 
   private void onFmlCommonSetup(FMLCommonSetupEvent event) {

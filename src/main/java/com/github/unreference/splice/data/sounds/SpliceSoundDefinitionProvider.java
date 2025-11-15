@@ -190,6 +190,49 @@ public final class SpliceSoundDefinitionProvider extends SoundDefinitionsProvide
             .subtitle("subtitles.splice.block.pale_hanging_moss.idle"));
 
     this.add(
+        SpliceSoundEvents.EYEBLOSSOM_OPEN_LONG,
+        SoundDefinition.definition()
+            .with(sound(getResourceLocation("block/eyeblossom/eyeblossom_open_long")))
+            .subtitle("subtitles.splice.block.eyeblossom.open"));
+
+    this.add(
+        SpliceSoundEvents.EYEBLOSSOM_OPEN,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_open1")),
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_open2")),
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_open3")),
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_open4")))
+            .subtitle("subtitles.splice.block.eyeblossom.open"));
+
+    this.add(
+        SpliceSoundEvents.EYEBLOSSOM_CLOSE_LONG,
+        SoundDefinition.definition()
+            .with(sound(getResourceLocation("block/eyeblossom/eyeblossom_close_long")))
+            .subtitle("subtitles.splice.block.eyeblossom.close"));
+
+    this.add(
+        SpliceSoundEvents.EYEBLOSSOM_CLOSE,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_close1")),
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_close2")),
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_close3")))
+            .subtitle("subtitles.splice.block.eyeblossom.close"));
+
+    this.add(
+        SpliceSoundEvents.EYEBLOSSOM_IDLE,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_idle1")),
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_idle2")),
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_idle3")),
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_idle4")),
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_idle5")),
+                sound(getResourceLocation("block/eyeblossom/eyeblossom_idle6")))
+            .subtitle("subtitles.splice.block.eyeblossom.idle"));
+
+    this.add(
         SpliceSoundEvents.MUSIC_DISC_TEARS,
         SoundDefinition.definition().with(sound(getResourceLocation("records/tears")).stream()));
 
