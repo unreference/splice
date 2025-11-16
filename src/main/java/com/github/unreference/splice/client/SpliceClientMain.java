@@ -5,22 +5,29 @@ import com.github.unreference.splice.client.particle.SpliceTrailParticle;
 import com.github.unreference.splice.client.renderer.entity.SpliceItemRenderer;
 import com.github.unreference.splice.client.renderer.entity.blockentity.SpliceCopperChestRenderer;
 import com.github.unreference.splice.core.particles.SpliceParticleTypes;
+import com.github.unreference.splice.data.worldgen.biome.SpliceBiomes;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import com.github.unreference.splice.world.level.block.entity.SpliceBlockEntityType;
 import com.github.unreference.splice.world.level.block.entity.SpliceCopperChestBlockEntity;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.FlameParticle;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.blockentity.HangingSignRenderer;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.event.SelectMusicEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import org.jetbrains.annotations.NotNull;
@@ -84,5 +91,23 @@ public final class SpliceClientMain {
         return this.renderer;
       }
     };
+  }
+
+  @SubscribeEvent
+  public static void onSelectMusic(SelectMusicEvent event) {
+    final Minecraft mc = Minecraft.getInstance();
+    final LocalPlayer player = mc.player;
+    final ClientLevel level = mc.level;
+
+    if (player == null || level == null) {
+      return;
+    }
+
+    final BlockPos pos = player.blockPosition();
+    final Holder<Biome> biome = level.getBiome(pos);
+
+    if (biome.is(SpliceBiomes.PALE_GARDEN)) {
+      event.setMusic(null);
+    }
   }
 }

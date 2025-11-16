@@ -13,21 +13,42 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public final class SpliceTreePlacements {
-  public static final ResourceKey<PlacedFeature> PALE_OAK_CHECKED = create("pale_oak_checked");
+  public static final ResourceKey<PlacedFeature> PALE_OAK = create("pale_oak");
+  public static final ResourceKey<PlacedFeature> PALE_OAK_CREAKING_HEART =
+      create("pale_oak_creaking_heart");
 
   private static ResourceKey<PlacedFeature> create(String name) {
     return SpliceRegistries.createKey(Registries.PLACED_FEATURE, name);
   }
 
   public static void bootstrap(BootstrapContext<PlacedFeature> context) {
-    final HolderGetter<ConfiguredFeature<?, ?>> features =
+    final HolderGetter<ConfiguredFeature<?, ?>> configured =
         context.lookup(Registries.CONFIGURED_FEATURE);
-    final Holder<ConfiguredFeature<?, ?>> paleOak =
-        features.getOrThrow(SpliceTreeFeatures.PALE_OAK);
+
+    paleOak(context, configured);
+    paleOakCreakingHeart(context, configured);
+  }
+
+  private static void paleOakCreakingHeart(
+      BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configured) {
+    final Holder<ConfiguredFeature<?, ?>> paleOakCreakingHeart =
+        configured.getOrThrow(SpliceTreeFeatures.PALE_OAK_CREAKING_HEART);
 
     SplicePlacementUtils.register(
         context,
-        PALE_OAK_CHECKED,
+        PALE_OAK_CREAKING_HEART,
+        paleOakCreakingHeart,
+        PlacementUtils.filteredByBlockSurvival(SpliceBlocks.PALE_OAK_SAPLING.get()));
+  }
+
+  private static void paleOak(
+      BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configured) {
+    final Holder<ConfiguredFeature<?, ?>> paleOak =
+        configured.getOrThrow(SpliceTreeFeatures.PALE_OAK);
+
+    SplicePlacementUtils.register(
+        context,
+        PALE_OAK,
         paleOak,
         PlacementUtils.filteredByBlockSurvival(SpliceBlocks.PALE_OAK_SAPLING.get()));
   }

@@ -19,8 +19,6 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 public final class SpliceDataGenerator {
   public static void onGatherData(GatherDataEvent event) {
-    event.createDatapackRegistryObjects(SpliceRegistries.BUILDER);
-
     final DataGenerator generator = event.getGenerator();
     final PackOutput output = generator.getPackOutput();
     final CompletableFuture<HolderLookup.Provider> lookup = event.getLookupProvider();
@@ -49,36 +47,26 @@ public final class SpliceDataGenerator {
       PackOutput output,
       CompletableFuture<HolderLookup.Provider> lookup,
       ExistingFileHelper helper) {
-    // Advancement provider
-    // Loot table provider
-    generator.addProvider(true, SpliceLootTableProvider.create(output, lookup));
-    generator.addProvider(true, new SpliceLootModifierProvider(output, lookup));
-    // Recipe provider
-    generator.addProvider(true, new SpliceRecipeProvider(output, lookup));
-    // Block tags provider
-    final SpliceBlockTagsProvider blockTags = new SpliceBlockTagsProvider(output, lookup, helper);
+    final SpliceRegistries registries = new SpliceRegistries(output, lookup);
+    generator.addProvider(true, registries);
+
+    final CompletableFuture<HolderLookup.Provider> futureLookup = registries.getRegistryProvider();
+
+    generator.addProvider(true, SpliceLootTableProvider.create(output, futureLookup));
+    generator.addProvider(true, new SpliceLootModifierProvider(output, futureLookup));
+    generator.addProvider(true, new SpliceRecipeProvider(output, futureLookup));
+
+    final SpliceBlockTagsProvider blockTags =
+        new SpliceBlockTagsProvider(output, futureLookup, helper);
     generator.addProvider(true, blockTags);
-    // Item tags provider
+
     generator.addProvider(
-        true, new SpliceItemTagsProvider(output, lookup, blockTags.contentsGetter(), helper));
-    // Data maps provider
-    generator.addProvider(true, new SpliceDataMapsProvider(output, lookup));
-    // Biome tags provider
-    generator.addProvider(true, new SpliceBiomeTagsProvider(output, lookup, helper));
-    // Banner pattern tags provider
-    generator.addProvider(true, new SpliceBannerPatternTagsProvider(output, lookup, helper));
-    // Structure tags provider
-    // Damage type tags provider
-    // Dialog tags provider
-    // Entity type tags provider
-    // Flat level generator preset tags provider
-    // Fluid tags provider
-    // Game event tags provider
-    // Instrument tags provider
-    // Painting variant tags provider
-    generator.addProvider(true, new SplicePaintingVariantTagsProvider(output, lookup, helper));
-    // POI type tags provider
-    // World preset tags provider
-    // Enchantment tags provider
+        true, new SpliceItemTagsProvider(output, futureLookup, blockTags.contentsGetter(), helper));
+
+    generator.addProvider(true, new SpliceDataMapsProvider(output, futureLookup));
+    generator.addProvider(true, new SpliceBiomeTagsProvider(output, futureLookup, helper));
+    generator.addProvider(true, new SpliceBannerPatternTagsProvider(output, futureLookup, helper));
+    generator.addProvider(
+        true, new SplicePaintingVariantTagsProvider(output, futureLookup, helper));
   }
 }

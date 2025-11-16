@@ -4,6 +4,7 @@ import com.github.unreference.splice.client.SpliceClientMain;
 import com.github.unreference.splice.core.particles.SpliceParticleTypes;
 import com.github.unreference.splice.data.SpliceDataGenerator;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
+import com.github.unreference.splice.terrablender.SpliceOverworldRegion;
 import com.github.unreference.splice.world.item.SpliceCreativeModeTabs;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlockTypes;
@@ -19,7 +20,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
+import terrablender.api.Regions;
 
 @Mod(SpliceMain.MOD_ID)
 public final class SpliceMain {
@@ -39,8 +42,12 @@ public final class SpliceMain {
     SpliceSoundEvents.register(modEventBus);
 
     if (FMLEnvironment.dist.isClient()) {
-      modEventBus.register(SpliceClientMain.class);
+      modEventBus.addListener(SpliceClientMain::onEntityRenderersEvent);
+      modEventBus.addListener(SpliceClientMain::onRegisterParticleProviders);
+      modEventBus.addListener(SpliceClientMain::onRegisterClientExtensions);
       modEventBus.register(SpliceCreativeModeTabs.class);
+
+      NeoForge.EVENT_BUS.addListener(SpliceClientMain::onSelectMusic);
     }
 
     modEventBus.addListener(this::onFmlCommonSetup);
@@ -71,11 +78,16 @@ public final class SpliceMain {
     pot.addPlant(SpliceBlocks.OPEN_EYEBLOSSOM.getId(), SpliceBlocks.POTTED_OPEN_EYEBLOSSOM);
   }
 
+  private static void addBiomes() {
+    Regions.register(new SpliceOverworldRegion(10));
+  }
+
   private void onFmlCommonSetup(FMLCommonSetupEvent event) {
     event.enqueueWork(
         () -> {
           addFlammables();
           addPottedPlants();
+          addBiomes();
         });
   }
 }

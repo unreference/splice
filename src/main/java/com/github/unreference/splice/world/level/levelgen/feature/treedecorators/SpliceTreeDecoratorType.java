@@ -17,6 +17,10 @@ public record SpliceTreeDecoratorType<T extends TreeDecorator>(MapCodec<T> codec
           TreeDecoratorType<?>, TreeDecoratorType<SplicePaleMossDecorator>>
       PALE_MOSS = register("pale_moss", SplicePaleMossDecorator.CODEC);
 
+  public static final DeferredHolder<
+          TreeDecoratorType<?>, TreeDecoratorType<SpliceCreakingHeartDecorator>>
+      CREAKING_HEART = register("creaking_heart", SpliceCreakingHeartDecorator.CODEC);
+
   private static <T extends TreeDecorator>
       DeferredHolder<TreeDecoratorType<?>, TreeDecoratorType<T>> register(
           String name, MapCodec<T> codec) {

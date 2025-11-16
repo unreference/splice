@@ -62,8 +62,6 @@ public final class SpliceSoundEvents {
       register("music_disc.tears");
   public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_LAVA_CHICKEN =
       register("music_disc.lava_chicken");
-  public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_COFFEE_MACHINE =
-      register("music_disc.coffee_machine");
 
   private static DeferredHolder<SoundEvent, SoundEvent> register(String key) {
     final ResourceLocation id = ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, key);

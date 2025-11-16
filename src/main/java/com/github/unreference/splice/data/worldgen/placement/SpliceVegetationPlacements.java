@@ -26,50 +26,71 @@ public final class SpliceVegetationPlacements {
   public static void bootstrap(BootstrapContext<PlacedFeature> context) {
     final HolderGetter<ConfiguredFeature<?, ?>> configured =
         context.lookup(Registries.CONFIGURED_FEATURE);
-    final Holder<ConfiguredFeature<?, ?>> paleGardenVegetation =
-        configured.getOrThrow(SpliceVegetationFeatures.PALE_GARDEN_VEGETATION);
-    final Holder<ConfiguredFeature<?, ?>> paleMossPatch =
-        configured.getOrThrow(SpliceVegetationFeatures.PALE_MOSS_PATCH);
-    final Holder<ConfiguredFeature<?, ?>> paleGardenFlowers =
-        configured.getOrThrow(SpliceVegetationFeatures.PALE_GARDEN_FLOWERS);
-    final Holder<ConfiguredFeature<?, ?>> paleGardenFlower =
+
+    paleGardenVegetation(context, configured);
+    paleGardenFlowers(context, configured);
+    paleMossPatch(context, configured);
+    paleGardenFlower(context, configured);
+  }
+
+  private static void paleGardenFlower(
+      BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configured) {
+    final Holder<ConfiguredFeature<?, ?>> holder =
         configured.getOrThrow(SpliceVegetationFeatures.PALE_GARDEN_FLOWER);
 
     SplicePlacementUtils.register(
         context,
-        PALE_GARDEN_VEGETATION,
-        paleGardenVegetation,
-        CountPlacement.of(16),
+        PALE_GARDEN_FLOWER,
+        holder,
+        RarityFilter.onAverageOnceEvery(32),
         InSquarePlacement.spread(),
-        SurfaceWaterDepthFilter.forMaxDepth(0),
-        PlacementUtils.HEIGHTMAP_OCEAN_FLOOR,
+        PlacementUtils.HEIGHTMAP,
         BiomeFilter.biome());
+  }
 
-    SplicePlacementUtils.register(
-        context,
-        PALE_GARDEN_FLOWERS,
-        paleGardenFlowers,
-        RarityFilter.onAverageOnceEvery(8),
-        InSquarePlacement.spread(),
-        SplicePlacementUtils.HEIGHTMAP_NO_LEAVES,
-        BiomeFilter.biome());
+  private static void paleMossPatch(
+      BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configured) {
+    final Holder<ConfiguredFeature<?, ?>> holder =
+        configured.getOrThrow(SpliceVegetationFeatures.PALE_MOSS_PATCH);
 
     SplicePlacementUtils.register(
         context,
         PALE_MOSS_PATCH,
-        paleMossPatch,
+        holder,
         CountPlacement.of(1),
         InSquarePlacement.spread(),
         SplicePlacementUtils.HEIGHTMAP_NO_LEAVES,
         BiomeFilter.biome());
+  }
+
+  private static void paleGardenFlowers(
+      BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configured) {
+    final Holder<ConfiguredFeature<?, ?>> holder =
+        configured.getOrThrow(SpliceVegetationFeatures.PALE_GARDEN_FLOWERS);
 
     SplicePlacementUtils.register(
         context,
-        PALE_GARDEN_FLOWER,
-        paleGardenFlower,
-        RarityFilter.onAverageOnceEvery(32),
+        PALE_GARDEN_FLOWERS,
+        holder,
+        RarityFilter.onAverageOnceEvery(8),
         InSquarePlacement.spread(),
-        PlacementUtils.HEIGHTMAP,
+        SplicePlacementUtils.HEIGHTMAP_NO_LEAVES,
+        BiomeFilter.biome());
+  }
+
+  private static void paleGardenVegetation(
+      BootstrapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configured) {
+    final Holder<ConfiguredFeature<?, ?>> holder =
+        configured.getOrThrow(SpliceVegetationFeatures.PALE_GARDEN_VEGETATION);
+
+    SplicePlacementUtils.register(
+        context,
+        PALE_GARDEN_VEGETATION,
+        holder,
+        CountPlacement.of(16),
+        InSquarePlacement.spread(),
+        SurfaceWaterDepthFilter.forMaxDepth(0),
+        PlacementUtils.HEIGHTMAP_OCEAN_FLOOR,
         BiomeFilter.biome());
   }
 }

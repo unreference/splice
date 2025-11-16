@@ -287,14 +287,6 @@ public final class SpliceItems {
               .rarity(Rarity.RARE)
               .jukeboxPlayable(SpliceJukeboxSongs.LAVA_CHICKEN));
 
-  public static final DeferredItem<Item> MUSIC_DISC_COFFEE_MACHINE =
-      ITEMS.registerSimpleItem(
-          "music_disc_coffee_machine",
-          new Item.Properties()
-              .stacksTo(1)
-              .rarity(Rarity.EPIC)
-              .jukeboxPlayable(SpliceJukeboxSongs.COFFEE_MACHINE));
-
   public static void register(IEventBus bus) {
     bannerPatterns();
     ITEMS.register(bus);

@@ -8,6 +8,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.tags.BiomeTags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class SpliceBiomeTagsProvider extends BiomeTagsProvider {
@@ -19,9 +20,10 @@ public final class SpliceBiomeTagsProvider extends BiomeTagsProvider {
   }
 
   @Override
-  protected void addTags(HolderLookup.Provider provider) {
+  protected void addTags(HolderLookup.@NotNull Provider provider) {
     this.tag(BiomeTags.IS_FOREST).add(SpliceBiomes.PALE_GARDEN);
     this.tag(BiomeTags.HAS_WOODLAND_MANSION).add(SpliceBiomes.PALE_GARDEN);
     this.tag(BiomeTags.STRONGHOLD_BIASED_TO).add(SpliceBiomes.PALE_GARDEN);
+    this.tag(BiomeTags.IS_OVERWORLD).add(SpliceBiomes.PALE_GARDEN);
   }
 }

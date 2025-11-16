@@ -49,46 +49,46 @@ public final class SpliceVegetationFeatures {
   }
 
   public static void bootstrap(BootstrapContext<ConfiguredFeature<?, ?>> context) {
-    final HolderGetter<PlacedFeature> placed = context.lookup(Registries.PLACED_FEATURE);
     final HolderGetter<ConfiguredFeature<?, ?>> configured =
         context.lookup(Registries.CONFIGURED_FEATURE);
-    final Holder<PlacedFeature> paleOakChecked =
-        placed.getOrThrow(SpliceTreePlacements.PALE_OAK_CHECKED);
 
+    paleGardenVegetation(context);
+    paleMossVegetation(context);
+    paleMossPatch(context, configured);
+    paleMossPatchBoneMeal(context, configured);
+    paleGardenFlowers(context);
+    paleGardenFlower(context);
+  }
+
+  private static void paleGardenFlower(BootstrapContext<ConfiguredFeature<?, ?>> context) {
     SpliceFeatureUtils.register(
         context,
-        PALE_GARDEN_VEGETATION,
-        Feature.RANDOM_SELECTOR,
-        new RandomFeatureConfiguration(
-            List.of(new WeightedPlacedFeature(paleOakChecked, 0.9f)), paleOakChecked));
+        PALE_GARDEN_FLOWER,
+        Feature.FLOWER,
+        new RandomPatchConfiguration(
+            1,
+            0,
+            0,
+            PlacementUtils.onlyWhenEmpty(
+                SpliceFeature.SIMPLE_BLOCK.get(),
+                new SpliceSimpleBlockConfiguration(
+                    BlockStateProvider.simple(SpliceBlocks.CLOSED_EYEBLOSSOM.get()), true))));
+  }
 
+  private static void paleGardenFlowers(BootstrapContext<ConfiguredFeature<?, ?>> context) {
     SpliceFeatureUtils.register(
         context,
-        PALE_MOSS_VEGETATION,
-        SpliceFeature.SIMPLE_BLOCK.get(),
-        new SpliceSimpleBlockConfiguration(
-            new WeightedStateProvider(
-                SimpleWeightedRandomList.<BlockState>builder()
-                    .add(SpliceBlocks.PALE_MOSS_CARPET.get().defaultBlockState(), 25)
-                    .add(Blocks.SHORT_GRASS.defaultBlockState(), 25)
-                    .add(Blocks.TALL_GRASS.defaultBlockState(), 10))));
+        PALE_GARDEN_FLOWERS,
+        Feature.RANDOM_PATCH,
+        FeatureUtils.simplePatchConfiguration(
+            SpliceFeature.SIMPLE_BLOCK.get(),
+            new SpliceSimpleBlockConfiguration(
+                BlockStateProvider.simple(SpliceBlocks.CLOSED_EYEBLOSSOM.get()), true)));
+  }
 
-    SpliceFeatureUtils.register(
-        context,
-        PALE_MOSS_PATCH,
-        Feature.VEGETATION_PATCH,
-        new VegetationPatchConfiguration(
-            BlockTags.MOSS_REPLACEABLE,
-            BlockStateProvider.simple(SpliceBlocks.PALE_MOSS_BLOCK.get()),
-            PlacementUtils.inlinePlaced(configured.getOrThrow(PALE_MOSS_VEGETATION)),
-            CaveSurface.FLOOR,
-            ConstantInt.of(1),
-            0.0f,
-            5,
-            0.3f,
-            UniformInt.of(2, 4),
-            0.75f));
-
+  private static void paleMossPatchBoneMeal(
+      BootstrapContext<ConfiguredFeature<?, ?>> context,
+      HolderGetter<ConfiguredFeature<?, ?>> configured) {
     SpliceFeatureUtils.register(
         context,
         PALE_MOSS_PATCH_BONE_MEAL,
@@ -104,27 +104,56 @@ public final class SpliceVegetationFeatures {
             0.6f,
             UniformInt.of(1, 2),
             0.75f));
+  }
+
+  private static void paleMossPatch(
+      BootstrapContext<ConfiguredFeature<?, ?>> context,
+      HolderGetter<ConfiguredFeature<?, ?>> configured) {
+    SpliceFeatureUtils.register(
+        context,
+        PALE_MOSS_PATCH,
+        Feature.VEGETATION_PATCH,
+        new VegetationPatchConfiguration(
+            BlockTags.MOSS_REPLACEABLE,
+            BlockStateProvider.simple(SpliceBlocks.PALE_MOSS_BLOCK.get()),
+            PlacementUtils.inlinePlaced(configured.getOrThrow(PALE_MOSS_VEGETATION)),
+            CaveSurface.FLOOR,
+            ConstantInt.of(1),
+            0.0f,
+            5,
+            0.3f,
+            UniformInt.of(2, 4),
+            0.75f));
+  }
+
+  private static void paleMossVegetation(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+    SpliceFeatureUtils.register(
+        context,
+        PALE_MOSS_VEGETATION,
+        SpliceFeature.SIMPLE_BLOCK.get(),
+        new SpliceSimpleBlockConfiguration(
+            new WeightedStateProvider(
+                SimpleWeightedRandomList.<BlockState>builder()
+                    .add(SpliceBlocks.PALE_MOSS_CARPET.get().defaultBlockState(), 25)
+                    .add(Blocks.SHORT_GRASS.defaultBlockState(), 25)
+                    .add(Blocks.TALL_GRASS.defaultBlockState(), 10))));
+  }
+
+  private static void paleGardenVegetation(BootstrapContext<ConfiguredFeature<?, ?>> context) {
+    final HolderGetter<PlacedFeature> holderGetter = context.lookup(Registries.PLACED_FEATURE);
+    final Holder<PlacedFeature> paleOakHolder =
+        holderGetter.getOrThrow(SpliceTreePlacements.PALE_OAK);
+    final Holder<PlacedFeature> paleOakCreakingHeartHolder =
+        holderGetter.getOrThrow(SpliceTreePlacements.PALE_OAK_CREAKING_HEART);
 
     SpliceFeatureUtils.register(
         context,
-        PALE_GARDEN_FLOWERS,
-        Feature.RANDOM_PATCH,
-        FeatureUtils.simplePatchConfiguration(
-            SpliceFeature.SIMPLE_BLOCK.get(),
-            new SpliceSimpleBlockConfiguration(
-                BlockStateProvider.simple(SpliceBlocks.CLOSED_EYEBLOSSOM.get()), true)));
-
-    SpliceFeatureUtils.register(
-        context,
-        PALE_GARDEN_FLOWER,
-        Feature.FLOWER,
-        new RandomPatchConfiguration(
-            1,
-            0,
-            0,
-            PlacementUtils.onlyWhenEmpty(
-                SpliceFeature.SIMPLE_BLOCK.get(),
-                new SpliceSimpleBlockConfiguration(
-                    BlockStateProvider.simple(SpliceBlocks.CLOSED_EYEBLOSSOM.get()), true))));
+        PALE_GARDEN_VEGETATION,
+        Feature.RANDOM_SELECTOR,
+        new RandomFeatureConfiguration(
+            List.of(
+                new WeightedPlacedFeature(paleOakCreakingHeartHolder, 0.1f),
+                new WeightedPlacedFeature(paleOakHolder, 0.9f)),
+            paleOakHolder));
   }
 }

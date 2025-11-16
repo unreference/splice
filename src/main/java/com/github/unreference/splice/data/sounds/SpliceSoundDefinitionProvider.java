@@ -240,10 +240,5 @@ public final class SpliceSoundDefinitionProvider extends SoundDefinitionsProvide
         SpliceSoundEvents.MUSIC_DISC_LAVA_CHICKEN,
         SoundDefinition.definition()
             .with(sound(getResourceLocation("records/lava_chicken")).stream()));
-
-    this.add(
-        SpliceSoundEvents.MUSIC_DISC_COFFEE_MACHINE,
-        SoundDefinition.definition()
-            .with(sound(getResourceLocation("records/coffee_machine")).stream()));
   }
 }

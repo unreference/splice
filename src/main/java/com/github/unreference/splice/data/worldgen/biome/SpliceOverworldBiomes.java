@@ -53,7 +53,6 @@ public final class SpliceOverworldBiomes extends OverworldBiomes {
                 .grassColorOverride(7832178)
                 .foliageColorOverride(8883574)
                 .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                .backgroundMusic(null)
                 .build())
         .mobSpawnSettings(mobSpawnSettings.build())
         .generationSettings(generationSettings.build())

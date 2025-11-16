@@ -116,7 +116,6 @@ public final class SpliceCreativeModeTabs {
     insert(event, SpliceItems.COPPER_HOE, SpliceItems.COPPER_AXE);
     insert(event, SpliceItems.MUSIC_DISC_TEARS, Items.MUSIC_DISC_PIGSTEP);
     insert(event, SpliceItems.MUSIC_DISC_LAVA_CHICKEN, SpliceItems.MUSIC_DISC_TEARS);
-    insert(event, SpliceItems.MUSIC_DISC_COFFEE_MACHINE, SpliceItems.MUSIC_DISC_LAVA_CHICKEN);
   }
 
   private static void copperRedstoneBlocks(BuildCreativeModeTabContentsEvent event) {

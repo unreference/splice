@@ -85,7 +85,6 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
   private void musicDiscItems() {
     this.basicItem(SpliceItems.MUSIC_DISC_TEARS.get());
     this.basicItem(SpliceItems.MUSIC_DISC_LAVA_CHICKEN.get());
-    this.basicItem(SpliceItems.MUSIC_DISC_COFFEE_MACHINE.get());
   }
 
   private void blockFamilyItems() {
