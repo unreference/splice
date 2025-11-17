@@ -1,6 +1,7 @@
 package com.github.unreference.splice.mixin.net.minecraft.world.level.biome;
 
-import com.github.unreference.splice.data.worldgen.region.SpliceRegions;
+import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.data.worldgen.biome.SpliceBiomeData;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
@@ -29,8 +30,72 @@ public abstract class SpliceMixinMultiNoiseBiomeSource {
     final List<Pair<Climate.ParameterPoint, Holder<Biome>>> values =
         new ArrayList<>(baseList.values());
 
-    SpliceRegions.contribute(values::add);
+    try {
+      for (Pair<Climate.ParameterPoint, Holder<Biome>> pair : baseList.values()) {
+        final Climate.ParameterPoint point = pair.getFirst();
+        final Holder<Biome> baseBiome = pair.getSecond();
+
+        if (!splice$IsPaleGardenCandidate(point, baseBiome)) {
+          continue;
+        }
+
+        values.add(Pair.of(point, SpliceBiomeData.PALE_GARDEN));
+      }
+    } catch (Exception e) {
+      SpliceMain.LOGGER.error("Failed to extend overworld biomes. Using fallback.", e);
+      return baseList;
+    }
+
     return new Climate.ParameterList<>(values);
+  }
+
+  @Unique
+  private static boolean splice$IsPaleGardenCandidate(
+      Climate.ParameterPoint point, Holder<Biome> biome) {
+    if (!biome.is(Biomes.DARK_FOREST)) {
+      return false;
+    }
+
+    final float temperature = Climate.unquantizeCoord(splice$getMid(point.temperature()));
+    final float humidity = Climate.unquantizeCoord(splice$getMid(point.humidity()));
+    final float continentalness = Climate.unquantizeCoord(splice$getMid(point.continentalness()));
+    final float erosion = Climate.unquantizeCoord(splice$getMid(point.erosion()));
+    final float depth = Climate.unquantizeCoord(splice$getMid(point.depth()));
+    final float weirdness = Climate.unquantizeCoord(splice$getMid(point.weirdness()));
+
+    if (temperature < -0.15f || temperature > 0.2f) {
+      return false;
+    }
+
+    if (humidity < 0.3f) {
+      return false;
+    }
+
+    if (continentalness < 0.03f) {
+      return false;
+    }
+
+    if (erosion < -0.78f || erosion > 0.05f) {
+      return false;
+    }
+
+    if (Math.abs(weirdness) < 0.267f) {
+      return false;
+    }
+
+    return !(depth < 0.0f) && !(depth > 1.0f);
+  }
+
+  @Unique
+  private static long splice$getMid(Climate.Parameter parameter) {
+    final long min = parameter.min();
+    final long max = parameter.max();
+
+    if (min == max) {
+      return min;
+    }
+
+    return (min + max) / 2;
   }
 
   @Inject(method = "parameters", at = @At("RETURN"), cancellable = true)

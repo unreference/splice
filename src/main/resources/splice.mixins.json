@@ -19,6 +19,7 @@
   },
   "mixins": [
     "net.minecraft.world.entity.SpliceMixinMob",
-    "net.minecraft.world.level.biome.SpliceMixinMultiNoiseBiomeSource"
+    "net.minecraft.world.level.biome.SpliceMixinMultiNoiseBiomeSource",
+    "net.minecraft.world.level.biome.SpliceMixinMultiNoiseBiomeSourceAccessor"
   ]
 }
