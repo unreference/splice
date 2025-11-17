@@ -7,6 +7,7 @@ import com.github.unreference.splice.data.worldgen.biome.SpliceBiomeData;
 import com.github.unreference.splice.data.worldgen.biome.SpliceBiomes;
 import com.github.unreference.splice.data.worldgen.region.SpliceOverworldRegion;
 import com.github.unreference.splice.data.worldgen.region.SpliceRegions;
+import com.github.unreference.splice.server.commands.SpliceDebugCommands;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import com.github.unreference.splice.world.item.SpliceCreativeModeTabs;
 import com.github.unreference.splice.world.item.SpliceItems;
@@ -57,8 +58,10 @@ public final class SpliceMain {
       NeoForge.EVENT_BUS.addListener(SpliceClientMain::onSelectMusic);
     }
 
-    NeoForge.EVENT_BUS.addListener(SpliceMain::onServerAboutToStart);
     modEventBus.addListener(SpliceMain::onFmlCommonSetup);
+
+    NeoForge.EVENT_BUS.addListener(SpliceMain::onServerAboutToStart);
+    NeoForge.EVENT_BUS.addListener(SpliceDebugCommands::onRegisterCommandsEvent);
   }
 
   private static void addFlammables() {
@@ -87,7 +90,6 @@ public final class SpliceMain {
   }
 
   private static void addBiomes() {
-    // Regions.register(new SpliceOverworldRegion(10));
     SpliceRegions.register(new SpliceOverworldRegion());
   }
 

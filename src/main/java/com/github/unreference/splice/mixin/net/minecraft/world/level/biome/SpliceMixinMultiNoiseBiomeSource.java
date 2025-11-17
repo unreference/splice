@@ -1,6 +1,5 @@
 package com.github.unreference.splice.mixin.net.minecraft.world.level.biome;
 
-import com.github.unreference.splice.compat.SpliceWorldGenCompat;
 import com.github.unreference.splice.data.worldgen.region.SpliceRegions;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
@@ -36,10 +35,6 @@ public abstract class SpliceMixinMultiNoiseBiomeSource {
 
   @Inject(method = "parameters", at = @At("RETURN"), cancellable = true)
   private void splice$parameters(CallbackInfoReturnable<Climate.ParameterList<Holder<Biome>>> cir) {
-    if (SpliceWorldGenCompat.isInjectionSkipped()) {
-      return;
-    }
-
     if (!this.splice$isOverworldPreset()) {
       return;
     }
