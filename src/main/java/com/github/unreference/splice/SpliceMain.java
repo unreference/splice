@@ -3,8 +3,11 @@ package com.github.unreference.splice;
 import com.github.unreference.splice.client.SpliceClientMain;
 import com.github.unreference.splice.core.particles.SpliceParticleTypes;
 import com.github.unreference.splice.data.SpliceDataGenerator;
+import com.github.unreference.splice.data.worldgen.biome.SpliceBiomeData;
+import com.github.unreference.splice.data.worldgen.biome.SpliceBiomes;
+import com.github.unreference.splice.data.worldgen.region.SpliceOverworldRegion;
+import com.github.unreference.splice.data.worldgen.region.SpliceRegions;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
-import com.github.unreference.splice.terrablender.SpliceOverworldRegion;
 import com.github.unreference.splice.world.item.SpliceCreativeModeTabs;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlockTypes;
@@ -13,6 +16,10 @@ import com.github.unreference.splice.world.level.block.entity.SpliceBlockEntityT
 import com.github.unreference.splice.world.level.levelgen.feature.SpliceFeature;
 import com.github.unreference.splice.world.level.levelgen.feature.treedecorators.SpliceTreeDecoratorType;
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
@@ -21,8 +28,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import org.slf4j.Logger;
-import terrablender.api.Regions;
 
 @Mod(SpliceMain.MOD_ID)
 public final class SpliceMain {
@@ -50,7 +57,8 @@ public final class SpliceMain {
       NeoForge.EVENT_BUS.addListener(SpliceClientMain::onSelectMusic);
     }
 
-    modEventBus.addListener(this::onFmlCommonSetup);
+    NeoForge.EVENT_BUS.addListener(SpliceMain::onServerAboutToStart);
+    modEventBus.addListener(SpliceMain::onFmlCommonSetup);
   }
 
   private static void addFlammables() {
@@ -79,15 +87,22 @@ public final class SpliceMain {
   }
 
   private static void addBiomes() {
-    Regions.register(new SpliceOverworldRegion(10));
+    // Regions.register(new SpliceOverworldRegion(10));
+    SpliceRegions.register(new SpliceOverworldRegion());
   }
 
-  private void onFmlCommonSetup(FMLCommonSetupEvent event) {
+  private static void onFmlCommonSetup(FMLCommonSetupEvent event) {
     event.enqueueWork(
         () -> {
           addFlammables();
           addPottedPlants();
           addBiomes();
         });
+  }
+
+  private static void onServerAboutToStart(ServerAboutToStartEvent event) {
+    final RegistryAccess registryAccess = event.getServer().registryAccess();
+    final Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+    SpliceBiomeData.PALE_GARDEN = biomeRegistry.getHolderOrThrow(SpliceBiomes.PALE_GARDEN);
   }
 }

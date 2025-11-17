@@ -20,7 +20,6 @@ import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 public final class SpliceRegistries extends DatapackBuiltinEntriesProvider {
   public static final RegistrySetBuilder BUILDER =
       new RegistrySetBuilder()
-          // .add(Registries.LEVEL_STEM, SpliceLevelStem::bootstrap)
           .add(Registries.CONFIGURED_FEATURE, SpliceFeatureUtils::bootstrap)
           .add(Registries.PLACED_FEATURE, SplicePlacementUtils::bootstrap)
           .add(Registries.BIOME, SpliceBiomeData::bootstrap)
@@ -28,7 +27,7 @@ public final class SpliceRegistries extends DatapackBuiltinEntriesProvider {
           .add(Registries.JUKEBOX_SONG, SpliceJukeboxSongs::bootstrap);
 
   public SpliceRegistries(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup) {
-    super(output, lookup, BUILDER, Set.of(SpliceMain.MOD_ID, ResourceLocation.DEFAULT_NAMESPACE));
+    super(output, lookup, BUILDER, Set.of(SpliceMain.MOD_ID));
   }
 
   public static <T> ResourceKey<T> createKey(ResourceKey<Registry<T>> registry, String name) {

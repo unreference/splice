@@ -10,7 +10,7 @@ import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public final class SpliceOverworldBiomes extends OverworldBiomes {
-  public static Biome paleForest(
+  public static Biome paleGarden(
       HolderGetter<PlacedFeature> placed, HolderGetter<ConfiguredWorldCarver<?>> carver) {
     final MobSpawnSettings.Builder mobSpawnSettings = new MobSpawnSettings.Builder();
 

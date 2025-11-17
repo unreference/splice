@@ -1,4 +1,4 @@
-package com.github.unreference.splice.terrablender;
+package com.github.unreference.splice.compat.terrablender;
 
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.data.worldgen.biome.SpliceBiomes;
