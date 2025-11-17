@@ -27,19 +27,19 @@ public abstract class SpliceMixinMultiNoiseBiomeSource {
   @Unique
   private static Climate.ParameterList<Holder<Biome>> splice$buildExtendedParameterList(
       Climate.ParameterList<Holder<Biome>> baseList) {
-    final List<Pair<Climate.ParameterPoint, Holder<Biome>>> values =
-        new ArrayList<>(baseList.values());
+    final List<Pair<Climate.ParameterPoint, Holder<Biome>>> values = new ArrayList<>();
 
     try {
       for (Pair<Climate.ParameterPoint, Holder<Biome>> pair : baseList.values()) {
         final Climate.ParameterPoint point = pair.getFirst();
         final Holder<Biome> baseBiome = pair.getSecond();
 
-        if (!splice$IsPaleGardenCandidate(point, baseBiome)) {
-          continue;
+        if (splice$IsPaleGardenCandidate(point, baseBiome)) {
+          final Climate.ParameterPoint newPoint = splice$normalizeContinentalness(point);
+          values.add(Pair.of(newPoint, SpliceBiomeData.PALE_GARDEN));
+        } else {
+          values.add(pair);
         }
-
-        values.add(Pair.of(point, SpliceBiomeData.PALE_GARDEN));
       }
     } catch (Exception e) {
       SpliceMain.LOGGER.error("Failed to extend overworld biomes. Using fallback.", e);
@@ -128,6 +128,37 @@ public abstract class SpliceMixinMultiNoiseBiomeSource {
       // Don't use the rough plateau band in these slices
       return false;
     }
+  }
+
+  @Unique
+  private static Climate.ParameterPoint splice$normalizeContinentalness(
+      Climate.ParameterPoint point) {
+
+    final Climate.Parameter continentalness = point.continentalness();
+
+    final float min = Climate.unquantizeCoord(continentalness.min());
+
+    final float max = Climate.unquantizeCoord(continentalness.max());
+
+    if (min >= 0.03f && max >= 1.0f - 0.0f) {
+
+      return point;
+    }
+
+    final float newMin = Math.max(min, 0.03f);
+
+    final float newMax = 1.0f;
+
+    final Climate.Parameter newContinentalness = Climate.Parameter.span(newMin, newMax);
+
+    return new Climate.ParameterPoint(
+        point.temperature(),
+        point.humidity(),
+        newContinentalness,
+        point.erosion(),
+        point.depth(),
+        point.weirdness(),
+        point.offset());
   }
 
   @Unique
