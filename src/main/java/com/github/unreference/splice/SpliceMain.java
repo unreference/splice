@@ -5,8 +5,6 @@ import com.github.unreference.splice.core.particles.SpliceParticleTypes;
 import com.github.unreference.splice.data.SpliceDataGenerator;
 import com.github.unreference.splice.data.worldgen.biome.SpliceBiomeData;
 import com.github.unreference.splice.data.worldgen.biome.SpliceBiomes;
-import com.github.unreference.splice.data.worldgen.region.SpliceOverworldRegion;
-import com.github.unreference.splice.data.worldgen.region.SpliceRegions;
 import com.github.unreference.splice.server.commands.SpliceDebugCommands;
 import com.github.unreference.splice.sounds.SpliceSoundEvents;
 import com.github.unreference.splice.world.item.SpliceCreativeModeTabs;
@@ -89,16 +87,11 @@ public final class SpliceMain {
     pot.addPlant(SpliceBlocks.OPEN_EYEBLOSSOM.getId(), SpliceBlocks.POTTED_OPEN_EYEBLOSSOM);
   }
 
-  private static void addBiomes() {
-    SpliceRegions.register(new SpliceOverworldRegion());
-  }
-
   private static void onFmlCommonSetup(FMLCommonSetupEvent event) {
     event.enqueueWork(
         () -> {
           addFlammables();
           addPottedPlants();
-          addBiomes();
         });
   }
 
