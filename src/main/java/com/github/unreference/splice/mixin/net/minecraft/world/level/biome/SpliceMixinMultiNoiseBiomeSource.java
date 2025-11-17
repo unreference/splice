@@ -57,33 +57,77 @@ public abstract class SpliceMixinMultiNoiseBiomeSource {
     }
 
     final float temperature = Climate.unquantizeCoord(splice$getMid(point.temperature()));
-    final float humidity = Climate.unquantizeCoord(splice$getMid(point.humidity()));
-    final float continentalness = Climate.unquantizeCoord(splice$getMid(point.continentalness()));
-    final float erosion = Climate.unquantizeCoord(splice$getMid(point.erosion()));
-    final float depth = Climate.unquantizeCoord(splice$getMid(point.depth()));
-    final float weirdness = Climate.unquantizeCoord(splice$getMid(point.weirdness()));
-
     if (temperature < -0.15f || temperature > 0.2f) {
       return false;
     }
 
+    final float humidity = Climate.unquantizeCoord(splice$getMid(point.humidity()));
     if (humidity < 0.3f) {
       return false;
     }
 
-    if (continentalness < 0.03f) {
-      return false;
-    }
-
+    final float erosion = Climate.unquantizeCoord(splice$getMid(point.erosion()));
     if (erosion < -0.78f || erosion > 0.05f) {
       return false;
     }
 
-    if (Math.abs(weirdness) < 0.267f) {
+    final float weirdness = Climate.unquantizeCoord(splice$getMid(point.weirdness()));
+
+    final float absWeirdness = Math.abs(weirdness);
+    if (absWeirdness < 0.267f) {
       return false;
     }
 
-    return !(depth < 0.0f) && !(depth > 1.0f);
+    final float depth = Climate.unquantizeCoord(splice$getMid(point.depth()));
+    if (depth < 0.0f || depth > 1.0f) {
+      return false;
+    }
+
+    // ---- Classify erosion into Mojang's three plateau bands ----
+    final boolean isErosionRough = erosion < -0.375f; // [-0.780, -0.375]
+    final boolean isErosionMidBand = erosion >= -0.375f && erosion < -0.222f; // [-0.375, -0.222]
+    final boolean isErosionSmooth = erosion >= -0.222f; // [-0.222,  0.050]
+
+    // ---- Classify weirdness slices ----
+    // We already know |weirdness| >= 0.267 here.
+    final boolean isOuterSlice = absWeirdness >= 0.933f; // [-1.000,-0.933] & [0.933,1.000]
+    final boolean isInnerSpikeSlice = absWeirdness <= 0.4f; // [-0.400,-0.267] & [0.267,0.400]
+
+    // We use min to tell 0.03 vs. 0.3 bands apart.
+    final float continentalness = Climate.unquantizeCoord(point.continentalness().min());
+
+    // ---- Outer + inner spike slices ----
+    // Mojang uses only rough + mid plateau, and only the inland half (>= 0.30).
+
+    if (isOuterSlice || isInnerSpikeSlice) {
+      if (!isErosionRough && !isErosionMidBand) {
+        // No smooth plateau in these slices
+        return false;
+      }
+
+      // Only inland continentalness
+      return continentalness >= 0.3f;
+    } else {
+
+      // ---- Middle ring slices ----
+      // Mojang pattern:
+      // - Erosion mid band:  continentalness [0.030, 1.000]
+      // - Erosion smooth:    continentalness [0.300, 1.000]
+      // - No rough plateau here.
+
+      if (isErosionMidBand) {
+        // Near-inland strip: allow 0.03..1
+        return continentalness >= 0.03f;
+      }
+
+      if (isErosionSmooth) {
+        // Smooth plateau: only inland half
+        return continentalness >= 0.3f;
+      }
+
+      // Don't use the rough plateau band in these slices
+      return false;
+    }
   }
 
   @Unique
