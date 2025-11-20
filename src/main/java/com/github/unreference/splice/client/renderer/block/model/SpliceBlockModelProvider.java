@@ -73,15 +73,45 @@ public final class SpliceBlockModelProvider extends BlockModelProvider {
     this.cross(SpliceUtils.getName(closedEyeblossom), SpliceUtils.getLocation(closedEyeblossom))
         .renderType("cutout");
 
-    final Block openEyeblossom = SpliceBlocks.OPEN_EYEBLOSSOM.get();
-    this.cross(SpliceUtils.getName(openEyeblossom), SpliceUtils.getLocation(openEyeblossom))
-        .renderType("cutout");
+    this.openEyeblossom();
 
     final Block pottedClosedEyeblossom = SpliceBlocks.POTTED_CLOSED_EYEBLOSSOM.get();
     this.flowerPot(SpliceUtils.getName(pottedClosedEyeblossom), SpliceBlocks.CLOSED_EYEBLOSSOM);
 
-    final Block pottedOpenEyeblossom = SpliceBlocks.POTTED_OPEN_EYEBLOSSOM.get();
-    this.flowerPot(SpliceUtils.getName(pottedOpenEyeblossom), SpliceBlocks.OPEN_EYEBLOSSOM);
+    this.pottedOpenEyeblossom();
+    this.creakingHeart();
+  }
+
+  private void pottedOpenEyeblossom() {
+    final Block pottedId = SpliceBlocks.POTTED_OPEN_EYEBLOSSOM.get();
+    final String name = SpliceUtils.getName(pottedId);
+    final ResourceLocation plant = SpliceUtils.getLocation(SpliceBlocks.OPEN_EYEBLOSSOM.get());
+    final ResourceLocation emissive = ResourceLocation.parse(plant + "_emissive");
+
+    this.withExistingParent(name, this.modLoc("block/flower_pot_cross_emissive"))
+        .texture("plant", plant)
+        .texture("cross_emissive", emissive)
+        .renderType("cutout");
+  }
+
+  private void openEyeblossom() {
+    final Block id = SpliceBlocks.OPEN_EYEBLOSSOM.get();
+    final String name = SpliceUtils.getName(id);
+    final ResourceLocation base = SpliceUtils.getLocation(id);
+    final ResourceLocation emissive = ResourceLocation.parse(base + "_emissive");
+
+    this.withExistingParent(name, this.modLoc("block/cross_emissive"))
+        .texture("cross", base)
+        .texture("cross_emissive", emissive)
+        .renderType("cutout");
+  }
+
+  private void creakingHeart() {
+    final Block creakingHeart = SpliceBlocks.CREAKING_HEART.get();
+    this.cubeColumn(
+        SpliceUtils.getName(creakingHeart),
+        SpliceUtils.getLocation(creakingHeart),
+        ResourceLocation.parse(SpliceUtils.getLocation(creakingHeart) + "_top"));
   }
 
   private void hangingMoss(Block block) {

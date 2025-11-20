@@ -1,6 +1,7 @@
 package com.github.unreference.splice.world.level.levelgen.feature.treedecorators;
 
 import com.github.unreference.splice.SpliceMain;
+import com.github.unreference.splice.world.level.block.SpliceBlocks;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import java.util.ArrayList;
@@ -11,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import org.jetbrains.annotations.NotNull;
@@ -61,10 +61,10 @@ public class SpliceCreakingHeartDecorator extends TreeDecorator {
 
         optional.ifPresent(
             pos -> {
-              context.setBlock(
-                  pos, Blocks.NETHERRACK.defaultBlockState()); // TODO: Replace with creaking heart
+              context.setBlock(pos, SpliceBlocks.CREAKING_HEART.get().defaultBlockState());
 
-              SpliceMain.LOGGER.info("Creaking heart placed at: {}", pos);
+              SpliceMain.LOGGER.debug(
+                  "Creaking Heart placed at: {} {} {}", pos.getX(), pos.getY(), pos.getZ());
             });
       }
     }

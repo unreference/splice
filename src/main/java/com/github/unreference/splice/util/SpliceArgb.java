@@ -4,7 +4,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
-public final class Argb {
+public final class SpliceArgb {
   public static int alpha(int alpha) {
     return alpha >>> 24;
   }

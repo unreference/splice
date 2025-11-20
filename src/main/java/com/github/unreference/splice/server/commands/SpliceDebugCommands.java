@@ -2,30 +2,45 @@ package com.github.unreference.splice.server.commands;
 
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.mixin.net.minecraft.world.level.biome.SpliceMixinMultiNoiseBiomeSourceAccessor;
+import com.github.unreference.splice.util.SpliceComponentBuilder;
+import com.google.common.base.Stopwatch;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.util.Pair;
+import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.ResourceOrTagArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
-import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 public final class SpliceDebugCommands {
+  private static final int MAX_BIOME_CHUNK_RADIUS = 256;
+  private static final int MAX_BIOME_SEARCH_RADIUS = 6400;
+  private static final int BIOME_SAMPLE_RESOLUTION_HORIZONTAL = 32;
+  private static final int BIOME_SAMPLE_RESOLUTION_VERTICAL = 64;
+  private static final int MAX_STRUCTURE_SEARCH_RADIUS = 100;
+
   public static void onRegisterCommandsEvent(RegisterCommandsEvent event) {
     final CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
     dispatcher.register(
@@ -39,12 +54,17 @@ public final class SpliceDebugCommands {
                                 ResourceOrTagArgument.resourceOrTag(
                                     event.getBuildContext(), Registries.BIOME))
                             .then(
-                                Commands.argument("radius", IntegerArgumentType.integer(1, 256))
-                                    .executes(SpliceDebugCommands::biomeChunks)))));
-
-    dispatcher.register(
-        Commands.literal(SpliceMain.MOD_ID)
-            .requires(source -> source.hasPermission(2))
+                                Commands.argument(
+                                        "radius",
+                                        IntegerArgumentType.integer(1, MAX_BIOME_CHUNK_RADIUS))
+                                    .executes(
+                                        context ->
+                                            biomeChunks(
+                                                context.getSource(),
+                                                ResourceOrTagArgument.getResourceOrTag(
+                                                    context, "biome", Registries.BIOME),
+                                                IntegerArgumentType.getInteger(
+                                                    context, "radius"))))))
             .then(
                 Commands.literal("biome_climate")
                     .then(
@@ -52,30 +72,151 @@ public final class SpliceDebugCommands {
                                 "biome",
                                 ResourceOrTagArgument.resourceOrTag(
                                     event.getBuildContext(), Registries.BIOME))
-                            .executes(SpliceDebugCommands::biomeClimate))));
+                            .executes(SpliceDebugCommands::biomeClimate)))
+            .then(
+                Commands.literal("locate")
+                    .then(
+                        Commands.literal("biome")
+                            .then(
+                                Commands.argument(
+                                        "biome",
+                                        ResourceOrTagArgument.resourceOrTag(
+                                            event.getBuildContext(), Registries.BIOME))
+                                    .executes(
+                                        context ->
+                                            locateBiome(
+                                                context.getSource(),
+                                                ResourceOrTagArgument.getResourceOrTag(
+                                                    context, "biome", Registries.BIOME)))))));
+  }
+
+  private static int locateBiome(
+      CommandSourceStack source, ResourceOrTagArgument.Result<Biome> biome) {
+    final BlockPos playerPos = BlockPos.containing(source.getPosition());
+    final ServerLevel level = source.getLevel();
+    final String biomePrintable = biome.asPrintable();
+
+    final Supplier<Component> searching =
+        () ->
+            Component.literal(
+                String.format("Searching for biome of type \"%s\"...", biomePrintable));
+
+    final Supplier<LocateBiomeResult> task =
+        () -> {
+          final Stopwatch stopwatch = Stopwatch.createStarted(Util.TICKER);
+          final Pair<BlockPos, Holder<Biome>> pair =
+              level.findClosestBiome3d(
+                  biome,
+                  playerPos,
+                  MAX_BIOME_SEARCH_RADIUS,
+                  BIOME_SAMPLE_RESOLUTION_HORIZONTAL,
+                  BIOME_SAMPLE_RESOLUTION_VERTICAL);
+
+          stopwatch.stop();
+          return new LocateBiomeResult(pair, stopwatch.elapsed());
+        };
+
+    final Consumer<LocateBiomeResult> callback =
+        result -> {
+          if (result.pair() == null) {
+            source.sendFailure(
+                Component.translatable("commands.locate.biome.not_found", biomePrintable));
+          } else {
+            showLocateResult(
+                source,
+                biome,
+                playerPos,
+                result.pair(),
+                "commands.locate.biome.success",
+                true,
+                result.duration());
+          }
+        };
+
+    return runAsyncCommand(source, searching, task, callback);
+  }
+
+  private static void showLocateResult(
+      CommandSourceStack source,
+      ResourceOrTagArgument.Result<?> result,
+      BlockPos pos,
+      Pair<BlockPos, Holder<Biome>> resultPos,
+      String translationKey,
+      boolean isAbsoluteY,
+      Duration duration) {
+    final SpliceComponentBuilder builder = new SpliceComponentBuilder(result.asPrintable());
+    result
+        .unwrap()
+        .ifRight(
+            holders ->
+                builder.append(" (").append(resultPos.getSecond().getRegisteredName()).append(")"));
+
+    final Component element = builder.build();
+    showLocateResult(source, pos, resultPos, translationKey, isAbsoluteY, element, duration);
+  }
+
+  private static void showLocateResult(
+      CommandSourceStack source,
+      BlockPos pos,
+      Pair<BlockPos, Holder<Biome>> resultPos,
+      String translationKey,
+      boolean isAbsoluteY,
+      Component elementName,
+      Duration duration) {
+    final BlockPos blockPos = resultPos.getFirst();
+    final int distance =
+        isAbsoluteY
+            ? Mth.floor(Mth.sqrt((float) pos.distSqr(blockPos)))
+            : Mth.floor(getDistance(pos.getX(), pos.getZ(), blockPos.getX(), blockPos.getZ()));
+    final String location = isAbsoluteY ? String.valueOf(blockPos.getY()) : "~";
+
+    final Component coordinates =
+        ComponentUtils.wrapInSquareBrackets(
+                Component.translatable(
+                    "chat.coordinates", blockPos.getX(), location, blockPos.getZ()))
+            .withStyle(
+                style ->
+                    style
+                        .withColor(ChatFormatting.GREEN)
+                        .withClickEvent(
+                            new ClickEvent(
+                                ClickEvent.Action.SUGGEST_COMMAND,
+                                "/teleport @s "
+                                    + blockPos.getX()
+                                    + ' '
+                                    + location
+                                    + ' '
+                                    + blockPos.getZ()))
+                        .withHoverEvent(
+                            new HoverEvent(
+                                HoverEvent.Action.SHOW_TEXT,
+                                Component.translatable("chat.coordinates.tooltip"))));
+
+    final MutableComponent success =
+        Component.translatable(translationKey, elementName, coordinates, distance);
+
+    source.sendSuccess(() -> success, false);
+    SpliceMain.LOGGER.info(
+        "Locating biome {} took {} ms", elementName.getString(), duration.toMillis());
+  }
+
+  private static float getDistance(int x, int z, int x2, int z2) {
+    final int i = x2 - x;
+    final int j = z2 - z;
+    return Mth.sqrt((float) (i * i + j * j));
   }
 
   private static int biomeClimate(CommandContext<CommandSourceStack> context)
       throws CommandSyntaxException {
     final CommandSourceStack source = context.getSource();
-    final ServerPlayer player = source.getPlayerOrException();
     final ServerLevel level = source.getLevel();
 
     final ResourceOrTagArgument.Result<Biome> biomeArgument =
         ResourceOrTagArgument.getResourceOrTag(context, "biome", Registries.BIOME);
 
     final BiomeSource biomeSource = level.getChunkSource().getGenerator().getBiomeSource();
-    if (!(biomeSource instanceof MultiNoiseBiomeSource multiNoiseBiomeSource)) {
-      source.sendFailure(
-          Component.literal(
-              String.format(
-                  "Current dimension uses %s, not MultiNoiseBiomeSource",
-                  biomeSource.getClass().getName())));
-      return -1;
-    }
-
     final Climate.ParameterList<Holder<Biome>> parameterList =
-        ((SpliceMixinMultiNoiseBiomeSourceAccessor) multiNoiseBiomeSource).splice$parameters();
+        ((SpliceMixinMultiNoiseBiomeSourceAccessor) biomeSource).splice$parameters();
     final List<Pair<Climate.ParameterPoint, Holder<Biome>>> values = parameterList.values();
 
     int count = 0;
@@ -136,56 +277,95 @@ public final class SpliceDebugCommands {
     return String.format(Locale.ROOT, "[%.3f, %.3f]", min, max);
   }
 
-  private static int biomeChunks(CommandContext<CommandSourceStack> context)
+  private static int biomeChunks(
+      CommandSourceStack source, ResourceOrTagArgument.Result<Biome> biome, int radius)
       throws CommandSyntaxException {
-    final CommandSourceStack source = context.getSource();
     final ServerPlayer player = source.getPlayerOrException();
     final ServerLevel level = source.getLevel();
     final int centerChunkX = player.chunkPosition().x;
     final int centerChunkZ = player.chunkPosition().z;
+    final String biomePrintable = biome.asPrintable();
 
-    final ResourceOrTagArgument.Result<Biome> biomeArgument =
-        ResourceOrTagArgument.getResourceOrTag(context, "biome", Registries.BIOME);
-    final int radiusArgument = IntegerArgumentType.getInteger(context, "radius");
+    final Supplier<Component> searching =
+        () ->
+            Component.literal(
+                String.format(
+                    "Scanning %d chunk/chunks for \"%s\"...",
+                    (radius * 2 + 1) * (radius * 2 + 1), biomePrintable));
 
-    int totalChunks = 0;
-    int matchingChunks = 0;
+    final Stopwatch[] stopwatch = new Stopwatch[1];
+    final Supplier<BiomeChunkResult> task =
+        () -> {
+          stopwatch[0] = Stopwatch.createStarted(Util.TICKER);
 
-    for (int x = -radiusArgument; x <= radiusArgument; x++) {
-      for (int z = -radiusArgument; z <= radiusArgument; z++) {
-        final int chunkX = centerChunkX + x;
-        final int chunkZ = centerChunkZ + z;
-        final int blockX = (chunkX << 4) + 8;
-        final int blockZ = (chunkZ << 4) + 8;
+          int totalChunks = 0;
+          int matchingChunks = 0;
 
-        final int height = level.getHeight(Heightmap.Types.WORLD_SURFACE, blockX, blockZ);
-        final BlockPos pos = new BlockPos(blockX, height, blockZ);
+          for (int x = -radius; x <= radius; x++) {
+            for (int z = -radius; z <= radius; z++) {
+              final int chunkX = centerChunkX + x;
+              final int chunkZ = centerChunkZ + z;
+              final int blockX = (chunkX << 4) + 8;
+              final int blockZ = (chunkZ << 4) + 8;
 
-        final Holder<Biome> biome = level.getBiome(pos);
-        if (biomeArgument.test(biome)) {
-          matchingChunks++;
-        }
+              final int height = level.getHeight(Heightmap.Types.WORLD_SURFACE, blockX, blockZ);
+              final BlockPos pos = new BlockPos(blockX, height, blockZ);
 
-        totalChunks++;
-      }
-    }
+              final Holder<Biome> biomeHolder = level.getBiome(pos);
+              if (biome.test(biomeHolder)) {
+                matchingChunks++;
+              }
 
-    final double percent = totalChunks == 0 ? 0.0 : (matchingChunks * 100.0) / totalChunks;
-    final double diameter = radiusArgument * 2 + 1;
+              totalChunks++;
+            }
+          }
 
-    final Component component =
-        Component.literal(
-            String.format(
-                Locale.ROOT,
-                "%d/%d chunks matching %s in %.0f×%.0f radius (%.3f%%)",
-                matchingChunks,
-                totalChunks,
-                biomeArgument.asPrintable(),
-                diameter,
-                diameter,
-                percent));
+          final double percent = totalChunks == 0 ? 0.0 : (matchingChunks * 100.0) / totalChunks;
 
-    source.sendSuccess(() -> component, false);
-    return matchingChunks;
+          stopwatch[0].stop();
+          return new BiomeChunkResult(matchingChunks, totalChunks, percent, stopwatch[0].elapsed());
+        };
+
+    final Consumer<BiomeChunkResult> callback =
+        result -> {
+          final double diameter = radius * 2 + 1;
+          final Component component =
+              Component.literal(
+                  String.format(
+                      Locale.ROOT,
+                      "%d/%d chunks matching %s in %.0f×%.0f radius (%.3f%%)",
+                      result.matching(),
+                      result.total(),
+                      biomePrintable,
+                      diameter,
+                      diameter,
+                      result.percent()));
+
+          source.sendSuccess(() -> component, false);
+          SpliceMain.LOGGER.info(
+              "Locating {} matching chunks took {} ms",
+              result.total(),
+              stopwatch[0].elapsed().toMillis());
+        };
+
+    return runAsyncCommand(source, searching, task, callback);
   }
+
+  private static <T> int runAsyncCommand(
+      CommandSourceStack source,
+      Supplier<Component> searchMessage,
+      Supplier<T> task,
+      Consumer<T> callback) {
+    final MinecraftServer server = source.getServer();
+    source.sendSuccess(searchMessage, false);
+
+    CompletableFuture.supplyAsync(task, Util.backgroundExecutor())
+        .thenAcceptAsync(callback, server);
+
+    return 1;
+  }
+
+  private record LocateBiomeResult(Pair<BlockPos, Holder<Biome>> pair, Duration duration) {}
+
+  private record BiomeChunkResult(int matching, int total, double percent, Duration duration) {}
 }

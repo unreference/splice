@@ -50,11 +50,17 @@ public final class SpliceCreativeModeTabs {
       copperIngredients(event);
     }
 
-    // if (event.getTabKey().equals(CreativeModeTabs.SPAWN_EGGS)) {}
+    if (event.getTabKey().equals(CreativeModeTabs.SPAWN_EGGS)) {
+      paleGardenSpawnEggs(event);
+    }
 
     // if (event.getTabKey().equals(CreativeModeTabs.OP_BLOCKS)) {}
 
     // if (event.getTabKey().equals(CreativeModeTabs.INVENTORY)) {}
+  }
+
+  private static void paleGardenSpawnEggs(BuildCreativeModeTabContentsEvent event) {
+    insert(event, SpliceItems.CREAKING_HEART, Items.TRIAL_SPAWNER);
   }
 
   private static void paleGardenNaturalBlocks(BuildCreativeModeTabContentsEvent event) {

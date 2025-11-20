@@ -10,7 +10,7 @@ public final class SpliceExtraCodecs {
       Codec.withAlternative(
           Codec.INT,
           ExtraCodecs.VECTOR3F,
-          color -> Argb.color(1.0f, color.x(), color.y(), color.z()));
+          color -> SpliceArgb.color(1.0f, color.x(), color.y(), color.z()));
 
   private static Codec<Float> floatRangeMinInclusiveWithMessage(
       float min, float max, Function<Float, String> message) {

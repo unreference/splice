@@ -544,15 +544,29 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   private static void paleGarden(@NotNull RecipeOutput recipeOutput) {
     planksFromLog(recipeOutput, SpliceBlocks.PALE_OAK_PLANKS, SpliceItemTags.PALE_OAK_LOGS, 4);
     woodFromLogs(recipeOutput, SpliceBlocks.PALE_OAK_WOOD, SpliceBlocks.PALE_OAK_LOG);
+
     woodFromLogs(
         recipeOutput, SpliceBlocks.STRIPPED_PALE_OAK_WOOD, SpliceBlocks.STRIPPED_PALE_OAK_LOG);
+
     hangingSign(
         recipeOutput, SpliceBlocks.PALE_OAK_HANGING_SIGN, SpliceBlocks.STRIPPED_PALE_OAK_LOG);
+
     carpet(recipeOutput, SpliceBlocks.PALE_MOSS_CARPET, SpliceBlocks.PALE_MOSS_BLOCK);
+
     oneToOneConversionRecipe(
         recipeOutput, Items.GRAY_DYE, SpliceBlocks.CLOSED_EYEBLOSSOM, "gray_dye");
+
     oneToOneConversionRecipe(
         recipeOutput, Items.ORANGE_DYE, SpliceBlocks.OPEN_EYEBLOSSOM, "orange_dye");
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SpliceBlocks.CREAKING_HEART)
+        .define('P', SpliceBlocks.PALE_OAK_LOG)
+        .define('R', SpliceBlocks.RESIN_BLOCK)
+        .pattern(" P ")
+        .pattern(" R ")
+        .pattern(" P ")
+        .unlockedBy(getHasName(SpliceItems.RESIN_BLOCK), has(SpliceItems.RESIN_BLOCK))
+        .save(recipeOutput);
   }
 
   @Override

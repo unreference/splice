@@ -367,8 +367,8 @@ public final class SpliceBlocks {
       BLOCKS.register(
           "potted_closed_eyeblossom",
           () ->
-              new FlowerPotBlock(
-                  () -> (FlowerPotBlock) Blocks.FLOWER_POT,
+              new SpliceFlowerPotBlock(
+                  () -> (SpliceFlowerPotBlock) Blocks.FLOWER_POT,
                   CLOSED_EYEBLOSSOM,
                   getFlowerPotProperties()));
   public static final DeferredBlock<SpliceEyeblossomBlock> OPEN_EYEBLOSSOM =
@@ -389,10 +389,19 @@ public final class SpliceBlocks {
       BLOCKS.register(
           "potted_open_eyeblossom",
           () ->
-              new FlowerPotBlock(
-                  () -> (FlowerPotBlock) Blocks.FLOWER_POT,
+              new SpliceFlowerPotBlock(
+                  () -> (SpliceFlowerPotBlock) Blocks.FLOWER_POT,
                   OPEN_EYEBLOSSOM,
                   getFlowerPotProperties()));
+  public static final DeferredBlock<SpliceCreakingHeartBlock> CREAKING_HEART =
+      BLOCKS.registerBlock(
+          "creaking_heart",
+          SpliceCreakingHeartBlock::new,
+          BlockBehaviour.Properties.of()
+              .mapColor(MapColor.COLOR_ORANGE)
+              .instrument(NoteBlockInstrument.BASEDRUM)
+              .strength(10.0f)
+              .sound(SpliceSoundType.CREAKING_HEART));
 
   public static DeferredBlock<Block> CHISELED_RESIN_BRICKS =
       BLOCKS.registerSimpleBlock("chiseled_resin_bricks", getResinBricksProperties());

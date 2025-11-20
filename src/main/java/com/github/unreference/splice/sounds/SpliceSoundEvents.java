@@ -57,6 +57,22 @@ public final class SpliceSoundEvents {
       register("block.eyeblossom.close");
   public static final DeferredHolder<SoundEvent, SoundEvent> EYEBLOSSOM_IDLE =
       register("block.eyeblossom.idle");
+  public static final DeferredHolder<SoundEvent, SoundEvent> CREAKING_HEART_BREAK =
+      register("block.creaking_heart.break");
+  public static final DeferredHolder<SoundEvent, SoundEvent> CREAKING_HEART_FALL =
+      register("block.creaking_heart.fall");
+  public static final DeferredHolder<SoundEvent, SoundEvent> CREAKING_HEART_HIT =
+      register("block.creaking_heart.hit");
+  public static final DeferredHolder<SoundEvent, SoundEvent> CREAKING_HEART_HURT =
+      register("block.creaking_heart.hurt");
+  public static final DeferredHolder<SoundEvent, SoundEvent> CREAKING_HEART_PLACE =
+      register("block.creaking_heart.place");
+  public static final DeferredHolder<SoundEvent, SoundEvent> CREAKING_HEART_STEP =
+      register("block.creaking_heart.step");
+  public static final DeferredHolder<SoundEvent, SoundEvent> CREAKING_HEART_IDLE =
+      register("block.creaking_heart.idle");
+  public static final DeferredHolder<SoundEvent, SoundEvent> CREAKING_HEART_SPAWN =
+      register("block.creaking_heart.spawn");
 
   public static final DeferredHolder<SoundEvent, SoundEvent> MUSIC_DISC_TEARS =
       register("music_disc.tears");

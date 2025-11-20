@@ -18,39 +18,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiNoiseBiomeSource.class)
 public abstract class SpliceMixinMultiNoiseBiomeSource {
+  @Unique private final Object splice$lock = new Object();
   @Final @Shadow
   private Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>>
       parameters;
-
-  @Unique private Climate.ParameterList<Holder<Biome>> splice$extendedOverworldParameterList;
+  @Unique
+  private volatile Climate.ParameterList<Holder<Biome>> splice$extendedOverworldParameterList;
 
   @Unique
-  private static Climate.ParameterList<Holder<Biome>> splice$buildExtendedParameterList(
-      Climate.ParameterList<Holder<Biome>> baseList) {
-    final List<Pair<Climate.ParameterPoint, Holder<Biome>>> values = new ArrayList<>();
-
-    try {
-      for (Pair<Climate.ParameterPoint, Holder<Biome>> pair : baseList.values()) {
-        final Climate.ParameterPoint point = pair.getFirst();
-        final Holder<Biome> baseBiome = pair.getSecond();
-
-        if (splice$IsPaleGardenCandidate(point, baseBiome)) {
-          final Climate.ParameterPoint newPoint = splice$normalizeContinentalness(point);
-          values.add(Pair.of(newPoint, SpliceBiomeData.PALE_GARDEN));
-        } else {
-          values.add(pair);
-        }
-      }
-    } catch (Exception e) {
-      SpliceMain.LOGGER.error("Failed to extend overworld biomes. Using fallback.", e);
-      return baseList;
-    }
-
-    return new Climate.ParameterList<>(values);
-  }
-
-  @Unique
-  private static boolean splice$IsPaleGardenCandidate(
+  private static boolean splice$isPaleGardenCandidate(
       Climate.ParameterPoint point, Holder<Biome> biome) {
     if (!biome.is(Biomes.DARK_FOREST)) {
       return false;
@@ -173,6 +149,31 @@ public abstract class SpliceMixinMultiNoiseBiomeSource {
     return (min + max) / 2;
   }
 
+  @Unique
+  private Climate.ParameterList<Holder<Biome>> splice$buildExtendedParameterList(
+      Climate.ParameterList<Holder<Biome>> baseList) {
+    final List<Pair<Climate.ParameterPoint, Holder<Biome>>> values = new ArrayList<>();
+
+    try {
+      for (Pair<Climate.ParameterPoint, Holder<Biome>> pair : baseList.values()) {
+        final Climate.ParameterPoint point = pair.getFirst();
+        final Holder<Biome> baseBiome = pair.getSecond();
+
+        if (splice$isPaleGardenCandidate(point, baseBiome)) {
+          final Climate.ParameterPoint newPoint = splice$normalizeContinentalness(point);
+          values.add(Pair.of(newPoint, SpliceBiomeData.PALE_GARDEN));
+        } else {
+          values.add(pair);
+        }
+      }
+    } catch (Exception e) {
+      SpliceMain.LOGGER.error("Failed to extend overworld biomes. Using fallback.", e);
+      return baseList;
+    }
+
+    return new Climate.ParameterList<>(values);
+  }
+
   @Inject(method = "parameters", at = @At("RETURN"), cancellable = true)
   private void splice$parameters(CallbackInfoReturnable<Climate.ParameterList<Holder<Biome>>> cir) {
     if (!this.splice$isOverworldPreset()) {
@@ -180,12 +181,16 @@ public abstract class SpliceMixinMultiNoiseBiomeSource {
     }
 
     if (this.splice$extendedOverworldParameterList == null) {
-      final Climate.ParameterList<Holder<Biome>> base = cir.getReturnValue();
-      if (base == null) {
-        return;
-      }
+      synchronized (this.splice$lock) {
+        if (this.splice$extendedOverworldParameterList == null) {
+          final Climate.ParameterList<Holder<Biome>> base = cir.getReturnValue();
+          if (base == null) {
+            return;
+          }
 
-      this.splice$extendedOverworldParameterList = splice$buildExtendedParameterList(base);
+          this.splice$extendedOverworldParameterList = this.splice$buildExtendedParameterList(base);
+        }
+      }
     }
 
     cir.setReturnValue(this.splice$extendedOverworldParameterList);

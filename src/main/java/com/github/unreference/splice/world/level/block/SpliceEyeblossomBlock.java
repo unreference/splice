@@ -53,7 +53,7 @@ public final class SpliceEyeblossomBlock extends FlowerBlock {
     this.type = Type.fromBoolean(isOpen);
   }
 
-  private static boolean isMoonVisible(Level level) {
+  public static boolean isMoonVisible(Level level) {
     if (!level.dimensionType().natural()) {
       return false;
     } else {
@@ -194,7 +194,7 @@ public final class SpliceEyeblossomBlock extends FlowerBlock {
       this.particleColor = particleColor;
     }
 
-    private static Type fromBoolean(boolean isOpen) {
+    public static Type fromBoolean(boolean isOpen) {
       return isOpen ? OPEN : CLOSED;
     }
 
@@ -208,7 +208,7 @@ public final class SpliceEyeblossomBlock extends FlowerBlock {
       return this.getBlock().defaultBlockState();
     }
 
-    private Type transform() {
+    public Type transform() {
       return fromBoolean(!this.isOpen);
     }
 
@@ -216,7 +216,7 @@ public final class SpliceEyeblossomBlock extends FlowerBlock {
       return this.isOpen;
     }
 
-    private void spawnTransformParticle(ServerLevel level, BlockPos pos, RandomSource random) {
+    public void spawnTransformParticle(ServerLevel level, BlockPos pos, RandomSource random) {
       final Vec3 center = pos.getCenter();
       final double randomDouble = 0.5 + random.nextDouble();
       final Vec3 location =
@@ -227,7 +227,7 @@ public final class SpliceEyeblossomBlock extends FlowerBlock {
       level.sendParticles(particle, center.x(), center.y(), center.z(), 1, 0.0, 0.0, 0.0, 0.0);
     }
 
-    private DeferredHolder<SoundEvent, SoundEvent> getLongSwitchSound() {
+    public DeferredHolder<SoundEvent, SoundEvent> getLongSwitchSound() {
       return longSwitchSound;
     }
   }

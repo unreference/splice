@@ -1,7 +1,7 @@
 package com.github.unreference.splice.client.particle;
 
 import com.github.unreference.splice.core.particles.SpliceTrailParticleOption;
-import com.github.unreference.splice.util.Argb;
+import com.github.unreference.splice.util.SpliceArgb;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -28,11 +28,11 @@ public final class SpliceTrailParticle extends SpliceSingleQuadParticle {
       TextureAtlasSprite sprite) {
     super(level, x, y, z, xSpeed, ySpeed, zSpeed, sprite);
     final float brightness = 0.875f + this.random.nextFloat() * 0.25f;
-    color = Argb.scale(color, brightness);
+    color = SpliceArgb.scale(color, brightness);
 
-    this.rCol = Argb.red(color) / 255.0f;
-    this.gCol = Argb.green(color) / 255.0f;
-    this.bCol = Argb.blue(color) / 255.0f;
+    this.rCol = SpliceArgb.red(color) / 255.0f;
+    this.gCol = SpliceArgb.green(color) / 255.0f;
+    this.bCol = SpliceArgb.blue(color) / 255.0f;
     this.quadSize = 0.26f;
     this.target = target;
   }

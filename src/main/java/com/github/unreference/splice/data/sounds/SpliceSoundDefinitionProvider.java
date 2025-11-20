@@ -233,6 +233,81 @@ public final class SpliceSoundDefinitionProvider extends SoundDefinitionsProvide
             .subtitle("subtitles.splice.block.eyeblossom.idle"));
 
     this.add(
+        SpliceSoundEvents.CREAKING_HEART_BREAK,
+        SoundDefinition.definition()
+            .with(sound(getResourceLocation("block/creaking_heart/break/creaking_heart_break")))
+            .subtitle("subtitles.block.generic.break"));
+
+    this.add(
+        SpliceSoundEvents.CREAKING_HEART_FALL,
+        SoundDefinition.definition()
+            .with(sound(getResourceLocation("block/creaking_heart/fall/creaking_heart_fall")))
+            .subtitle("subtitles.splice.block.generic.fall"));
+
+    this.add(
+        SpliceSoundEvents.CREAKING_HEART_HIT,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/creaking_heart/hit/creaking_heart_hit1")),
+                sound(getResourceLocation("block/creaking_heart/hit/creaking_heart_hit2")),
+                sound(getResourceLocation("block/creaking_heart/hit/creaking_heart_hit3")),
+                sound(getResourceLocation("block/creaking_heart/hit/creaking_heart_hit4")),
+                sound(getResourceLocation("block/creaking_heart/hit/creaking_heart_hit5")))
+            .subtitle("subtitles.block.generic.hit"));
+
+    this.add(
+        SpliceSoundEvents.CREAKING_HEART_HURT,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/creaking_heart/hurt/trail1")),
+                sound(getResourceLocation("block/creaking_heart/hurt/trail2")),
+                sound(getResourceLocation("block/creaking_heart/hurt/trail3")),
+                sound(getResourceLocation("block/creaking_heart/hurt/trail4")),
+                sound(getResourceLocation("block/creaking_heart/hurt/trail5")),
+                sound(getResourceLocation("block/creaking_heart/hurt/trail6")),
+                sound(getResourceLocation("block/creaking_heart/hurt/trail7")))
+            .subtitle("subtitles.splice.block.creaking_heart.hurt"));
+
+    this.add(
+        SpliceSoundEvents.CREAKING_HEART_PLACE,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/creaking_heart/place/creaking_heart_place1")),
+                sound(getResourceLocation("block/creaking_heart/place/creaking_heart_place2")),
+                sound(getResourceLocation("block/creaking_heart/place/creaking_heart_place3")),
+                sound(getResourceLocation("block/creaking_heart/place/creaking_heart_place4")))
+            .subtitle("subtitles.block.generic.place"));
+
+    this.add(
+        SpliceSoundEvents.CREAKING_HEART_STEP,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/creaking_heart/step/creaking_heart_step1")),
+                sound(getResourceLocation("block/creaking_heart/step/creaking_heart_step2")),
+                sound(getResourceLocation("block/creaking_heart/step/creaking_heart_step3")),
+                sound(getResourceLocation("block/creaking_heart/step/creaking_heart_step4")),
+                sound(getResourceLocation("block/creaking_heart/step/creaking_heart_step5")),
+                sound(getResourceLocation("block/creaking_heart/step/creaking_heart_step6")))
+            .subtitle("subtitles.block.generic.footsteps"));
+
+    this.add(
+        SpliceSoundEvents.CREAKING_HEART_IDLE,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/creaking_heart/idle/creaking_heart_idle1")),
+                sound(getResourceLocation("block/creaking_heart/idle/creaking_heart_idle2")),
+                sound(getResourceLocation("block/creaking_heart/idle/creaking_heart_idle3")),
+                sound(getResourceLocation("block/creaking_heart/idle/creaking_heart_idle4")))
+            .subtitle("subtitles.splice.block.creaking_heart.idle"));
+
+    this.add(
+        SpliceSoundEvents.CREAKING_HEART_SPAWN,
+        SoundDefinition.definition()
+            .with(
+                sound(getResourceLocation("block/creaking_heart/spawnmob/creaking_heart_spawnmob")))
+            .subtitle("subtitles.splice.block.creaking_heart.spawn"));
+
+    this.add(
         SpliceSoundEvents.MUSIC_DISC_TEARS,
         SoundDefinition.definition().with(sound(getResourceLocation("records/tears")).stream()));
 

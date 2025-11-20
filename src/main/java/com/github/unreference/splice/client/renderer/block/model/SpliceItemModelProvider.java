@@ -5,6 +5,7 @@ import com.github.unreference.splice.data.SpliceBlockFamilies;
 import com.github.unreference.splice.util.SpliceUtils;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
+import com.github.unreference.splice.world.level.block.SpliceEyeblossomBlock;
 import java.util.*;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
@@ -62,13 +63,29 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.simpleBlockItem(SpliceBlocks.PALE_OAK_WOOD.get());
     this.simpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get());
     this.basicItem(SpliceItems.PALE_OAK_HANGING_SIGN.get());
-    this.inventoryBlockItem(SpliceBlocks.PALE_OAK_SAPLING.get());
+    this.inventoryBlockItem(SpliceBlocks.PALE_OAK_SAPLING);
     this.simpleBlockItem(SpliceBlocks.PALE_OAK_LEAVES.get());
     this.simpleBlockItem(SpliceBlocks.PALE_MOSS_CARPET.get());
     this.simpleBlockItem(SpliceBlocks.PALE_MOSS_BLOCK.get());
-    this.inventoryBlockItem(SpliceBlocks.PALE_HANGING_MOSS.get());
-    this.inventoryBlockItem(SpliceBlocks.CLOSED_EYEBLOSSOM.get());
-    this.inventoryBlockItem(SpliceBlocks.OPEN_EYEBLOSSOM.get());
+    this.inventoryBlockItem(SpliceBlocks.PALE_HANGING_MOSS);
+    this.flowerItem(SpliceBlocks.CLOSED_EYEBLOSSOM, false);
+    this.flowerItem(SpliceBlocks.OPEN_EYEBLOSSOM, true);
+    this.simpleBlockItem(SpliceBlocks.CREAKING_HEART.get());
+  }
+
+  private void flowerItem(DeferredBlock<SpliceEyeblossomBlock> block, boolean isEmissive) {
+    final Block id = block.get();
+    final String name = SpliceUtils.getName(id);
+    final ResourceLocation base = SpliceUtils.getLocation(id);
+    final ResourceLocation emissive = ResourceLocation.parse(base + "_emissive");
+
+    if (isEmissive) {
+      this.withExistingParent(name, this.mcLoc("item/generated"))
+          .texture("layer0", base)
+          .texture("layer1", emissive);
+    } else {
+      this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", base);
+    }
   }
 
   private void resinItems() {
@@ -208,20 +225,8 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
     this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
   }
 
-  private void inventoryItem(Block block) {
-    final String name = SpliceUtils.getName(block);
-    final ResourceLocation texture = this.modLoc("item/" + SpliceUtils.stripWaxedPrefix(name));
-    this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
-  }
-
   private void inventoryBlockItem(DeferredBlock<? extends Block> block) {
     final String name = SpliceUtils.getName(block.get());
-    final ResourceLocation texture = this.modLoc("block/" + SpliceUtils.stripWaxedPrefix(name));
-    this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
-  }
-
-  private void inventoryBlockItem(Block block) {
-    final String name = SpliceUtils.getName(block);
     final ResourceLocation texture = this.modLoc("block/" + SpliceUtils.stripWaxedPrefix(name));
     this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
   }

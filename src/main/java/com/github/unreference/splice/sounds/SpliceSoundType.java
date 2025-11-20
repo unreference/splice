@@ -23,4 +23,14 @@ public final class SpliceSoundType {
           SpliceSoundEvents.RESIN_BRICKS_PLACE,
           SpliceSoundEvents.RESIN_BRICKS_HIT,
           SpliceSoundEvents.RESIN_BRICKS_FALL);
+
+  public static final SoundType CREAKING_HEART =
+      new DeferredSoundType(
+          1.0f,
+          1.0f,
+          SpliceSoundEvents.CREAKING_HEART_BREAK,
+          SpliceSoundEvents.CREAKING_HEART_STEP,
+          SpliceSoundEvents.CREAKING_HEART_PLACE,
+          SpliceSoundEvents.CREAKING_HEART_HIT,
+          SpliceSoundEvents.CREAKING_HEART_FALL);
 }

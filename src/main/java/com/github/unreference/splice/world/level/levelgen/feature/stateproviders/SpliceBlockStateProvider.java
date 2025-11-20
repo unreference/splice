@@ -90,6 +90,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     this.block(SpliceBlocks.OPEN_EYEBLOSSOM);
     this.block(SpliceBlocks.POTTED_CLOSED_EYEBLOSSOM);
     this.block(SpliceBlocks.POTTED_OPEN_EYEBLOSSOM);
+    this.block(SpliceBlocks.CREAKING_HEART);
   }
 
   private void hangingMoss() {
@@ -261,7 +262,6 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
 
   private void multiface(DeferredBlock<Block> block) {
     final Block id = block.get();
-
     final MultiPartBlockStateBuilder builder = this.getMultipartBuilder(id);
     final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
 
@@ -401,11 +401,13 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         this.models()
             .getExistingFile(ResourceLocation.parse(SpliceUtils.getLocation(id) + "_hanging"));
 
-    final VariantBlockStateBuilder s = this.getVariantBuilder(id);
-    s.partialState()
+    final VariantBlockStateBuilder builder = this.getVariantBuilder(id);
+    builder
+        .partialState()
         .with(BlockStateProperties.HANGING, false)
         .addModels(new ConfiguredModel(standing));
-    s.partialState()
+    builder
+        .partialState()
         .with(BlockStateProperties.HANGING, true)
         .addModels(new ConfiguredModel(hanging));
   }
@@ -419,17 +421,21 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     final ModelFile wallModel = this.models().getExistingFile(SpliceUtils.getLocation(wallId));
     this.simpleBlock(standingId, standingModel);
 
-    final VariantBlockStateBuilder s = this.getVariantBuilder(wallId);
-    s.partialState()
+    final VariantBlockStateBuilder builder = this.getVariantBuilder(wallId);
+    builder
+        .partialState()
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
         .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(270).build());
-    s.partialState()
+    builder
+        .partialState()
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
         .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(90).build());
-    s.partialState()
+    builder
+        .partialState()
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
         .addModels(ConfiguredModel.builder().modelFile(wallModel).build());
-    s.partialState()
+    builder
+        .partialState()
         .with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
         .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(180).build());
   }
