@@ -4,8 +4,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
-public final class SpliceUtils {
+public final class SpliceModelUtils {
   public static ResourceLocation getId(Block block) {
     return BuiltInRegistries.BLOCK.getKey(block);
   }
@@ -19,6 +20,11 @@ public final class SpliceUtils {
     return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath());
   }
 
+  public static ResourceLocation getLocation(DeferredBlock<?> block) {
+    final ResourceLocation id = getId(block.get());
+    return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "block/" + id.getPath());
+  }
+
   public static ResourceLocation getLocation(Item item) {
     final ResourceLocation id = getId(item);
     return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "item/" + id.getPath());
@@ -28,7 +34,11 @@ public final class SpliceUtils {
     return getId(block).getPath();
   }
 
-  public static String stripWaxedPrefix(String name) {
-    return name.startsWith("waxed_") ? name.substring("waxed_".length()) : name;
+  public static String getName(Item item) {
+    return getId(item).getPath();
+  }
+
+  public static ResourceLocation setSuffix(ResourceLocation base, String suffix) {
+    return ResourceLocation.fromNamespaceAndPath(base.getNamespace(), base.getPath() + suffix);
   }
 }

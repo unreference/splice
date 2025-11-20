@@ -19,9 +19,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MultiNoiseBiomeSource.class)
 public abstract class SpliceMixinMultiNoiseBiomeSource {
   @Unique private final Object splice$lock = new Object();
+
   @Final @Shadow
   private Either<Climate.ParameterList<Holder<Biome>>, Holder<MultiNoiseBiomeSourceParameterList>>
       parameters;
+
   @Unique
   private volatile Climate.ParameterList<Holder<Biome>> splice$extendedOverworldParameterList;
 

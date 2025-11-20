@@ -2,10 +2,14 @@ package com.github.unreference.splice.world.level.levelgen.feature.stateprovider
 
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.data.SpliceBlockFamilies;
-import com.github.unreference.splice.util.SpliceUtils;
+import com.github.unreference.splice.util.SpliceBlockPropertyUtils;
+import com.github.unreference.splice.util.SpliceModelUtils;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
+import com.github.unreference.splice.world.level.block.SpliceCreakingHeartBlock;
 import com.github.unreference.splice.world.level.block.SpliceHangingMossBlock;
 import com.github.unreference.splice.world.level.block.SpliceMossyCarpetBlock;
+import com.github.unreference.splice.world.level.block.state.properties.SpliceCreakingHeartState;
+import java.util.HashMap;
 import net.minecraft.core.Direction;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
@@ -23,13 +27,170 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     super(output, SpliceMain.MOD_ID, exFileHelper);
   }
 
-  private static void applyDotCondition(
-      MultiPartBlockStateBuilder builder, ModelFile model, int yRotation, boolean isUvLocked) {
+  @Override
+  protected void registerStatesAndModels() {
+    this.registerBlockFamilies();
+    this.registerCopper();
+    this.registerResin();
+    this.registerPaleGarden();
+  }
+
+  // ===================================================================================================================
+  // Pale Garden
+  // ===================================================================================================================
+
+  private void registerPaleGarden() {
+    this.logBlock(SpliceBlocks.PALE_OAK_LOG.get());
+    this.logBlock(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get());
+    this.woodBlock(
+        SpliceBlocks.PALE_OAK_WOOD.get(),
+        SpliceModelUtils.getLocation(SpliceBlocks.PALE_OAK_LOG.get()));
+    this.woodBlock(
+        SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get(),
+        SpliceModelUtils.getLocation(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get()));
+
+    this.existingBlock(SpliceBlocks.PALE_OAK_SAPLING);
+    this.existingBlock(SpliceBlocks.PALE_OAK_LEAVES);
+    this.existingBlock(SpliceBlocks.POTTED_PALE_OAK_SAPLING);
+    this.existingBlock(SpliceBlocks.PALE_MOSS_BLOCK);
+
+    this.existingBlock(SpliceBlocks.CLOSED_EYEBLOSSOM);
+    this.existingBlock(SpliceBlocks.OPEN_EYEBLOSSOM);
+    this.existingBlock(SpliceBlocks.POTTED_CLOSED_EYEBLOSSOM);
+    this.existingBlock(SpliceBlocks.POTTED_OPEN_EYEBLOSSOM);
+
+    this.hangingSignBlock(
+        SpliceBlocks.PALE_OAK_HANGING_SIGN.get(),
+        SpliceBlocks.PALE_OAK_WALL_HANGING_SIGN.get(),
+        SpliceModelUtils.getLocation(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get()));
+    this.hangingMoss();
+    this.mossyCarpet();
+    this.creakingHeart();
+  }
+
+  private void woodBlock(RotatedPillarBlock block, ResourceLocation texture) {
+    this.axisBlock(block, texture, texture);
+  }
+
+  private void creakingHeart() {
+    final Block block = SpliceBlocks.CREAKING_HEART.get();
+    final String name = SpliceModelUtils.getName(block);
+    final ResourceLocation side = modLoc("block/" + name);
+
+    final HashMap<SpliceCreakingHeartState, ModelPair> models = new HashMap<>();
+    models.put(
+        SpliceCreakingHeartState.UPROOTED,
+        new ModelPair(
+            models().cubeColumn(name, side, SpliceModelUtils.setSuffix(side, "_top")),
+            models()
+                .cubeColumnHorizontal(
+                    name + "_horizontal", side, SpliceModelUtils.setSuffix(side, "_top"))));
+    models.put(
+        SpliceCreakingHeartState.AWAKE,
+        new ModelPair(
+            models()
+                .cubeColumn(
+                    name + "_awake",
+                    SpliceModelUtils.setSuffix(side, "_awake"),
+                    SpliceModelUtils.setSuffix(side, "_top_awake")),
+            models()
+                .cubeColumnHorizontal(
+                    name + "_awake_horizontal",
+                    SpliceModelUtils.setSuffix(side, "_awake"),
+                    SpliceModelUtils.setSuffix(side, "_top_awake"))));
+    models.put(
+        SpliceCreakingHeartState.DORMANT,
+        new ModelPair(
+            models()
+                .cubeColumn(
+                    name + "_dormant",
+                    SpliceModelUtils.setSuffix(side, "_dormant"),
+                    SpliceModelUtils.setSuffix(side, "_top_dormant")),
+            models()
+                .cubeColumnHorizontal(
+                    name + "_dormant_horizontal",
+                    SpliceModelUtils.setSuffix(side, "_dormant"),
+                    SpliceModelUtils.setSuffix(side, "_top_dormant"))));
+
+    this.getVariantBuilder(block)
+        .forAllStatesExcept(
+            state -> {
+              final SpliceCreakingHeartState heartState =
+                  state.getValue(SpliceCreakingHeartBlock.STATE);
+              final Direction.Axis axis = state.getValue(BlockStateProperties.AXIS);
+              final ModelPair pair =
+                  models.getOrDefault(heartState, models.get(SpliceCreakingHeartState.UPROOTED));
+
+              return switch (axis) {
+                case Y -> ConfiguredModel.builder().modelFile(pair.vertical).build();
+                case Z ->
+                    ConfiguredModel.builder().modelFile(pair.horizontal).rotationX(90).build();
+                case X ->
+                    ConfiguredModel.builder()
+                        .modelFile(pair.horizontal)
+                        .rotationX(90)
+                        .rotationY(90)
+                        .build();
+              };
+            },
+            SpliceCreakingHeartBlock.IS_NATURAL);
+  }
+
+  private void hangingMoss() {
+    final Block block = SpliceBlocks.PALE_HANGING_MOSS.get();
+    final ModelFile main = this.existingBlockModel(block);
+    final ModelFile tip =
+        this.existingBlockModel(
+            SpliceModelUtils.setSuffix(SpliceModelUtils.getLocation(block), "_tip"));
+
+    this.getVariantBuilder(block)
+        .forAllStates(
+            state -> {
+              boolean isTip = state.getValue(SpliceHangingMossBlock.IS_JUST_THE_TIP);
+              return ConfiguredModel.builder().modelFile(isTip ? tip : main).build();
+            });
+  }
+
+  private void mossyCarpet() {
+    final Block block = SpliceBlocks.PALE_MOSS_CARPET.get();
+    final ResourceLocation baseLoc = SpliceModelUtils.getLocation(block);
+
+    final ModelFile carpet = this.existingBlockModel(baseLoc);
+    final ModelFile tall =
+        this.existingBlockModel(SpliceModelUtils.setSuffix(baseLoc, "_side_tall"));
+    final ModelFile low =
+        this.existingBlockModel(SpliceModelUtils.setSuffix(baseLoc, "_side_small"));
+
+    final MultiPartBlockStateBuilder builder = getMultipartBuilder(block);
+
+    builder.part().modelFile(carpet).addModel().condition(SpliceMossyCarpetBlock.IS_BASE, true);
+
+    for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getPossibleValues()) {
+      final int y = (int) direction.toYRot();
+      final EnumProperty<WallSide> side = SpliceBlockPropertyUtils.getWallSideProperty(direction);
+
+      if (side != null) {
+        builder
+            .part()
+            .modelFile(tall)
+            .rotationY(y)
+            .uvLock(direction != Direction.NORTH)
+            .addModel()
+            .condition(side, WallSide.TALL);
+        builder
+            .part()
+            .modelFile(low)
+            .rotationY(y)
+            .uvLock(direction != Direction.NORTH)
+            .addModel()
+            .condition(side, WallSide.LOW);
+      }
+    }
+
     builder
         .part()
-        .rotationY(yRotation)
-        .uvLock(isUvLocked)
-        .modelFile(model)
+        .rotationY(0)
+        .modelFile(carpet)
         .addModel()
         .condition(SpliceMossyCarpetBlock.IS_BASE, false)
         .condition(SpliceMossyCarpetBlock.NORTH, WallSide.NONE)
@@ -38,439 +199,224 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
         .condition(SpliceMossyCarpetBlock.WEST, WallSide.NONE);
   }
 
-  private static void applyWallSide(
-      MultiPartBlockStateBuilder builder,
-      EnumProperty<WallSide> wall,
-      ModelFile tall,
-      ModelFile low,
-      int yRotation,
-      boolean isUvLocked) {
+  private void registerResin() {
+    this.existingBlock(SpliceBlocks.RESIN_BLOCK);
+    this.multiface(SpliceBlocks.RESIN_CLUMP.get());
+  }
+
+  // ===================================================================================================================
+  // Resin (Multiface)
+  // ===================================================================================================================
+
+  private void multiface(Block block) {
+    final MultiPartBlockStateBuilder builder = getMultipartBuilder(block);
+    final ModelFile model = this.existingBlockModel(block);
+
+    for (Direction direction : Direction.values()) {
+      int x = 0;
+      int y = 0;
+
+      switch (direction) {
+        case UP -> x = 270;
+        case DOWN -> x = 90;
+        case SOUTH -> y = 180;
+        case WEST -> y = 270;
+        case EAST -> y = 90;
+      }
+
+      builder
+          .part()
+          .modelFile(model)
+          .rotationX(x)
+          .rotationY(y)
+          .uvLock(true)
+          .addModel()
+          .condition(SpliceBlockPropertyUtils.getDirectionProperty(direction), true);
+    }
+
     builder
         .part()
-        .modelFile(tall)
-        .rotationY(yRotation)
-        .uvLock(isUvLocked)
+        .modelFile(model)
         .addModel()
-        .condition(wall, WallSide.TALL);
-    builder
-        .part()
-        .modelFile(low)
-        .rotationY(yRotation)
-        .uvLock(isUvLocked)
-        .addModel()
-        .condition(wall, WallSide.LOW);
+        .condition(BlockStateProperties.DOWN, false)
+        .condition(BlockStateProperties.UP, false)
+        .condition(BlockStateProperties.NORTH, false)
+        .condition(BlockStateProperties.SOUTH, false)
+        .condition(BlockStateProperties.EAST, false)
+        .condition(BlockStateProperties.WEST, false);
   }
 
-  @Override
-  protected void registerStatesAndModels() {
-    this.blockFamilyBlocks();
-    this.copperBlocks();
-    this.resinBlocks();
-    this.paleGardenBlocks();
+  private void registerCopper() {
+    SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::barsPair);
+    SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::chainPair);
+    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::lanternPair);
+
+    SpliceBlocks.COPPER_CHESTS.forEach(this::existingBlock);
+    this.torchPair(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
   }
 
-  private void paleGardenBlocks() {
-    this.log(SpliceBlocks.PALE_OAK_LOG);
-    this.log(SpliceBlocks.STRIPPED_PALE_OAK_LOG);
-    this.wood(SpliceBlocks.PALE_OAK_WOOD, SpliceUtils.getLocation(SpliceBlocks.PALE_OAK_LOG.get()));
-    this.wood(
-        SpliceBlocks.STRIPPED_PALE_OAK_WOOD,
-        SpliceUtils.getLocation(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get()));
-    this.hangingSignBlock(
-        SpliceBlocks.PALE_OAK_HANGING_SIGN.get(),
-        SpliceBlocks.PALE_OAK_WALL_HANGING_SIGN.get(),
-        SpliceUtils.getLocation(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get()));
-    this.block(SpliceBlocks.PALE_OAK_SAPLING);
-    this.block(SpliceBlocks.PALE_OAK_LEAVES);
-    this.block(SpliceBlocks.POTTED_PALE_OAK_SAPLING);
-    this.mossyCarpet();
-    this.block(SpliceBlocks.PALE_MOSS_BLOCK);
-    this.hangingMoss();
-    this.block(SpliceBlocks.CLOSED_EYEBLOSSOM);
-    this.block(SpliceBlocks.OPEN_EYEBLOSSOM);
-    this.block(SpliceBlocks.POTTED_CLOSED_EYEBLOSSOM);
-    this.block(SpliceBlocks.POTTED_OPEN_EYEBLOSSOM);
-    this.block(SpliceBlocks.CREAKING_HEART);
+  // ===================================================================================================================
+  // Copper
+  // ===================================================================================================================
+
+  private void barsPair(
+      DeferredBlock<? extends Block> normal, DeferredBlock<? extends Block> waxed) {
+    final ResourceLocation texture = this.modLoc("block/" + SpliceModelUtils.getName(normal.get()));
+    this.bars((IronBarsBlock) normal.get(), texture);
+    this.bars((IronBarsBlock) waxed.get(), texture);
   }
 
-  private void hangingMoss() {
-    final Block id = SpliceBlocks.PALE_HANGING_MOSS.get();
-    final String name = SpliceUtils.getName(id);
-    final ModelFile hangingMoss = this.models().getExistingFile(this.modLoc("block/" + name));
-    final ModelFile hangingMossTip =
-        this.models().getExistingFile(this.modLoc("block/" + name + "_tip"));
+  private void bars(IronBarsBlock block, ResourceLocation texture) {
+    this.paneBlockWithRenderType(block, texture, texture, this.mcLoc("cutout_mipped"));
+  }
 
-    final VariantBlockStateBuilder builder = this.getVariantBuilder(id);
-    builder
+  private void chainPair(
+      DeferredBlock<? extends Block> normal, DeferredBlock<? extends Block> waxed) {
+    final ModelFile model = this.existingBlockModel(normal.get());
+    this.axisBlock((RotatedPillarBlock) normal.get(), model, model);
+    this.axisBlock((RotatedPillarBlock) waxed.get(), model, model);
+  }
+
+  private void lanternPair(
+      DeferredBlock<? extends Block> normal, DeferredBlock<? extends Block> waxed) {
+    this.lantern(normal.get());
+    this.lantern(waxed.get());
+  }
+
+  private void lantern(Block block) {
+    final ModelFile standing = this.existingBlockModel(block);
+    final ModelFile hanging =
+        this.existingBlockModel(
+            SpliceModelUtils.setSuffix(SpliceModelUtils.getLocation(block), "_hanging"));
+
+    this.getVariantBuilder(block)
         .partialState()
-        .with(SpliceHangingMossBlock.IS_JUST_THE_TIP, false)
+        .with(BlockStateProperties.HANGING, false)
         .modelForState()
-        .modelFile(hangingMoss)
+        .modelFile(standing)
         .addModel()
         .partialState()
-        .with(SpliceHangingMossBlock.IS_JUST_THE_TIP, true)
+        .with(BlockStateProperties.HANGING, true)
         .modelForState()
-        .modelFile(hangingMossTip)
+        .modelFile(hanging)
         .addModel();
   }
 
-  private void mossyCarpet() {
-    final Block id = SpliceBlocks.PALE_MOSS_CARPET.get();
-    final String name = SpliceUtils.getName(id);
-    final ModelFile carpet = this.models().getExistingFile(this.modLoc("block/" + name));
-    final ModelFile sideTall =
-        this.models().getExistingFile(this.modLoc("block/" + name + "_side_tall"));
-    final ModelFile sideLow =
-        this.models().getExistingFile(this.modLoc("block/" + name + "_side_small"));
+  private void torchPair(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
+    final ModelFile standingModel = this.existingBlockModel(standing.get());
+    final ModelFile wallModel = this.existingBlockModel(wall.get());
 
-    final MultiPartBlockStateBuilder builder = this.getMultipartBuilder(id);
-    builder.part().modelFile(carpet).addModel().condition(SpliceMossyCarpetBlock.IS_BASE, true);
+    this.simpleBlock(standing.get(), standingModel);
 
-    applyWallSide(builder, SpliceMossyCarpetBlock.NORTH, sideTall, sideLow, 0, false);
-    applyWallSide(builder, SpliceMossyCarpetBlock.SOUTH, sideTall, sideLow, 180, true);
-    applyWallSide(builder, SpliceMossyCarpetBlock.EAST, sideTall, sideLow, 90, true);
-    applyWallSide(builder, SpliceMossyCarpetBlock.WEST, sideTall, sideLow, 270, true);
-
-    applyDotCondition(builder, carpet, 0, false);
-    applyDotCondition(builder, sideTall, 0, false);
-    applyDotCondition(builder, sideTall, 90, true);
-    applyDotCondition(builder, sideTall, 180, true);
-    applyDotCondition(builder, sideTall, 270, true);
-  }
-
-  private void log(DeferredBlock<RotatedPillarBlock> block) {
-    this.logBlock(block.get());
-  }
-
-  private void wood(DeferredBlock<RotatedPillarBlock> block, ResourceLocation texture) {
-    final Block id = block.get();
-    final String name = SpliceUtils.getName(id);
-
-    final ModelFile model = this.models().cubeColumn(name, texture, texture);
-    final VariantBlockStateBuilder builder = this.getVariantBuilder(id);
-    builder
+    this.getVariantBuilder(wall.get())
         .partialState()
-        .with(RotatedPillarBlock.AXIS, Direction.Axis.Y)
+        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
         .modelForState()
-        .modelFile(model)
+        .modelFile(wallModel)
+        .rotationY(270)
         .addModel()
         .partialState()
-        .with(RotatedPillarBlock.AXIS, Direction.Axis.X)
+        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
         .modelForState()
-        .modelFile(model)
-        .rotationX(90)
+        .modelFile(wallModel)
         .rotationY(90)
         .addModel()
         .partialState()
-        .with(RotatedPillarBlock.AXIS, Direction.Axis.Z)
+        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
         .modelForState()
-        .modelFile(model)
-        .rotationX(90)
+        .modelFile(wallModel)
+        .addModel()
+        .partialState()
+        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
+        .modelForState()
+        .modelFile(wallModel)
+        .rotationY(180)
         .addModel();
   }
 
-  private void resinBlocks() {
-    this.block(SpliceBlocks.RESIN_BLOCK);
-    this.multiface(SpliceBlocks.RESIN_CLUMP);
-  }
-
-  private void blockFamilyBlocks() {
+  private void registerBlockFamilies() {
     for (BlockFamily family : SpliceBlockFamilies.getBlockFamilies().values()) {
-      if (!family.shouldGenerateModel()) {
+      if (!family.shouldGenerateModel() || family.getBaseBlock() == null) {
         continue;
       }
 
       final Block base = family.getBaseBlock();
-      if (base == null) {
-        return;
-      }
-
       this.simpleBlock(base);
-      final ResourceLocation texture = SpliceUtils.getLocation(base);
+      final ResourceLocation texture = SpliceModelUtils.getLocation(base);
 
-      final Block button = family.get(BlockFamily.Variant.BUTTON);
-      if (button != null) {
-        this.buttonBlock(((ButtonBlock) button), texture);
+      if (family.get(BlockFamily.Variant.BUTTON) instanceof ButtonBlock button) {
+        this.buttonBlock(button, texture);
       }
 
-      final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
-      if (chiseled != null) {
+      if (family.get(BlockFamily.Variant.CHISELED) instanceof Block chiseled) {
         this.simpleBlock(chiseled);
       }
 
-      final Block door = family.get(BlockFamily.Variant.DOOR);
-      if (door != null) {
+      if (family.get(BlockFamily.Variant.DOOR) instanceof DoorBlock door) {
         this.doorBlock(
-            (DoorBlock) door,
-            ResourceLocation.parse(SpliceUtils.getLocation(door) + "_bottom"),
-            ResourceLocation.parse(SpliceUtils.getLocation(door) + "_top"));
+            door,
+            SpliceModelUtils.setSuffix(SpliceModelUtils.getLocation(door), "_bottom"),
+            SpliceModelUtils.setSuffix(SpliceModelUtils.getLocation(door), "_top"));
       }
 
-      final Block fence = family.get(BlockFamily.Variant.FENCE);
-      if (fence != null) {
-        this.fenceBlock((FenceBlock) fence, texture);
+      if (family.get(BlockFamily.Variant.FENCE) instanceof FenceBlock fence) {
+        this.fenceBlock(fence, texture);
       }
 
-      final Block fenceGate = family.get(BlockFamily.Variant.FENCE_GATE);
-      if (fenceGate != null) {
-        this.fenceGateBlock((FenceGateBlock) fenceGate, texture);
+      if (family.get(BlockFamily.Variant.FENCE_GATE) instanceof FenceGateBlock fenceGate) {
+        this.fenceGateBlock(fenceGate, texture);
       }
 
-      final Block sign = family.get(BlockFamily.Variant.SIGN);
-      final Block wallSign = family.get(BlockFamily.Variant.WALL_SIGN);
-      if (sign != null && wallSign != null) {
-        this.signBlock((StandingSignBlock) sign, ((WallSignBlock) wallSign), texture);
+      if (family.get(BlockFamily.Variant.SIGN) instanceof StandingSignBlock standingSign
+          && family.get(BlockFamily.Variant.WALL_SIGN) instanceof WallSignBlock wallSign) {
+        this.signBlock(standingSign, wallSign, texture);
       }
 
-      final Block slab = family.get(BlockFamily.Variant.SLAB);
-      if (slab != null) {
-        this.slabBlock(((SlabBlock) slab), texture, texture);
+      if (family.get(BlockFamily.Variant.SLAB) instanceof SlabBlock slab) {
+        this.slabBlock(slab, texture, texture);
       }
 
-      final Block stairs = family.get(BlockFamily.Variant.STAIRS);
-      if (stairs != null) {
-        this.stairsBlock(((StairBlock) stairs), texture);
+      if (family.get(BlockFamily.Variant.STAIRS) instanceof StairBlock stairs) {
+        this.stairsBlock(stairs, texture);
       }
 
-      final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
-      if (pressurePlate != null) {
-        this.pressurePlateBlock((PressurePlateBlock) pressurePlate, texture);
+      if (family.get(BlockFamily.Variant.PRESSURE_PLATE)
+          instanceof PressurePlateBlock pressurePlate) {
+        this.pressurePlateBlock(pressurePlate, texture);
       }
 
-      final Block trapdoor = family.get(BlockFamily.Variant.TRAPDOOR);
-      if (trapdoor != null) {
-        this.trapdoorBlock(((TrapDoorBlock) trapdoor), SpliceUtils.getLocation(trapdoor), true);
-      }
+      if (family.get(BlockFamily.Variant.TRAPDOOR) instanceof TrapDoorBlock trapdoor)
+        this.trapdoorBlock(trapdoor, SpliceModelUtils.getLocation(trapdoor), true);
 
-      final Block wall = family.get(BlockFamily.Variant.WALL);
-      if (wall != null) {
-        this.wallBlock(((WallBlock) wall), texture);
+      if (family.get(BlockFamily.Variant.WALL) instanceof WallBlock wall) {
+        this.wallBlock(wall, texture);
       }
     }
   }
 
-  private void copperBlocks() {
-    SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::copperBars);
-    SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::copperChain);
-    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::copperLantern);
-    SpliceBlocks.COPPER_CHESTS.forEach(
-        block ->
-            this.simpleBlock(
-                block.get(), this.models().getExistingFile(SpliceUtils.getLocation(block.get()))));
-    this.torch(SpliceBlocks.COPPER_TORCH, SpliceBlocks.COPPER_WALL_TORCH);
+  // ===================================================================================================================
+  // Block Families
+  // ===================================================================================================================
+
+  private void existingBlock(DeferredBlock<?> block) {
+    this.existingBlock(block.get());
   }
 
-  private void multiface(DeferredBlock<Block> block) {
-    final Block id = block.get();
-    final MultiPartBlockStateBuilder builder = this.getMultipartBuilder(id);
-    final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
+  // ===================================================================================================================
+  // Helpers
+  // ===================================================================================================================
 
-    builder
-        .part()
-        .modelFile(model)
-        .addModel()
-        .condition(BlockStateProperties.NORTH, true)
-        .end()
-        .part()
-        .modelFile(model)
-        .addModel()
-        .condition(BlockStateProperties.DOWN, false)
-        .condition(BlockStateProperties.EAST, false)
-        .condition(BlockStateProperties.NORTH, false)
-        .condition(BlockStateProperties.SOUTH, false)
-        .condition(BlockStateProperties.UP, false)
-        .condition(BlockStateProperties.WEST, false)
-        .end()
-        .part()
-        .modelFile(model)
-        .uvLock(true)
-        .rotationY(90)
-        .addModel()
-        .condition(BlockStateProperties.EAST, true)
-        .end()
-        .part()
-        .modelFile(model)
-        .uvLock(true)
-        .rotationY(90)
-        .addModel()
-        .condition(BlockStateProperties.DOWN, false)
-        .condition(BlockStateProperties.EAST, false)
-        .condition(BlockStateProperties.NORTH, false)
-        .condition(BlockStateProperties.SOUTH, false)
-        .condition(BlockStateProperties.UP, false)
-        .condition(BlockStateProperties.WEST, false)
-        .end()
-        .part()
-        .modelFile(model)
-        .uvLock(true)
-        .rotationY(180)
-        .addModel()
-        .condition(BlockStateProperties.SOUTH, true)
-        .end()
-        .part()
-        .modelFile(model)
-        .uvLock(true)
-        .rotationY(180)
-        .addModel()
-        .condition(BlockStateProperties.DOWN, false)
-        .condition(BlockStateProperties.EAST, false)
-        .condition(BlockStateProperties.NORTH, false)
-        .condition(BlockStateProperties.SOUTH, false)
-        .condition(BlockStateProperties.UP, false)
-        .condition(BlockStateProperties.WEST, false)
-        .end()
-        .part()
-        .modelFile(model)
-        .uvLock(true)
-        .rotationY(270)
-        .addModel()
-        .condition(BlockStateProperties.WEST, true)
-        .end()
-        .part()
-        .modelFile(model)
-        .uvLock(true)
-        .rotationY(270)
-        .addModel()
-        .condition(BlockStateProperties.DOWN, false)
-        .condition(BlockStateProperties.EAST, false)
-        .condition(BlockStateProperties.NORTH, false)
-        .condition(BlockStateProperties.SOUTH, false)
-        .condition(BlockStateProperties.UP, false)
-        .condition(BlockStateProperties.WEST, false)
-        .end()
-        .part()
-        .modelFile(model)
-        .uvLock(true)
-        .rotationX(270)
-        .addModel()
-        .condition(BlockStateProperties.UP, true)
-        .end()
-        .part()
-        .modelFile(model)
-        .uvLock(true)
-        .rotationY(270)
-        .addModel()
-        .condition(BlockStateProperties.DOWN, false)
-        .condition(BlockStateProperties.EAST, false)
-        .condition(BlockStateProperties.NORTH, false)
-        .condition(BlockStateProperties.SOUTH, false)
-        .condition(BlockStateProperties.UP, false)
-        .condition(BlockStateProperties.WEST, false)
-        .end()
-        .part()
-        .modelFile(model)
-        .uvLock(true)
-        .rotationX(90)
-        .addModel()
-        .condition(BlockStateProperties.DOWN, true)
-        .end()
-        .part()
-        .modelFile(model)
-        .uvLock(true)
-        .rotationX(90)
-        .addModel()
-        .condition(BlockStateProperties.DOWN, false)
-        .condition(BlockStateProperties.EAST, false)
-        .condition(BlockStateProperties.NORTH, false)
-        .condition(BlockStateProperties.SOUTH, false)
-        .condition(BlockStateProperties.UP, false)
-        .condition(BlockStateProperties.WEST, false)
-        .end();
+  private void existingBlock(Block block) {
+    this.simpleBlock(block, this.existingBlockModel(block));
   }
 
-  private void block(DeferredBlock<?> block) {
-    final Block id = block.get();
-    final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
-    this.simpleBlock(id, model);
+  private ModelFile existingBlockModel(Block block) {
+    return this.models().getExistingFile(SpliceModelUtils.getLocation(block));
   }
 
-  private void copperLantern(
-      DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.lantern(unaffected);
-    this.lantern(waxed);
+  private ModelFile existingBlockModel(ResourceLocation location) {
+    return this.models().getExistingFile(location);
   }
 
-  private void lantern(DeferredBlock<? extends Block> block) {
-    final Block id = block.get();
-    if (!(id instanceof LanternBlock)) {
-      throw new IllegalArgumentException("Expected LanternBlock, got: " + id);
-    }
-
-    final ModelFile standing = this.models().getExistingFile(SpliceUtils.getLocation(id));
-    final ModelFile hanging =
-        this.models()
-            .getExistingFile(ResourceLocation.parse(SpliceUtils.getLocation(id) + "_hanging"));
-
-    final VariantBlockStateBuilder builder = this.getVariantBuilder(id);
-    builder
-        .partialState()
-        .with(BlockStateProperties.HANGING, false)
-        .addModels(new ConfiguredModel(standing));
-    builder
-        .partialState()
-        .with(BlockStateProperties.HANGING, true)
-        .addModels(new ConfiguredModel(hanging));
-  }
-
-  private void torch(DeferredBlock<Block> standing, DeferredBlock<Block> wall) {
-    final Block standingId = standing.get();
-    final Block wallId = wall.get();
-
-    final ModelFile standingModel =
-        this.models().getExistingFile(SpliceUtils.getLocation(standingId));
-    final ModelFile wallModel = this.models().getExistingFile(SpliceUtils.getLocation(wallId));
-    this.simpleBlock(standingId, standingModel);
-
-    final VariantBlockStateBuilder builder = this.getVariantBuilder(wallId);
-    builder
-        .partialState()
-        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.NORTH)
-        .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(270).build());
-    builder
-        .partialState()
-        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.SOUTH)
-        .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(90).build());
-    builder
-        .partialState()
-        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST)
-        .addModels(ConfiguredModel.builder().modelFile(wallModel).build());
-    builder
-        .partialState()
-        .with(BlockStateProperties.HORIZONTAL_FACING, Direction.WEST)
-        .addModels(ConfiguredModel.builder().modelFile(wallModel).rotationY(180).build());
-  }
-
-  private void copperBars(
-      DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.bars(unaffected);
-    this.bars(waxed);
-  }
-
-  private void bars(DeferredBlock<? extends Block> block) {
-    final Block id = block.get();
-    if (!(id instanceof IronBarsBlock bars)) {
-      throw new IllegalArgumentException("Expected IronBarsBlock, got: " + id);
-    }
-
-    final String name = SpliceUtils.getName(id);
-    final ResourceLocation texture = this.modLoc("block/" + SpliceUtils.stripWaxedPrefix(name));
-
-    this.paneBlockWithRenderType(bars, texture, texture, this.mcLoc("cutout_mipped"));
-  }
-
-  private void copperChain(
-      DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.chain(unaffected);
-    this.chain(waxed);
-  }
-
-  private void chain(DeferredBlock<? extends Block> block) {
-    final Block id = block.get();
-    if (!(id instanceof ChainBlock chain)) {
-      throw new IllegalArgumentException("Expected ChainBlock, got: " + id);
-    }
-
-    final ModelFile model = this.models().getExistingFile(SpliceUtils.getLocation(id));
-    this.axisBlock(chain, model, model);
-  }
+  private record ModelPair(ModelFile vertical, ModelFile horizontal) {}
 }

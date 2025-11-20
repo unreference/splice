@@ -5,8 +5,9 @@ import com.github.unreference.splice.data.SpliceBlockFamilies;
 import com.github.unreference.splice.tags.SpliceItemTags;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import javax.annotation.Nullable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
@@ -21,7 +22,7 @@ import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
 public final class SpliceRecipeProvider extends RecipeProvider {
-  private static final float COOKING_XP = 0.1f;
+  private static final float XP_COOKING = 0.1f;
   private static final int TIME_SMELTING = 200;
   private static final int TIME_BLASTING = 100;
 
@@ -30,37 +31,90 @@ public final class SpliceRecipeProvider extends RecipeProvider {
     super(output, registries);
   }
 
-  private static ResourceLocation getResourceLocation(String path) {
-    return ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, path);
+  private static String getName(ItemLike item) {
+    return getSimpleRecipeName(item);
   }
 
-  private static void bannerPatterns(RecipeOutput recipeOutput) {
-    // Field masoned
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, SpliceItems.FIELD_MASONED_BANNER_PATTERN)
-        .requires(Items.PAPER)
-        .requires(Blocks.BRICKS)
-        .unlockedBy(getHasName(Blocks.BRICKS), has(Blocks.BRICKS))
-        .save(recipeOutput);
+  // ===================================================================================================================
+  // 1. Pale Garden
+  // ===================================================================================================================
 
-    // Bordure indented
-    ShapelessRecipeBuilder.shapeless(
-            RecipeCategory.MISC, SpliceItems.BORDURE_INDENTED_BANNER_PATTERN)
-        .requires(Items.PAPER)
-        .requires(Blocks.VINE)
-        .unlockedBy(getHasName(Blocks.VINE), has(Blocks.VINE))
-        .save(recipeOutput);
+  @Override
+  protected void buildRecipes(@NotNull RecipeOutput output) {
+    this.registerBlockFamilies(output);
+    this.registerCopper(output);
+    this.registerResin(output);
+    this.registerPaleGarden(output);
+    this.registerMiscellaneous(output);
   }
 
-  private static void copperBlocks(RecipeOutput recipeOutput) {
+  // ===================================================================================================================
+  // 2. Resin
+  // ===================================================================================================================
+
+  private void registerPaleGarden(RecipeOutput output) {
+    planksFromLog(output, SpliceBlocks.PALE_OAK_PLANKS.get(), SpliceItemTags.PALE_OAK_LOGS, 4);
+    woodFromLogs(output, SpliceBlocks.PALE_OAK_WOOD.get(), SpliceBlocks.PALE_OAK_LOG.get());
+    woodFromLogs(
+        output,
+        SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get(),
+        SpliceBlocks.STRIPPED_PALE_OAK_LOG.get());
+    hangingSign(
+        output, SpliceBlocks.PALE_OAK_HANGING_SIGN.get(), SpliceBlocks.STRIPPED_PALE_OAK_LOG.get());
+
+    carpet(output, SpliceBlocks.PALE_MOSS_CARPET.get(), SpliceBlocks.PALE_MOSS_BLOCK.get());
+
+    this.oneToOne(output, Items.GRAY_DYE, SpliceBlocks.CLOSED_EYEBLOSSOM, "gray_dye");
+    this.oneToOne(output, Items.ORANGE_DYE, SpliceBlocks.OPEN_EYEBLOSSOM, "orange_dye");
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SpliceBlocks.CREAKING_HEART)
+        .define('P', SpliceBlocks.PALE_OAK_LOG)
+        .define('R', SpliceBlocks.RESIN_BLOCK)
+        .pattern(" P ")
+        .pattern(" R ")
+        .pattern(" P ")
+        .unlockedBy(getName(SpliceItems.RESIN_BLOCK), has(SpliceItems.RESIN_BLOCK))
+        .save(output);
+  }
+
+  // ===================================================================================================================
+  // 3. Copper
+  // ===================================================================================================================
+
+  private void registerResin(RecipeOutput output) {
+    final Item block = SpliceItems.RESIN_BLOCK.get();
+    final Item clump = SpliceItems.RESIN_CLUMP.get();
+    final Item brick = SpliceItems.RESIN_BRICK.get();
+
+    this.nineBlockStorage(
+        output, RecipeCategory.MISC, clump, RecipeCategory.BUILDING_BLOCKS, block);
+
+    this.twoByTwo(output, RecipeCategory.BUILDING_BLOCKS, SpliceBlocks.RESIN_BRICKS.get(), brick);
+
+    SimpleCookingRecipeBuilder.smelting(
+            Ingredient.of(clump), RecipeCategory.MISC, brick, XP_COOKING, TIME_SMELTING)
+        .unlockedBy(getName(clump), has(clump))
+        .save(output);
+  }
+
+  private void registerCopper(RecipeOutput output) {
+    SpliceBlocks.COPPER_FAMILY.stream()
+        .flatMap(block -> block.waxedMapping().entrySet().stream())
+        .forEach(block -> this.waxing(output, block.getKey().get(), block.getValue().get()));
+
+    this.copperBlocks(output);
+    this.copperEquipment(output);
+    this.copperCooking(output);
+  }
+
+  private void copperBlocks(RecipeOutput output) {
     final Item ingot = Items.COPPER_INGOT;
     final Item nugget = SpliceItems.COPPER_NUGGET.get();
 
-    // Trapdoor
-    twoByTwoPacker(recipeOutput, RecipeCategory.REDSTONE, Blocks.COPPER_TRAPDOOR, ingot);
+    this.twoByTwo(output, RecipeCategory.REDSTONE, Blocks.COPPER_TRAPDOOR, ingot);
 
-    // Ingot <-> nugget
-    nineBlockStorageRecipesWithCustomPacking(
-        recipeOutput,
+    this.nineBlockStorage(
+        output,
         RecipeCategory.MISC,
         nugget,
         RecipeCategory.MISC,
@@ -68,37 +122,33 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         getConversionRecipeName(ingot, nugget),
         getItemName(ingot));
 
-    // Bars
     ShapedRecipeBuilder.shaped(
             RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_BARS.unaffected(), 16)
         .define('I', ingot)
         .pattern("III")
         .pattern("III")
-        .unlockedBy(getHasName(ingot), has(ingot))
-        .save(recipeOutput);
+        .unlockedBy(getName(ingot), has(ingot))
+        .save(output);
 
-    // Chain
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_CHAIN.unaffected())
         .define('N', nugget)
         .define('I', ingot)
         .pattern("N")
         .pattern("I")
         .pattern("N")
-        .unlockedBy(getHasName(nugget), has(nugget))
-        .unlockedBy(getHasName(ingot), has(ingot))
-        .save(recipeOutput);
+        .unlockedBy(getName(nugget), has(nugget))
+        .unlockedBy(getName(ingot), has(ingot))
+        .save(output);
 
-    // Chest
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_CHEST)
         .define('I', ingot)
         .define('C', Blocks.CHEST)
         .pattern("III")
         .pattern("ICI")
         .pattern("III")
-        .unlockedBy(getHasName(SpliceBlocks.COPPER_CHEST), has(SpliceBlocks.COPPER_CHEST))
-        .save(recipeOutput);
+        .unlockedBy(getName(SpliceBlocks.COPPER_CHEST), has(SpliceBlocks.COPPER_CHEST))
+        .save(output);
 
-    // Torch
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_TORCH, 4)
         .define('N', nugget)
         .define('C', Ingredient.of(Items.COAL, Items.CHARCOAL))
@@ -106,367 +156,194 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .pattern("N")
         .pattern("C")
         .pattern("S")
-        .unlockedBy(getHasName(nugget), has(nugget))
-        .save(recipeOutput);
+        .unlockedBy(getName(nugget), has(nugget))
+        .save(output);
 
-    // Lantern
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, SpliceBlocks.COPPER_LANTERN.unaffected())
         .define('N', nugget)
         .define('T', SpliceItems.COPPER_TORCH)
         .pattern("NNN")
         .pattern("NTN")
         .pattern("NNN")
-        .unlockedBy(getHasName(SpliceItems.COPPER_TORCH), has(SpliceItems.COPPER_TORCH))
-        .save(recipeOutput);
+        .unlockedBy(getName(SpliceItems.COPPER_TORCH), has(SpliceItems.COPPER_TORCH))
+        .save(output);
   }
 
-  private static void waxable(RecipeOutput recipeOutput, Block from, Block to) {
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, to)
-        .requires(from)
-        .requires(Items.HONEYCOMB)
-        .group(getItemName(to))
-        .unlockedBy(getHasName(from), has(from))
-        .save(recipeOutput, getResourceLocation(getConversionRecipeName(to, Items.HONEYCOMB)));
+  private void copperEquipment(RecipeOutput output) {
+    final TagKey<Item> material = SpliceItemTags.COPPER_TOOL_MATERIALS;
+
+    this.shovel(output, SpliceItems.COPPER_SHOVEL.get(), material);
+    this.pickaxe(output, SpliceItems.COPPER_PICKAXE.get(), material);
+    this.axe(output, SpliceItems.COPPER_AXE.get(), material);
+    this.hoe(output, SpliceItems.COPPER_HOE.get(), material);
+    this.sword(output, SpliceItems.COPPER_SWORD.get(), material);
+
+    this.helmet(output, SpliceItems.COPPER_HELMET.get(), material);
+    this.chestplate(output, SpliceItems.COPPER_CHESTPLATE.get(), material);
+    this.leggings(output, SpliceItems.COPPER_LEGGINGS.get(), material);
+    this.boots(output, SpliceItems.COPPER_BOOTS.get(), material);
   }
 
-  private static void copperEquipment(RecipeOutput recipeOutput) {
-    final Item ingot = Items.COPPER_INGOT;
-    final Item stick = Items.STICK;
-    final TagKey<Item> copperMaterials = SpliceItemTags.COPPER_TOOL_MATERIALS;
+  // ===================================================================================================================
+  // 4. Block Families
+  // ===================================================================================================================
 
-    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_SHOVEL)
-        .define('C', copperMaterials)
-        .define('S', stick)
-        .pattern("C")
-        .pattern("S")
-        .pattern("S")
-        .unlockedBy(getHasName(ingot), has(copperMaterials))
-        .save(recipeOutput);
-
-    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_PICKAXE)
-        .define('C', copperMaterials)
-        .define('S', stick)
-        .pattern("CCC")
-        .pattern(" S ")
-        .pattern(" S ")
-        .unlockedBy(getHasName(ingot), has(copperMaterials))
-        .save(recipeOutput);
-
-    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_AXE)
-        .define('C', copperMaterials)
-        .define('S', stick)
-        .pattern("CC")
-        .pattern("CS")
-        .pattern(" S")
-        .unlockedBy(getHasName(ingot), has(copperMaterials))
-        .save(recipeOutput);
-
-    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, SpliceItems.COPPER_HOE)
-        .define('C', copperMaterials)
-        .define('S', stick)
-        .pattern("CC")
-        .pattern(" S")
-        .pattern(" S")
-        .unlockedBy(getHasName(ingot), has(copperMaterials))
-        .save(recipeOutput);
-
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_SWORD)
-        .define('C', copperMaterials)
-        .define('S', stick)
-        .pattern("C")
-        .pattern("C")
-        .pattern("S")
-        .unlockedBy(getHasName(ingot), has(copperMaterials))
-        .save(recipeOutput);
-
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_HELMET)
-        .define('C', copperMaterials)
-        .pattern("CCC")
-        .pattern("C C")
-        .unlockedBy(getHasName(ingot), has(copperMaterials))
-        .save(recipeOutput);
-
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_CHESTPLATE)
-        .define('C', copperMaterials)
-        .pattern("C C")
-        .pattern("CCC")
-        .pattern("CCC")
-        .unlockedBy(getHasName(ingot), has(copperMaterials))
-        .save(recipeOutput);
-
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_LEGGINGS)
-        .define('C', copperMaterials)
-        .pattern("CCC")
-        .pattern("C C")
-        .pattern("C C")
-        .unlockedBy(getHasName(ingot), has(copperMaterials))
-        .save(recipeOutput);
-
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, SpliceItems.COPPER_BOOTS)
-        .define('C', copperMaterials)
-        .pattern("C C")
-        .pattern("C C")
-        .unlockedBy(getHasName(ingot), has(copperMaterials))
-        .save(recipeOutput);
-  }
-
-  private static void copperCooking(RecipeOutput recipeOutput) {
+  private void copperCooking(RecipeOutput output) {
     final Item nugget = SpliceItems.COPPER_NUGGET.get();
-
-    final ItemLike[] meltable = {
-      SpliceItems.COPPER_SHOVEL,
-      SpliceItems.COPPER_PICKAXE,
-      SpliceItems.COPPER_AXE,
-      SpliceItems.COPPER_HOE,
-      SpliceItems.COPPER_SWORD,
-      SpliceItems.COPPER_HELMET,
-      SpliceItems.COPPER_CHESTPLATE,
-      SpliceItems.COPPER_LEGGINGS,
-      SpliceItems.COPPER_BOOTS,
-      SpliceItems.COPPER_HORSE_ARMOR,
+    final ItemLike[] meltables = {
+      SpliceItems.COPPER_SHOVEL, SpliceItems.COPPER_PICKAXE, SpliceItems.COPPER_AXE,
+      SpliceItems.COPPER_HOE, SpliceItems.COPPER_SWORD, SpliceItems.COPPER_HELMET,
+      SpliceItems.COPPER_CHESTPLATE, SpliceItems.COPPER_LEGGINGS, SpliceItems.COPPER_BOOTS,
+      SpliceItems.COPPER_HORSE_ARMOR
     };
 
-    final Ingredient inputs = Ingredient.of(meltable);
-    final SimpleCookingRecipeBuilder smelt =
-        SimpleCookingRecipeBuilder.smelting(
-            inputs, RecipeCategory.MISC, nugget, COOKING_XP, TIME_SMELTING);
-
-    for (ItemLike i : meltable) {
-      smelt.unlockedBy(getHasName(i), has(i));
-    }
-
-    smelt.save(recipeOutput, getResourceLocation(getSmeltingRecipeName(nugget)));
-
-    final SimpleCookingRecipeBuilder blasting =
-        SimpleCookingRecipeBuilder.blasting(
-            inputs, RecipeCategory.MISC, nugget, COOKING_XP, TIME_BLASTING);
-
-    for (ItemLike i : meltable) {
-      blasting.unlockedBy(getHasName(i), has(i));
-    }
-
-    blasting.save(recipeOutput, getResourceLocation(getBlastingRecipeName(nugget)));
+    this.recycleSmelting(
+        output, Arrays.asList(meltables), nugget, XP_COOKING, TIME_SMELTING, TIME_BLASTING);
   }
 
-  private static void waxable(RecipeOutput output) {
-    SpliceBlocks.COPPER_FAMILY.stream()
-        .flatMap(f -> f.waxedMapping().entrySet().stream())
-        .forEach(entry -> waxable(output, entry.getKey().get(), entry.getValue().get()));
-  }
+  // ===================================================================================================================
+  // Miscellaneous
+  // ===================================================================================================================
 
-  private static void copper(RecipeOutput recipeOutput) {
-    copperBlocks(recipeOutput);
-    copperEquipment(recipeOutput);
-    copperCooking(recipeOutput);
-    waxable(recipeOutput);
-  }
-
-  private static void saddle(@NotNull RecipeOutput recipeOutput) {
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, Items.SADDLE)
-        .define('L', Items.LEATHER)
-        .define('I', Items.IRON_INGOT)
-        .pattern(" L ")
-        .pattern("LIL")
-        .unlockedBy(getHasName(Items.LEATHER), has(Items.LEATHER))
-        .save(recipeOutput);
-  }
-
-  private static void lead(@NotNull RecipeOutput recipeOutput) {
-    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Items.LEAD, 2)
-        .define('S', Items.STRING)
-        .pattern("SS ")
-        .pattern("SS ")
-        .pattern("  S")
-        .unlockedBy(getHasName(Items.STRING), has(Items.STRING))
-        .save(recipeOutput);
-  }
-
-  private static void blockFamily(@NotNull RecipeOutput recipeOutput) {
+  private void registerBlockFamilies(RecipeOutput output) {
     for (BlockFamily family : SpliceBlockFamilies.getBlockFamilies().values()) {
       if (!family.shouldGenerateRecipe()) {
         continue;
       }
 
       final Block base = family.getBaseBlock();
-      final Block button = family.get(BlockFamily.Variant.BUTTON);
 
-      if (button != null) {
-        button(recipeOutput, button, base);
+      if (family.get(BlockFamily.Variant.BUTTON) instanceof Block button) {
+        buttonBuilder(button, Ingredient.of(base))
+            .unlockedBy(getName(base), has(base))
+            .save(output);
       }
 
-      final Block door = family.get(BlockFamily.Variant.DOOR);
-      if (door != null) {
-        door(recipeOutput, door, base);
+      if (family.get(BlockFamily.Variant.DOOR) instanceof Block door) {
+        doorBuilder(door, Ingredient.of(base)).unlockedBy(getName(base), has(base)).save(output);
       }
 
-      final Block fence = family.get(BlockFamily.Variant.FENCE);
-      if (fence != null) {
-        fence(recipeOutput, fence, base);
+      if (family.get(BlockFamily.Variant.FENCE) instanceof Block fence) {
+        fenceBuilder(fence, Ingredient.of(base)).unlockedBy(getName(base), has(base)).save(output);
       }
 
-      final Block fenceGate = family.get(BlockFamily.Variant.FENCE_GATE);
-      if (fenceGate != null) {
-        fenceGate(recipeOutput, fenceGate, base);
+      if (family.get(BlockFamily.Variant.FENCE_GATE) instanceof Block fenceGate) {
+        fenceGateBuilder(fenceGate, Ingredient.of(base))
+            .unlockedBy(getName(base), has(base))
+            .save(output);
       }
 
-      final Block sign = family.get(BlockFamily.Variant.SIGN);
-      final Block wallSign = family.get(BlockFamily.Variant.WALL_SIGN);
-      if (sign != null && wallSign != null) {
-        sign(recipeOutput, sign, base);
+      if (family.get(BlockFamily.Variant.SIGN) instanceof Block sign) {
+        signBuilder(sign, Ingredient.of(base)).unlockedBy(getName(base), has(base)).save(output);
       }
 
-      final Block slab = family.get(BlockFamily.Variant.SLAB);
-      if (slab != null) {
-        slab(recipeOutput, slab, base);
-        stonecutter(recipeOutput, slab, base, 2);
+      if (family.get(BlockFamily.Variant.PRESSURE_PLATE) instanceof Block pressurePlate) {
+        pressurePlate(output, pressurePlate, base);
+      }
 
-        final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
-        if (chiseled != null) {
-          chiseled(recipeOutput, chiseled, slab);
-          stonecutter(recipeOutput, chiseled, base);
+      if (family.get(BlockFamily.Variant.TRAPDOOR) instanceof Block trapdoor) {
+        trapdoorBuilder(trapdoor, Ingredient.of(base))
+            .unlockedBy(getName(base), has(base))
+            .save(output);
+      }
+
+      if (family.get(BlockFamily.Variant.WALL) instanceof Block wall) {
+        wall(output, RecipeCategory.DECORATIONS, wall, base);
+        this.stonecutter(output, RecipeCategory.DECORATIONS, wall, base, 1);
+      }
+
+      if (family.get(BlockFamily.Variant.SLAB) instanceof Block slab) {
+        slab(output, RecipeCategory.BUILDING_BLOCKS, slab, base);
+        this.stonecutter(output, RecipeCategory.BUILDING_BLOCKS, slab, base, 2);
+
+        if (family.get(BlockFamily.Variant.CHISELED) instanceof Block chiseled) {
+          chiseled(output, RecipeCategory.BUILDING_BLOCKS, chiseled, slab);
+          this.stonecutter(output, RecipeCategory.BUILDING_BLOCKS, chiseled, base, 1);
         }
       }
 
-      final Block stairs = family.get(BlockFamily.Variant.STAIRS);
-      if (stairs != null) {
-        stairs(recipeOutput, stairs, base);
-        stonecutter(recipeOutput, stairs, base);
-      }
-
-      final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
-      if (pressurePlate != null) {
-        pressurePlate(recipeOutput, pressurePlate, base);
-      }
-
-      final Block trapdoor = family.get(BlockFamily.Variant.TRAPDOOR);
-      if (trapdoor != null) {
-        trapdoor(recipeOutput, trapdoor, base);
-      }
-
-      final Block wall = family.get(BlockFamily.Variant.WALL);
-      if (wall != null) {
-        wall(recipeOutput, wall, base);
-        stonecutter(recipeOutput, wall, base);
+      if (family.get(BlockFamily.Variant.STAIRS) instanceof Block stairs) {
+        stairBuilder(stairs, Ingredient.of(base)).unlockedBy(getName(base), has(base)).save(output);
+        this.stonecutter(output, RecipeCategory.BUILDING_BLOCKS, stairs, base, 1);
       }
     }
   }
 
-  private static void trapdoor(@NotNull RecipeOutput recipeOutput, Block trapdoor, Block material) {
-    trapdoorBuilder(trapdoor, Ingredient.of(material))
-        .unlockedBy(getHasName(material), has(material))
-        .save(recipeOutput);
+  // ===================================================================================================================
+  // Helpers
+  // ===================================================================================================================
+
+  private void registerMiscellaneous(RecipeOutput output) {
+    this.shapeless(
+        output,
+        RecipeCategory.MISC,
+        SpliceItems.FIELD_MASONED_BANNER_PATTERN,
+        1,
+        Items.PAPER,
+        Blocks.BRICKS);
+    this.shapeless(
+        output,
+        RecipeCategory.MISC,
+        SpliceItems.BORDURE_INDENTED_BANNER_PATTERN,
+        1,
+        Items.PAPER,
+        Blocks.VINE);
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, Items.SADDLE)
+        .define('L', Items.LEATHER)
+        .define('I', Items.IRON_INGOT)
+        .pattern(" L ")
+        .pattern("LIL")
+        .unlockedBy(getName(Items.LEATHER), has(Items.LEATHER))
+        .save(output);
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, Items.LEAD, 2)
+        .define('S', Items.STRING)
+        .pattern("SS ")
+        .pattern("SS ")
+        .pattern("  S")
+        .unlockedBy(getName(Items.STRING), has(Items.STRING))
+        .save(output);
   }
 
-  private static void door(@NotNull RecipeOutput recipeOutput, Block door, Block material) {
-    doorBuilder(door, Ingredient.of(material))
-        .unlockedBy(getHasName(material), has(material))
-        .save(recipeOutput);
+  private void waxing(RecipeOutput output, Block from, Block to) {
+    ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, to)
+        .requires(from)
+        .requires(Items.HONEYCOMB)
+        .group(getItemName(to))
+        .unlockedBy(getName(from), has(from))
+        .save(output, this.getResourceLocation(getConversionRecipeName(to, Items.HONEYCOMB)));
   }
 
-  private static void sign(@NotNull RecipeOutput recipeOutput, Block sign, Block material) {
-    signBuilder(sign, Ingredient.of(material))
-        .unlockedBy(getHasName(material), has(material))
-        .save(recipeOutput);
-  }
-
-  private static void fence(@NotNull RecipeOutput recipeOutput, Block fence, Block material) {
-    fenceBuilder(fence, Ingredient.of(material))
-        .unlockedBy(getHasName(material), has(material))
-        .save(recipeOutput);
-  }
-
-  private static void fenceGate(
-      @NotNull RecipeOutput recipeOutput, Block fenceGate, Block material) {
-    fenceGateBuilder(fenceGate, Ingredient.of(material))
-        .unlockedBy(getHasName(material), has(material))
-        .save(recipeOutput);
-  }
-
-  private static void button(
-      @NotNull RecipeOutput recipeOutput, ItemLike button, ItemLike material) {
-    buttonBuilder(button, Ingredient.of(material))
-        .unlockedBy(getHasName(material), has(material))
-        .save(recipeOutput);
-  }
-
-  private static void chiseled(RecipeOutput recipeOutput, ItemLike chiseled, ItemLike material) {
-    chiseledBuilder(RecipeCategory.BUILDING_BLOCKS, chiseled, Ingredient.of(material))
-        .unlockedBy(getHasName(material), has(material))
-        .save(recipeOutput);
-  }
-
-  private static void slab(RecipeOutput recipeOutput, ItemLike slab, ItemLike material) {
-    slabBuilder(RecipeCategory.BUILDING_BLOCKS, slab, Ingredient.of(material))
-        .unlockedBy(getHasName(material), has(material))
-        .save(recipeOutput);
-  }
-
-  private static void stairs(RecipeOutput recipeOutput, ItemLike stairs, ItemLike material) {
-    stairBuilder(stairs, Ingredient.of(material))
-        .unlockedBy(getHasName(material), has(material))
-        .save(recipeOutput);
-  }
-
-  private static void stonecutter(RecipeOutput recipeOutput, ItemLike result, ItemLike material) {
-    SingleItemRecipeBuilder.stonecutting(
-            Ingredient.of(material), RecipeCategory.BUILDING_BLOCKS, result)
-        .unlockedBy(getHasName(material), has(material))
-        .save(
-            recipeOutput,
-            getResourceLocation(getConversionRecipeName(result, material) + "_stonecutting"));
-  }
-
-  private static void stonecutter(
-      @NotNull RecipeOutput recipeOutput, Block result, Block material, int amount) {
-    SingleItemRecipeBuilder.stonecutting(
-            Ingredient.of(material), RecipeCategory.BUILDING_BLOCKS, result, amount)
-        .unlockedBy(getHasName(material), has(material))
-        .save(
-            recipeOutput,
-            getResourceLocation(getConversionRecipeName(result, material) + "_stonecutting"));
-  }
-
-  private static void wall(RecipeOutput recipeOutput, ItemLike wall, ItemLike material) {
-    wallBuilder(RecipeCategory.DECORATIONS, wall, Ingredient.of(material))
-        .unlockedBy(getHasName(material), has(material))
-        .save(recipeOutput);
-  }
-
-  private static void resin(@NotNull RecipeOutput recipeOutput) {
-    final Item block = SpliceItems.RESIN_BLOCK.get();
-    final Item clump = SpliceItems.RESIN_CLUMP.get();
-    final Item brick = SpliceItems.RESIN_BRICK.get();
-    final Block bricks = SpliceBlocks.RESIN_BRICKS.get();
-
-    // Block <-> clump
-    nineBlockStorageRecipes(
-        recipeOutput, RecipeCategory.MISC, clump, RecipeCategory.BUILDING_BLOCKS, block);
-
-    // Bricks
-    ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, bricks)
-        .define('R', brick)
-        .pattern("RR")
-        .pattern("RR")
-        .unlockedBy(getHasName(brick), has(brick))
-        .save(recipeOutput);
-
-    // Smelting
-    SimpleCookingRecipeBuilder.smelting(
-            Ingredient.of(clump), RecipeCategory.MISC, brick, COOKING_XP, TIME_SMELTING)
-        .unlockedBy(getHasName(clump), has(clump))
-        .save(recipeOutput);
-  }
-
-  protected static void nineBlockStorageRecipesWithCustomPacking(
-      @NotNull RecipeOutput recipeOutput,
-      @NotNull RecipeCategory unpackedCategory,
+  private void nineBlockStorage(
+      RecipeOutput output,
+      RecipeCategory unpackCat,
       ItemLike unpacked,
-      @NotNull RecipeCategory packedCategory,
+      RecipeCategory packCat,
+      ItemLike packed) {
+    this.nineBlockStorage(
+        output,
+        unpackCat,
+        unpacked,
+        packCat,
+        packed,
+        getSimpleRecipeName(packed),
+        null,
+        getSimpleRecipeName(unpacked),
+        null);
+  }
+
+  private void nineBlockStorage(
+      RecipeOutput output,
+      RecipeCategory unpackedCategory,
+      ItemLike unpacked,
+      RecipeCategory packedCategory,
       ItemLike packed,
       String packedName,
-      @NotNull String packedGroup) {
-    nineBlockStorageRecipes(
-        recipeOutput,
+      String packedGroup) {
+
+    this.nineBlockStorage(
+        output,
         unpackedCategory,
         unpacked,
         packedCategory,
@@ -477,106 +354,154 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         null);
   }
 
-  protected static void nineBlockStorageRecipes(
-      @NotNull RecipeOutput recipeOutput,
-      @NotNull RecipeCategory unpackedCategory,
+  private void nineBlockStorage(
+      RecipeOutput output,
+      RecipeCategory unpackedCategory,
       ItemLike unpacked,
-      @NotNull RecipeCategory packedCategory,
-      ItemLike packed) {
-    nineBlockStorageRecipes(
-        recipeOutput,
-        unpackedCategory,
-        unpacked,
-        packedCategory,
-        packed,
-        getSimpleRecipeName(packed),
-        null,
-        getSimpleRecipeName(unpacked),
-        null);
-  }
-
-  protected static void nineBlockStorageRecipes(
-      @NotNull RecipeOutput recipeOutput,
-      @NotNull RecipeCategory unpackedCategory,
-      ItemLike unpacked,
-      @NotNull RecipeCategory packedCategory,
+      RecipeCategory packedCategory,
       ItemLike packed,
       String packedName,
-      @Nullable String packedGroup,
+      String packedGroup,
       String unpackedName,
-      @Nullable String unpackedGroup) {
+      String unpackedGroup) {
     ShapelessRecipeBuilder.shapeless(unpackedCategory, unpacked, 9)
         .requires(packed)
         .group(unpackedGroup)
-        .unlockedBy(getHasName(packed), has(packed))
-        .save(recipeOutput, getResourceLocation(unpackedName));
+        .unlockedBy(getName(packed), has(packed))
+        .save(output, this.getResourceLocation(unpackedName));
+
     ShapedRecipeBuilder.shaped(packedCategory, packed)
         .define('U', unpacked)
         .pattern("UUU")
         .pattern("UUU")
         .pattern("UUU")
         .group(packedGroup)
-        .unlockedBy(getHasName(unpacked), has(unpacked))
-        .save(recipeOutput, getResourceLocation(packedName));
+        .unlockedBy(getName(unpacked), has(unpacked))
+        .save(output, this.getResourceLocation(packedName));
   }
 
-  protected static void oneToOneConversionRecipe(
-      @NotNull RecipeOutput recipeOutput,
-      ItemLike result,
-      ItemLike ingredient,
-      @Nullable String group) {
-    oneToOneConversionRecipe(recipeOutput, result, ingredient, group, 1);
+  private void twoByTwo(RecipeOutput output, RecipeCategory category, ItemLike result, ItemLike input) {
+    ShapedRecipeBuilder.shaped(category, result)
+        .define('#', input)
+        .pattern("##")
+        .pattern("##")
+        .unlockedBy(getName(input), has(input))
+        .save(output);
   }
 
-  protected static void oneToOneConversionRecipe(
-      @NotNull RecipeOutput recipeOutput,
-      ItemLike result,
-      ItemLike ingredient,
-      @Nullable String group,
-      int resultCount) {
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result, resultCount)
+  private void oneToOne(RecipeOutput output, ItemLike result, ItemLike ingredient, String group) {
+    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result)
         .requires(ingredient)
         .group(group)
-        .unlockedBy(getHasName(ingredient), has(ingredient))
-        .save(recipeOutput, getResourceLocation(getConversionRecipeName(result, ingredient)));
+        .unlockedBy(getName(ingredient), has(ingredient))
+        .save(output, this.getResourceLocation(getConversionRecipeName(result, ingredient)));
   }
 
-  private static void paleGarden(@NotNull RecipeOutput recipeOutput) {
-    planksFromLog(recipeOutput, SpliceBlocks.PALE_OAK_PLANKS, SpliceItemTags.PALE_OAK_LOGS, 4);
-    woodFromLogs(recipeOutput, SpliceBlocks.PALE_OAK_WOOD, SpliceBlocks.PALE_OAK_LOG);
+  private void shapeless(
+      RecipeOutput output,
+      RecipeCategory category,
+      ItemLike result,
+      int count,
+      ItemLike... ingredients) {
+    final ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(category, result, count);
+    for (ItemLike i : ingredients) {
+      builder.requires(i);
+    }
 
-    woodFromLogs(
-        recipeOutput, SpliceBlocks.STRIPPED_PALE_OAK_WOOD, SpliceBlocks.STRIPPED_PALE_OAK_LOG);
+    if (ingredients.length > 0) {
+      builder.unlockedBy(getName(ingredients[0]), has(ingredients[0]));
+    }
 
-    hangingSign(
-        recipeOutput, SpliceBlocks.PALE_OAK_HANGING_SIGN, SpliceBlocks.STRIPPED_PALE_OAK_LOG);
-
-    carpet(recipeOutput, SpliceBlocks.PALE_MOSS_CARPET, SpliceBlocks.PALE_MOSS_BLOCK);
-
-    oneToOneConversionRecipe(
-        recipeOutput, Items.GRAY_DYE, SpliceBlocks.CLOSED_EYEBLOSSOM, "gray_dye");
-
-    oneToOneConversionRecipe(
-        recipeOutput, Items.ORANGE_DYE, SpliceBlocks.OPEN_EYEBLOSSOM, "orange_dye");
-
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, SpliceBlocks.CREAKING_HEART)
-        .define('P', SpliceBlocks.PALE_OAK_LOG)
-        .define('R', SpliceBlocks.RESIN_BLOCK)
-        .pattern(" P ")
-        .pattern(" R ")
-        .pattern(" P ")
-        .unlockedBy(getHasName(SpliceItems.RESIN_BLOCK), has(SpliceItems.RESIN_BLOCK))
-        .save(recipeOutput);
+    builder.save(output);
   }
 
-  @Override
-  protected void buildRecipes(@NotNull RecipeOutput recipeOutput) {
-    blockFamily(recipeOutput);
-    bannerPatterns(recipeOutput);
-    saddle(recipeOutput);
-    lead(recipeOutput);
-    copper(recipeOutput);
-    resin(recipeOutput);
-    paleGarden(recipeOutput);
+  private void stonecutter(
+      RecipeOutput output, RecipeCategory category, ItemLike result, ItemLike material, int count) {
+    SingleItemRecipeBuilder.stonecutting(Ingredient.of(material), category, result, count)
+        .unlockedBy(getName(material), has(material))
+        .save(
+            output,
+            this.getResourceLocation(getConversionRecipeName(result, material) + "_stonecutting"));
+  }
+
+  private void recycleSmelting(
+      RecipeOutput output,
+      List<ItemLike> inputs,
+      ItemLike result,
+      float xp,
+      int timeSmelt,
+      int timeBlast) {
+    final Ingredient ingredient = Ingredient.of(inputs.toArray(new ItemLike[0]));
+    final String name = getSimpleRecipeName(result);
+
+    SimpleCookingRecipeBuilder.smelting(ingredient, RecipeCategory.MISC, result, xp, timeSmelt)
+        .unlockedBy("has_item", has(inputs.getFirst()))
+        .save(output, this.getResourceLocation("smelting_" + name));
+
+    SimpleCookingRecipeBuilder.blasting(ingredient, RecipeCategory.MISC, result, xp, timeBlast)
+        .unlockedBy("has_item", has(inputs.getFirst()))
+        .save(output, this.getResourceLocation("blasting_" + name));
+  }
+
+  private void shovel(RecipeOutput out, Item result, TagKey<Item> material) {
+    this.tool(out, result, material, " M ", " S ", " S ");
+  }
+
+  private void pickaxe(RecipeOutput out, Item result, TagKey<Item> material) {
+    this.tool(out, result, material, "MMM", " S ", " S ");
+  }
+
+  private void axe(RecipeOutput out, Item result, TagKey<Item> material) {
+    this.tool(out, result, material, "MM ",  "MS ", " S ");
+  }
+
+  private void hoe(RecipeOutput out, Item result, TagKey<Item> material) {
+    this.tool(out, result, material, "MM ", " S ", " S ");
+  }
+
+  private void sword(RecipeOutput out, Item result, TagKey<Item> material) {
+    this.tool(out, result, material, " M ", " M ", " S ");
+  }
+
+  private void tool(RecipeOutput out, Item result, TagKey<Item> material, String... pattern) {
+    final ShapedRecipeBuilder builder =
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, result)
+            .define('M', material)
+            .define('S', Items.STICK);
+    for (String p : pattern) {
+      builder.pattern(p);
+    }
+
+    builder.unlockedBy("has_material", has(material)).save(out);
+  }
+
+  private void helmet(RecipeOutput out, Item result, TagKey<Item> material) {
+    this.armor(out, result, material, "MMM", "M M");
+  }
+
+  private void chestplate(RecipeOutput out, Item result, TagKey<Item> material) {
+    this.armor(out, result, material, "M M", "MMM", "MMM");
+  }
+
+  private void leggings(RecipeOutput out, Item result, TagKey<Item> material) {
+    this.armor(out, result, material, "MMM", "M M", "M M");
+  }
+
+  private void boots(RecipeOutput out, Item result, TagKey<Item> material) {
+    this.armor(out, result, material, "M M", "M M");
+  }
+
+  private void armor(RecipeOutput out, Item result, TagKey<Item> material, String... pattern) {
+    final ShapedRecipeBuilder builder =
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, result).define('M', material);
+    for (String p : pattern) {
+      builder.pattern(p);
+    }
+
+    builder.unlockedBy("has_material", has(material)).save(out);
+  }
+
+  private ResourceLocation getResourceLocation(String path) {
+    return ResourceLocation.fromNamespaceAndPath(SpliceMain.MOD_ID, path);
   }
 }

@@ -50,6 +50,9 @@ public final class SpliceBlockTypes {
   private static final Supplier<MapCodec<SpliceEyeblossomBlock>> EYEBLOSSOM =
       CODEC.register("eyeblossom", () -> SpliceEyeblossomBlock.CODEC);
 
+  private static final Supplier<MapCodec<SpliceCreakingHeartBlock>> CREAKING_HEART =
+      CODEC.register("creaking_heart", () -> SpliceCreakingHeartBlock.CODEC);
+
   public static void register(IEventBus bus) {
     CODEC.register(bus);
   }

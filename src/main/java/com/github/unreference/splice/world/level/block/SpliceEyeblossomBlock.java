@@ -56,10 +56,10 @@ public final class SpliceEyeblossomBlock extends FlowerBlock {
   public static boolean isMoonVisible(Level level) {
     if (!level.dimensionType().natural()) {
       return false;
-    } else {
-      int i = (int) (level.getDayTime() % 24000L);
-      return i >= 12600 && i <= 23400;
     }
+
+    final int ticks = (int) (level.getDayTime() % 24000L);
+    return ticks >= 12600 && ticks <= 23400;
   }
 
   @Override
@@ -115,9 +115,7 @@ public final class SpliceEyeblossomBlock extends FlowerBlock {
       @NotNull ServerLevel level,
       @NotNull BlockPos pos,
       @NotNull RandomSource random) {
-    if (!level.dimensionType().natural()) {
-      return false;
-    } else if (isMoonVisible(level) == this.type.isOpen) {
+    if (!level.dimensionType().natural() || isMoonVisible(level) == this.type.isOpen) {
       return false;
     }
 

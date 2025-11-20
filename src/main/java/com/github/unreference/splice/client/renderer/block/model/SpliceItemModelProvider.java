@@ -2,28 +2,27 @@ package com.github.unreference.splice.client.renderer.block.model;
 
 import com.github.unreference.splice.SpliceMain;
 import com.github.unreference.splice.data.SpliceBlockFamilies;
-import com.github.unreference.splice.util.SpliceUtils;
+import com.github.unreference.splice.util.SpliceModelUtils;
 import com.github.unreference.splice.world.item.SpliceItems;
 import com.github.unreference.splice.world.level.block.SpliceBlocks;
-import com.github.unreference.splice.world.level.block.SpliceEyeblossomBlock;
 import java.util.*;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.item.armortrim.TrimMaterials;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
 public final class SpliceItemModelProvider extends ItemModelProvider {
+
   private static final List<ResourceKey<TrimMaterial>> TRIM_ORDER =
       List.of(
           TrimMaterials.QUARTZ,
@@ -37,227 +36,207 @@ public final class SpliceItemModelProvider extends ItemModelProvider {
           TrimMaterials.LAPIS,
           TrimMaterials.AMETHYST);
 
-  private static final float TRIM_STEP = 0.1f;
-
   public SpliceItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
     super(output, SpliceMain.MOD_ID, existingFileHelper);
   }
 
-  private static float getTrimIndex(int index) {
-    return (index + 1) * TRIM_STEP;
-  }
-
   @Override
   protected void registerModels() {
-    this.blockFamilyItems();
-    this.bannerPatternItems();
-    this.copperItems();
-    this.musicDiscItems();
-    this.resinItems();
-    this.paleGardenItems();
+    this.registerBlockFamilies();
+    this.registerCopper();
+    this.registerResin();
+    this.registerPaleGarden();
+    this.registerMiscellaneous();
   }
 
-  private void paleGardenItems() {
+  // ===================================================================================================================
+  // Pale Garden
+  // ===================================================================================================================
+
+  private void registerPaleGarden() {
     this.simpleBlockItem(SpliceBlocks.PALE_OAK_LOG.get());
     this.simpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_LOG.get());
     this.simpleBlockItem(SpliceBlocks.PALE_OAK_WOOD.get());
     this.simpleBlockItem(SpliceBlocks.STRIPPED_PALE_OAK_WOOD.get());
-    this.basicItem(SpliceItems.PALE_OAK_HANGING_SIGN.get());
-    this.inventoryBlockItem(SpliceBlocks.PALE_OAK_SAPLING);
     this.simpleBlockItem(SpliceBlocks.PALE_OAK_LEAVES.get());
     this.simpleBlockItem(SpliceBlocks.PALE_MOSS_CARPET.get());
     this.simpleBlockItem(SpliceBlocks.PALE_MOSS_BLOCK.get());
-    this.inventoryBlockItem(SpliceBlocks.PALE_HANGING_MOSS);
-    this.flowerItem(SpliceBlocks.CLOSED_EYEBLOSSOM, false);
-    this.flowerItem(SpliceBlocks.OPEN_EYEBLOSSOM, true);
     this.simpleBlockItem(SpliceBlocks.CREAKING_HEART.get());
+
+    this.generated(SpliceItems.PALE_OAK_HANGING_SIGN.get());
+    this.generated(
+        SpliceBlocks.PALE_OAK_SAPLING.get(),
+        SpliceModelUtils.getLocation(SpliceBlocks.PALE_OAK_SAPLING.get()));
+    this.generated(
+        SpliceBlocks.PALE_HANGING_MOSS.get(),
+        SpliceModelUtils.getLocation(SpliceBlocks.PALE_HANGING_MOSS.get()));
+
+    this.eyeblossom(SpliceBlocks.CLOSED_EYEBLOSSOM.get(), false);
+    this.eyeblossom(SpliceBlocks.OPEN_EYEBLOSSOM.get(), true);
   }
 
-  private void flowerItem(DeferredBlock<SpliceEyeblossomBlock> block, boolean isEmissive) {
-    final Block id = block.get();
-    final String name = SpliceUtils.getName(id);
-    final ResourceLocation base = SpliceUtils.getLocation(id);
-    final ResourceLocation emissive = ResourceLocation.parse(base + "_emissive");
+  private void eyeblossom(Block block, boolean isEmissive) {
+    final String name = SpliceModelUtils.getName(block);
+    final ResourceLocation base = SpliceModelUtils.getLocation(block);
+
+    final ItemModelBuilder builder =
+        withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", base);
 
     if (isEmissive) {
-      this.withExistingParent(name, this.mcLoc("item/generated"))
-          .texture("layer0", base)
-          .texture("layer1", emissive);
-    } else {
-      this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", base);
+      builder.texture("layer1", SpliceModelUtils.setSuffix(base, "_emissive"));
     }
   }
 
-  private void resinItems() {
+  // ===================================================================================================================
+  // Resin
+  // ===================================================================================================================
+
+  private void registerResin() {
     this.simpleBlockItem(SpliceBlocks.RESIN_BLOCK.get());
     this.basicItem(SpliceItems.RESIN_CLUMP.get());
     this.basicItem(SpliceItems.RESIN_BRICK.get());
   }
 
-  private void bannerPatternItems() {
+  // ===================================================================================================================
+  // Miscellaneous
+  // ===================================================================================================================
+
+  private void registerMiscellaneous() {
     this.basicItem(SpliceItems.FIELD_MASONED_BANNER_PATTERN.get());
     this.basicItem(SpliceItems.BORDURE_INDENTED_BANNER_PATTERN.get());
-  }
-
-  private void musicDiscItems() {
     this.basicItem(SpliceItems.MUSIC_DISC_TEARS.get());
     this.basicItem(SpliceItems.MUSIC_DISC_LAVA_CHICKEN.get());
   }
 
-  private void blockFamilyItems() {
-    for (BlockFamily family : SpliceBlockFamilies.getBlockFamilies().values()) {
-      if (!family.shouldGenerateModel()) {
-        continue;
-      }
+  // ===================================================================================================================
+  // Copper
+  // ===================================================================================================================
 
-      final Block base = family.getBaseBlock();
-      if (base == null) {
-        return;
-      }
+  private void registerCopper() {
+    SpliceBlocks.COPPER_BARS
+        .waxedMapping()
+        .forEach(
+            (normal, waxed) -> {
+              final ResourceLocation texture =
+                  this.modLoc("block/" + SpliceModelUtils.getName(normal.get()));
+              this.generated(normal.get(), texture);
+              this.generated(waxed.get(), texture);
+            });
 
-      final ResourceLocation texture = SpliceUtils.getLocation(base);
-      this.simpleBlockItem(base);
+    SpliceBlocks.COPPER_CHAIN
+        .waxedMapping()
+        .forEach(
+            (normal, waxed) -> {
+              final ResourceLocation texture =
+                  this.modLoc("item/" + SpliceModelUtils.getName(normal.get()));
+              this.generated(normal.get(), texture);
+              this.generated(waxed.get(), texture);
+            });
 
-      final Block button = family.get(BlockFamily.Variant.BUTTON);
-      if (button != null) {
-        this.buttonInventory(SpliceUtils.getName(button), texture);
-      }
+    SpliceBlocks.COPPER_LANTERN
+        .waxedMapping()
+        .forEach(
+            (normal, waxed) -> {
+              final ResourceLocation texture =
+                  this.modLoc("item/" + SpliceModelUtils.getName(normal.get()));
+              this.generated(normal.get(), texture);
+              this.generated(waxed.get(), texture);
+            });
 
-      final Block chiseled = family.get(BlockFamily.Variant.CHISELED);
-      if (chiseled != null) {
-        this.simpleBlockItem(chiseled);
-      }
-
-      final Block door = family.get(BlockFamily.Variant.DOOR);
-      if (door != null) {
-        this.basicItem(door.asItem());
-      }
-
-      final Block fence = family.get(BlockFamily.Variant.FENCE);
-      if (fence != null) {
-        this.fenceInventory(SpliceUtils.getName(fence), texture);
-      }
-
-      final Block fenceGate = family.get(BlockFamily.Variant.FENCE_GATE);
-      if (fenceGate != null) {
-        this.simpleBlockItem(fenceGate);
-      }
-
-      final Block sign = family.get(BlockFamily.Variant.SIGN);
-      final Block wallSign = family.get(BlockFamily.Variant.WALL_SIGN);
-      if (sign != null && wallSign != null) {
-        this.basicItem(sign.asItem());
-      }
-
-      final Block slab = family.get(BlockFamily.Variant.SLAB);
-      if (slab != null) {
-        this.simpleBlockItem(slab);
-      }
-
-      final Block stairs = family.get(BlockFamily.Variant.STAIRS);
-      if (stairs != null) {
-        this.simpleBlockItem(stairs);
-      }
-
-      final Block pressurePlate = family.get(BlockFamily.Variant.PRESSURE_PLATE);
-      if (pressurePlate != null) {
-        this.simpleBlockItem(pressurePlate);
-      }
-
-      final Block trapdoor = family.get(BlockFamily.Variant.TRAPDOOR);
-      if (trapdoor != null) {
-        this.trapdoorOrientableBottom(
-            SpliceUtils.getName(trapdoor), SpliceUtils.getLocation(trapdoor));
-      }
-
-      final Block wall = family.get(BlockFamily.Variant.WALL);
-      if (wall != null) {
-        this.wallInventory(SpliceUtils.getName(wall), texture);
-      }
-    }
-  }
-
-  private void copperItems() {
-    SpliceBlocks.COPPER_BARS.waxedMapping().forEach(this::copperBarsItem);
-    SpliceBlocks.COPPER_CHAIN.waxedMapping().forEach(this::copperChainItem);
-    SpliceBlocks.COPPER_LANTERN.waxedMapping().forEach(this::copperLanternItem);
-    SpliceBlocks.COPPER_CHESTS.forEach(this::copperChestItem);
+    SpliceBlocks.COPPER_CHESTS.forEach(
+        block ->
+            withExistingParent(SpliceModelUtils.getName(block.get()), this.mcLoc("item/chest")));
 
     this.simpleBlockItem(SpliceBlocks.COPPER_TORCH.get());
     this.basicItem(SpliceItems.COPPER_NUGGET.get());
-    this.handheldItem(SpliceItems.COPPER_SHOVEL.get());
-    this.handheldItem(SpliceItems.COPPER_PICKAXE.get());
-    this.handheldItem(SpliceItems.COPPER_AXE.get());
-    this.handheldItem(SpliceItems.COPPER_HOE.get());
-    this.handheldItem(SpliceItems.COPPER_SWORD.get());
-    this.trimmableArmorItem(SpliceItems.COPPER_HELMET);
-    this.trimmableArmorItem(SpliceItems.COPPER_CHESTPLATE);
-    this.trimmableArmorItem(SpliceItems.COPPER_LEGGINGS);
-    this.trimmableArmorItem(SpliceItems.COPPER_BOOTS);
     this.basicItem(SpliceItems.COPPER_HORSE_ARMOR.get());
+
+    List.of(
+            SpliceItems.COPPER_SHOVEL,
+            SpliceItems.COPPER_PICKAXE,
+            SpliceItems.COPPER_AXE,
+            SpliceItems.COPPER_HOE,
+            SpliceItems.COPPER_SWORD)
+        .forEach(item -> this.handheldItem(item.get()));
+
+    List.of(
+            SpliceItems.COPPER_HELMET,
+            SpliceItems.COPPER_CHESTPLATE,
+            SpliceItems.COPPER_LEGGINGS,
+            SpliceItems.COPPER_BOOTS)
+        .forEach(this::trimmableArmor);
   }
 
-  private void copperChestItem(DeferredBlock<? extends Block> block) {
-    this.withExistingParent(SpliceUtils.getName(block.get()), this.mcLoc("item/chest"));
-  }
+  private void trimmableArmor(DeferredItem<? extends ArmorItem> item) {
+    final String name = SpliceModelUtils.getName(item.get());
+    final String type = item.get().getType().getName();
+    final ResourceLocation baseTexture = this.modLoc("item/" + name);
 
-  private void copperLanternItem(
-      DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.inventoryItem(unaffected);
-    this.inventoryItem(waxed);
-  }
-
-  private void copperChainItem(
-      DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.inventoryItem(unaffected);
-    this.inventoryItem(waxed);
-  }
-
-  private void copperBarsItem(
-      DeferredBlock<? extends Block> unaffected, DeferredBlock<? extends Block> waxed) {
-    this.inventoryBlockItem(unaffected);
-    this.inventoryBlockItem(waxed);
-  }
-
-  private void inventoryItem(DeferredBlock<? extends Block> block) {
-    final String name = SpliceUtils.getName(block.get());
-    final ResourceLocation texture = this.modLoc("item/" + SpliceUtils.stripWaxedPrefix(name));
-    this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
-  }
-
-  private void inventoryBlockItem(DeferredBlock<? extends Block> block) {
-    final String name = SpliceUtils.getName(block.get());
-    final ResourceLocation texture = this.modLoc("block/" + SpliceUtils.stripWaxedPrefix(name));
-    this.withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", texture);
-  }
-
-  private void trimmableArmorItem(DeferredItem<? extends ArmorItem> item) {
-    final String armorItem = item.getId().getPath();
-    final String armorKind = item.get().getType().getName();
-
-    final ItemModelBuilder base =
-        withExistingParent(armorItem, mcLoc("item/generated"))
-            .texture("layer0", modLoc("item/" + armorItem));
+    final ItemModelBuilder builder =
+        withExistingParent(name, this.mcLoc("item/generated")).texture("layer0", baseTexture);
 
     for (int i = 0; i < TRIM_ORDER.size(); i++) {
-      final ResourceKey<TrimMaterial> key = TRIM_ORDER.get(i);
-      final ResourceLocation materialLocation = key.location();
-      final String materialName = materialLocation.getPath();
-      final String texturePath = "trims/items/" + armorKind + "_trim_" + materialName;
-      final ResourceLocation trimTexture = this.mcLoc(texturePath);
+      final ResourceKey<TrimMaterial> trim = TRIM_ORDER.get(i);
+      final String materialName = trim.location().getPath();
+      float trimValue = (i + 1) * 0.1f;
 
-      existingFileHelper.trackGenerated(trimTexture, PackType.CLIENT_RESOURCES, ".png", "textures");
+      final String trimModelName = name + "_" + materialName + "_trim";
+      final ResourceLocation trimTexture =
+          this.mcLoc("trims/items/" + type + "_trim_" + materialName);
 
-      final String trimModelName = armorItem + '_' + materialName + "_trim";
-      this.getBuilder(trimModelName)
-          .parent(new ModelFile.UncheckedModelFile(this.mcLoc("item/generated")))
-          .texture("layer0", this.modLoc("item/" + armorItem))
+      this.withExistingParent(trimModelName, this.mcLoc("item/generated"))
+          .texture("layer0", baseTexture)
           .texture("layer1", trimTexture);
 
-      base.override()
-          .predicate(this.mcLoc("trim_type"), getTrimIndex(i))
+      builder
+          .override()
+          .predicate(this.mcLoc("trim_type"), trimValue)
           .model(new ModelFile.UncheckedModelFile(this.modLoc("item/" + trimModelName)))
           .end();
     }
+  }
+
+  // ===================================================================================================================
+  // Block Families
+  // ===================================================================================================================
+
+  private void registerBlockFamilies() {
+    for (BlockFamily family : SpliceBlockFamilies.getBlockFamilies().values()) {
+      if (!family.shouldGenerateModel() || family.getBaseBlock() == null) continue;
+
+      Block base = family.getBaseBlock();
+      this.simpleBlockItem(base);
+      ResourceLocation tex = SpliceModelUtils.getLocation(base);
+
+      if (family.get(BlockFamily.Variant.BUTTON) instanceof Block b)
+        buttonInventory(SpliceModelUtils.getName(b), tex);
+      if (family.get(BlockFamily.Variant.CHISELED) instanceof Block c) simpleBlockItem(c);
+      if (family.get(BlockFamily.Variant.DOOR) instanceof Block d) basicItem(d.asItem());
+      if (family.get(BlockFamily.Variant.FENCE) instanceof Block f)
+        fenceInventory(SpliceModelUtils.getName(f), tex);
+      if (family.get(BlockFamily.Variant.FENCE_GATE) instanceof Block fg) simpleBlockItem(fg);
+      if (family.get(BlockFamily.Variant.SLAB) instanceof Block s) simpleBlockItem(s);
+      if (family.get(BlockFamily.Variant.STAIRS) instanceof Block s) simpleBlockItem(s);
+      if (family.get(BlockFamily.Variant.PRESSURE_PLATE) instanceof Block p) simpleBlockItem(p);
+      if (family.get(BlockFamily.Variant.TRAPDOOR) instanceof Block t)
+        trapdoorOrientableBottom(SpliceModelUtils.getName(t), SpliceModelUtils.getLocation(t));
+      if (family.get(BlockFamily.Variant.WALL) instanceof Block w)
+        wallInventory(SpliceModelUtils.getName(w), tex);
+
+      if (family.get(BlockFamily.Variant.SIGN) instanceof Block s) basicItem(s.asItem());
+    }
+  }
+
+  // ===================================================================================================================
+  // Utilities & Helpers
+  // ===================================================================================================================
+
+  private void generated(ItemLike item, ResourceLocation texture) {
+    this.withExistingParent(SpliceModelUtils.getName(item.asItem()), this.mcLoc("item/generated"))
+        .texture("layer0", texture);
+  }
+
+  private void generated(ItemLike item) {
+    this.basicItem(item.asItem());
   }
 }

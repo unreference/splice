@@ -24,7 +24,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 public final class SpliceHangingMossBlock extends Block implements BonemealableBlock {
-  public static final BooleanProperty IS_JUST_THE_TIP = SpliceBlockStateProperties.TIP;
+  public static final BooleanProperty IS_JUST_THE_TIP = SpliceBlockStateProperties.IS_JUST_THE_TIP;
   public static final MapCodec<SpliceHangingMossBlock> CODEC =
       simpleCodec(SpliceHangingMossBlock::new);
   private static final VoxelShape SHAPE_BASE = SpliceBlock.column(14.0, 0.0, 16.0);
