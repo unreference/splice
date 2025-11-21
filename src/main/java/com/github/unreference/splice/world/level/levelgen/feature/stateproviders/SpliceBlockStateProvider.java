@@ -166,7 +166,7 @@ public final class SpliceBlockStateProvider extends BlockStateProvider {
     builder.part().modelFile(carpet).addModel().condition(SpliceMossyCarpetBlock.IS_BASE, true);
 
     for (Direction direction : BlockStateProperties.HORIZONTAL_FACING.getPossibleValues()) {
-      final int y = (int) direction.toYRot();
+      final int y = ((int) direction.toYRot() + 180) % 360;
       final EnumProperty<WallSide> side = SpliceBlockPropertyUtils.getWallSideProperty(direction);
 
       if (side != null) {
