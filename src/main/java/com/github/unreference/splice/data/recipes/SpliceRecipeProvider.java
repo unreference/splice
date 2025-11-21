@@ -380,7 +380,8 @@ public final class SpliceRecipeProvider extends RecipeProvider {
         .save(output, this.getResourceLocation(packedName));
   }
 
-  private void twoByTwo(RecipeOutput output, RecipeCategory category, ItemLike result, ItemLike input) {
+  private void twoByTwo(
+      RecipeOutput output, RecipeCategory category, ItemLike result, ItemLike input) {
     ShapedRecipeBuilder.shaped(category, result)
         .define('#', input)
         .pattern("##")
@@ -403,7 +404,8 @@ public final class SpliceRecipeProvider extends RecipeProvider {
       ItemLike result,
       int count,
       ItemLike... ingredients) {
-    final ShapelessRecipeBuilder builder = ShapelessRecipeBuilder.shapeless(category, result, count);
+    final ShapelessRecipeBuilder builder =
+        ShapelessRecipeBuilder.shapeless(category, result, count);
     for (ItemLike i : ingredients) {
       builder.requires(i);
     }
@@ -452,7 +454,7 @@ public final class SpliceRecipeProvider extends RecipeProvider {
   }
 
   private void axe(RecipeOutput out, Item result, TagKey<Item> material) {
-    this.tool(out, result, material, "MM ",  "MS ", " S ");
+    this.tool(out, result, material, "MM ", "MS ", " S ");
   }
 
   private void hoe(RecipeOutput out, Item result, TagKey<Item> material) {

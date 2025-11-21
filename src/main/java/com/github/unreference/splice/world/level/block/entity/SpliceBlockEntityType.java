@@ -20,7 +20,13 @@ public final class SpliceBlockEntityType {
                       SpliceHangingSignBlockEntity::new,
                       SpliceBlocks.PALE_OAK_HANGING_SIGN.get(),
                       SpliceBlocks.PALE_OAK_WALL_HANGING_SIGN.get())
-                  .build(null));  public static final Supplier<BlockEntityType<SpliceCopperChestBlockEntity>> COPPER_CHEST =
+                  .build(null));
+
+  public static void register(IEventBus bus) {
+    BLOCK_ENTITY_TYPES.register(bus);
+  }
+
+  public static final Supplier<BlockEntityType<SpliceCopperChestBlockEntity>> COPPER_CHEST =
       BLOCK_ENTITY_TYPES.register(
           "copper_chest",
           () ->
@@ -36,9 +42,7 @@ public final class SpliceBlockEntityType {
                       SpliceBlocks.WAXED_OXIDIZED_COPPER_CHEST.get())
                   .build(null));
 
-  public static void register(IEventBus bus) {
-    BLOCK_ENTITY_TYPES.register(bus);
-  }  public static final Supplier<BlockEntityType<SpliceSignBlockEntity>> SIGN =
+  public static final Supplier<BlockEntityType<SpliceSignBlockEntity>> SIGN =
       BLOCK_ENTITY_TYPES.register(
           "sign",
           () ->
@@ -48,8 +52,6 @@ public final class SpliceBlockEntityType {
                       SpliceBlocks.PALE_OAK_WALL_SIGN.get())
                   .build(null));
 
-
-
   public static final Supplier<BlockEntityType<SpliceCreakingHeartBlockEntity>> CREAKING_HEART =
       BLOCK_ENTITY_TYPES.register(
           "creaking_heart",
@@ -57,6 +59,4 @@ public final class SpliceBlockEntityType {
               BlockEntityType.Builder.of(
                       SpliceCreakingHeartBlockEntity::new, SpliceBlocks.CREAKING_HEART.get())
                   .build(null));
-
-
 }

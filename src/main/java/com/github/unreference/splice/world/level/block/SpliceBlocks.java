@@ -368,7 +368,7 @@ public final class SpliceBlocks {
           "potted_closed_eyeblossom",
           () ->
               new SpliceFlowerPotBlock(
-                  () -> (SpliceFlowerPotBlock) Blocks.FLOWER_POT,
+                  () -> (FlowerPotBlock) Blocks.FLOWER_POT,
                   CLOSED_EYEBLOSSOM,
                   getFlowerPotProperties()));
   public static final DeferredBlock<SpliceEyeblossomBlock> OPEN_EYEBLOSSOM =
@@ -390,7 +390,7 @@ public final class SpliceBlocks {
           "potted_open_eyeblossom",
           () ->
               new SpliceFlowerPotBlock(
-                  () -> (SpliceFlowerPotBlock) Blocks.FLOWER_POT,
+                  () -> (FlowerPotBlock) Blocks.FLOWER_POT,
                   OPEN_EYEBLOSSOM,
                   getFlowerPotProperties()));
   public static final DeferredBlock<SpliceCreakingHeartBlock> CREAKING_HEART =
